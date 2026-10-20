@@ -1,0 +1,607 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F3EBDD" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#161513" media="(prefers-color-scheme: dark)">
+<title>OTTOTO · קפה רמת אביב</title>
+<meta name="description" content="אוטוטו, קפה ויין ברמת אביב. גרונמן 8, תל אביב. שעות פתיחה, תפריט ופלייליסט.">
+<meta property="og:title" content="OTTOTO · קפה רמת אביב">
+<meta property="og:description" content="קפה ויין ברמת אביב. גרונמן 8, תל אביב.">
+<meta property="og:image" content="img/hero-wide.jpg">
+<meta property="og:locale" content="he_IL">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23F3EBDD'/%3E%3Crect x='14' y='10' width='36' height='44' rx='13' fill='none' stroke='%23141414' stroke-width='9'/%3E%3C/svg%3E">
+<link rel="preload" href="fonts/mplus1p-900-hebrew.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="img/reel-poster.jpg" as="image">
+<style>
+/* fonts: self-hosted, SIL Open Font License */
+/* Hebrew letters come from M PLUS 1p (square, blocky, close to the "קפה רמת אביב" in the logo); Latin stays Rubik */
+@font-face{font-family:"Rubik";font-weight:400;font-display:swap;src:url(fonts/mplus1p-400-hebrew.woff2) format("woff2");unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
+@font-face{font-family:"Rubik";font-weight:500;font-display:swap;src:url(fonts/mplus1p-500-hebrew.woff2) format("woff2");unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
+@font-face{font-family:"Rubik";font-weight:700;font-display:swap;src:url(fonts/mplus1p-700-hebrew.woff2) format("woff2");unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
+@font-face{font-family:"Rubik";font-weight:900;font-display:swap;src:url(fonts/mplus1p-900-hebrew.woff2) format("woff2");unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
+@font-face{font-family:"Rubik";font-weight:400 900;font-display:swap;src:url(fonts/rubik-400-900-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Cousine";font-weight:400;font-display:swap;src:url(fonts/cousine-400-hebrew.woff2) format("woff2");unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
+@font-face{font-family:"Cousine";font-weight:400;font-display:swap;src:url(fonts/cousine-400-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Cousine";font-weight:700;font-display:swap;src:url(fonts/cousine-700-hebrew.woff2) format("woff2");unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
+@font-face{font-family:"Cousine";font-weight:700;font-display:swap;src:url(fonts/cousine-700-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+/* tokens. brand: cream, ink, orange (the one accent), sage band.
+   shape rule: photos 20px, thumbnails 12px, every control is a full pill. */
+:root{
+  --bg:#F3EBDD;
+  --fg:#141414;
+  --muted:#4A443C;
+  --surface:#FBF6EE;
+  --band:#8E9B7E;
+  --on-band:#141414;
+  --deep:#141414;
+  --on-deep:#F3EBDD;
+  --on-deep-muted:#F2C3A2;
+  --accent:#F7B984;
+  --draft:#D9824A;
+  --on-accent:#141414;
+  --line:#141414;
+  --soft-line:rgba(20,20,20,.18);
+  --mono:"Cousine",ui-monospace,monospace;
+  --sans:"Rubik",system-ui,sans-serif;
+  --r:20px;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --ease-out:cubic-bezier(.23,1,.32,1);
+  --ease-in-out:cubic-bezier(.77,0,.175,1);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#161513;
+    --fg:#F3EBDD;
+    --muted:#CDBFA9;
+    --surface:#1E1C19;
+    --band:#3C4433;
+    --on-band:#F3EBDD;
+    --deep:#0D0C0B;
+    --line:#F3EBDD;
+    --soft-line:rgba(243,235,221,.2);
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;scrollbar-color:var(--fg) var(--bg);scroll-padding-top:150px}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;caret-color:var(--accent)}
+::selection{background:var(--accent);color:var(--on-accent)}
+img{display:block;max-width:100%}
+a{color:inherit;text-underline-offset:.2em}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+.en{direction:ltr;unicode-bidi:isolate}
+p.en,h2.en{text-align:right}
+.wrap{width:min(1200px,100% - 32px);margin-inline:auto}
+svg.i{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.draft{outline:2px dashed var(--draft);outline-offset:6px;border-radius:4px}
+
+/* paper grain, fixed so it never repaints on scroll */
+body::after{content:"";position:fixed;inset:0;z-index:30;pointer-events:none;opacity:.07;mix-blend-mode:multiply;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+@media (prefers-color-scheme:dark){body::after{mix-blend-mode:screen;opacity:.05}}
+
+.skip{position:absolute;top:-60px;right:16px;z-index:40;background:var(--fg);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:700;text-decoration:none;transform:translateY(0);transition:transform 200ms var(--ease-out)}
+.skip:focus{transform:translateY(72px)}
+
+/* quiet text link, for the secondary action */
+.tlink{display:inline-flex;align-items:center;gap:6px;min-height:50px;padding:0 6px;font-weight:700;font-size:16px;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:.35em;transition:text-underline-offset 200ms ease,color 200ms ease}
+.tlink svg{transition:transform 200ms var(--ease-out)}
+.tlink:active svg{transform:translateX(-3px)}
+
+/* reveal on enter (only when JS runs, never hides content otherwise) */
+.js [data-reveal]{opacity:0;transform:translateY(8px);transition:opacity 500ms var(--ease-out),transform 500ms var(--ease-out)}
+.js figure[data-reveal]{opacity:1;transform:none;clip-path:inset(0 0 100% 0);transition:clip-path 900ms var(--ease-in-out)}
+.js figure[data-reveal] img{transform:scale(1.08);transition:transform 1200ms var(--ease-out)}
+.js [data-reveal].in{opacity:1;transform:none;clip-path:inset(0)}
+.js figure[data-reveal].in img{transform:none}
+
+/* header: one horizontal menu row, centered. the big logo sits centered under it on the first screen;
+   once it scrolls away a small logo appears at the start of the row */
+header{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1.5px solid transparent;transition:border-color 200ms ease}
+header.lined{border-bottom-color:var(--line)}
+header .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;padding-block:14px}
+header .logo{justify-self:start;opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity 300ms var(--ease-out),transform 300ms var(--ease-out)}
+html.scrolled header .logo{opacity:1;transform:none;pointer-events:auto}
+header .logo img{height:22px;width:auto}
+
+/* menu: one row of caps, the current section gets a hand-drawn marker in the cup color */
+header nav{grid-column:2;direction:ltr;display:flex;flex-wrap:wrap;justify-content:center;gap:4px clamp(14px,2.4vw,30px)}
+header nav a{position:relative;z-index:0;display:inline-block;padding:5px 2px;font-weight:700;font-size:13px;line-height:1.2;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;transform-origin:50% 50%;scale:1;-webkit-tap-highlight-color:transparent;
+  transition:transform 750ms cubic-bezier(.3,1.6,.55,1) calc(var(--n,0)*90ms),opacity 350ms ease calc(var(--n,0)*90ms),scale 350ms cubic-bezier(.34,1.56,.64,1),color 250ms ease}
+header nav a::before{content:"";position:absolute;z-index:-1;left:-7px;right:-5px;top:50%;height:1.5em;translate:0 -50%;background:var(--accent);border-radius:3px 9px 4px 10px / 8px 4px 9px 3px;rotate:-1.5deg;transform-origin:50% 50%;scale:0 1;transition:scale 350ms cubic-bezier(.65,0,.35,1)}
+header nav a[aria-current=true]{color:var(--on-accent);scale:1.12}
+header nav a[aria-current=true]::before{scale:1 1}
+html:not(.navin) header nav a{opacity:0;visibility:hidden;transform:translateY(-60px) rotate(-4deg)}
+
+/* the big centered logo on the first screen */
+.home-screen{height:calc(100svh - var(--hdr,56px));min-height:460px;display:flex;flex-direction:column}
+.bigmark{flex:none;display:flex;justify-content:center;padding:clamp(18px,3vw,36px) 16px clamp(8px,2vw,20px)}
+.bigmark img{display:block;width:min(720px,100%);height:auto}
+html.splashing .bigmark img{visibility:hidden}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media (max-width:600px){
+  header .wrap{grid-template-columns:1fr;padding-block:10px}
+  header .logo{display:none}
+  header nav{grid-column:1;gap:2px 11px;flex-wrap:nowrap}
+  header nav a{font-size:10.5px;letter-spacing:.06em}
+}
+/* phones: the reel is as wide as the content (no side gaps), shown whole at 9:16.
+   to keep the first screen to one screen, the logo gets smaller and the info line becomes one compact row */
+@media (max-width:700px){
+  .home-screen{height:auto;min-height:calc(100svh - var(--hdr,44px))}
+  .hero{flex:none;padding-bottom:4px}
+  .hero .reel-band{flex:none}
+  .hero .reel-band .bg{display:none}
+  .hero .reel-band video{width:100%;height:auto;box-shadow:none}
+  .hero .infobar{display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 12px;margin-top:8px;padding-block:7px}
+  .hero .infobar .status,.hero .infobar .addr{font-size:13.5px;grid-column:1}
+  .infobar .addr svg{width:16px;height:16px}
+  .hero .infobar .btn{grid-column:2;grid-row:1/3;width:auto;min-height:44px;padding:0 18px;margin:0}
+}
+
+/* splash: the logo appears, sways, then flies into its place on the page */
+.splash{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:var(--bg);cursor:pointer;transition:background-color 900ms ease}
+.splash.out{background-color:transparent;pointer-events:none}
+.sp-fly{width:min(72vw,560px);line-height:0;transform-origin:0 0;will-change:transform}
+.sp-logo{display:block;width:100%;height:auto;transform-origin:50% 60%;opacity:0}
+.sp-logo.go{opacity:1;animation:spIn 400ms ease-out both,wob 2.6s ease-in-out infinite}
+@keyframes spIn{from{opacity:0}}
+@keyframes wob{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+
+/* buttons: one primary per view, ghost for the rest */
+.btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:50px;padding:0 24px;border-radius:999px;font-weight:700;font-size:16px;text-decoration:none;white-space:nowrap;border:2px solid var(--fg);color:var(--fg);background:transparent;transition:transform 160ms var(--ease-out),background-color 200ms ease,color 200ms ease,border-color 200ms ease;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.btn:active{transform:scale(.97)}
+.btn.fill{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+
+/* status: a real open/closed state, the only dot on the page that means something live */
+.status{display:inline-flex;align-items:center;gap:10px;font-size:16px;font-weight:700;font-variant-numeric:tabular-nums}
+.status i{width:10px;height:10px;border-radius:50%;border:2px solid currentColor}
+.status.open i{background:var(--accent);border-color:var(--fg)}
+
+/* hero: asymmetric split */
+.hero{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 0 clamp(12px,2.4svh,28px)}
+.hero .wrap{flex:none}
+/* first screen: the welcome reel edge to edge, then a single info line: open now, address, navigate */
+.reel-band{flex:1;min-height:0;position:relative;overflow:hidden;background:#141414;isolation:isolate}
+.reel-band .bg{position:absolute;inset:-60px;width:calc(100% + 120px);height:calc(100% + 120px);max-width:none;object-fit:cover;filter:blur(18px) brightness(.8);z-index:-1}
+.reel-band video{display:block;height:100%;width:auto;aspect-ratio:9/16;margin:0 auto;object-fit:cover;box-shadow:0 0 60px rgba(0,0,0,.35)}
+.infobar{flex:none;display:flex;align-items:center;gap:8px clamp(20px,4vw,48px);flex-wrap:wrap;margin-top:clamp(10px,1.8svh,18px);padding-block:clamp(8px,1.4svh,14px);border-block:1.5px solid var(--line)}
+.infobar .addr{display:inline-flex;align-items:center;gap:6px;font-size:17px}
+.infobar .btn{margin-inline-start:auto}
+@keyframes settle{to{transform:scale(1)}}
+
+/* sections */
+section{padding:clamp(88px,11vw,150px) 0 clamp(100px,12.5vw,170px)}
+h2{font-weight:900;font-size:clamp(40px,6.2vw,88px);line-height:.95;letter-spacing:-.02em;text-wrap:balance}
+h2.en{text-transform:uppercase}
+h2:not(.en),.visit .addr{letter-spacing:.03em}
+.lead{max-width:34ch;font-weight:400;margin-top:22px;font-size:clamp(18px,1.7vw,22px);line-height:1.5;text-wrap:pretty}
+
+/* about (now the opening of VIBES): offset collage */
+.vibes .about{margin-bottom:clamp(72px,9vw,120px)}
+.about h2{font-size:clamp(48px,8.4vw,120px);max-width:12ch}
+.collage{display:grid;grid-template-columns:4fr 5fr 3fr;gap:clamp(16px,2.5vw,32px);margin-top:clamp(40px,6vw,72px);align-items:start}
+.collage .lead{margin-top:0;align-self:end}
+.collage figure{border-radius:var(--r);overflow:hidden}
+.collage figure img{width:100%;height:100%;object-fit:cover}
+.collage .big{aspect-ratio:4/5}
+.collage .small{aspect-ratio:3/4;margin-top:clamp(60px,10vw,140px)}
+
+.note{margin-top:28px;font-size:15px;color:var(--muted)}
+
+/* shop: one product, the matto matcha kit. photo stage + facts, studio-white photos sit on paper */
+.shop{background:var(--surface);border-block:1.5px solid var(--line)}
+.shop .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(32px,6vw,96px);align-items:center}
+.stage{position:relative;aspect-ratio:1;border-radius:var(--r);overflow:hidden;background:#F1F1EF}
+.stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.03);filter:blur(6px);transition:opacity 240ms ease,filter 240ms ease,transform 420ms var(--ease-out)}
+.stage img.on{opacity:1;transform:none;filter:none}
+.thumbs{display:flex;gap:10px;margin-top:12px}
+.thumbs button{width:76px;height:76px;padding:0;border:2px solid transparent;border-radius:12px;overflow:hidden;background:#F1F1EF;cursor:pointer;transition:border-color 160ms ease,transform 160ms var(--ease-out);-webkit-tap-highlight-color:transparent}
+.thumbs button:active{transform:scale(.96)}
+.thumbs button[aria-pressed=true]{border-color:var(--fg)}
+.thumbs img{width:100%;height:100%;object-fit:cover}
+.shop .by{font-family:var(--mono);font-size:13px;letter-spacing:.12em;color:var(--muted);margin-top:14px;direction:ltr;text-align:right}
+.shop h3{font-size:clamp(26px,3vw,38px);font-weight:900;line-height:1.05;margin-top:28px;direction:ltr;text-align:right;letter-spacing:-.01em}
+.kit-list{list-style:none;margin-top:22px;border-top:1.5px solid var(--line)}
+.kit-list li{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--soft-line);font-size:17px}
+.kit-list li span+span{font-family:var(--mono);font-size:14px;color:var(--muted)}
+.price{display:flex;align-items:baseline;gap:10px;margin-top:24px;font-size:clamp(28px,3vw,36px);font-weight:900;font-variant-numeric:tabular-nums}
+.shop .how{margin-top:14px;font-size:15px;color:var(--muted)}
+
+/* playlist: centered stack, the cassette is the visual */
+.playlist{background:var(--band);color:var(--on-band);text-align:center}
+.playlist h2.en,.playlist .lead{text-align:center;margin-inline:auto}
+.playlist .btns{justify-content:center}
+.cassette{width:min(620px,100%);margin:clamp(40px,6vw,72px) auto 0;transform:rotate(-3deg);filter:drop-shadow(0 28px 34px rgba(30,36,24,.35));view-timeline-name:--cas}
+.cassette svg{width:100%;height:auto;display:block;overflow:visible;direction:ltr}
+.cassette text{font-family:var(--mono)}
+.spin,.pack{transform-box:fill-box;transform-origin:center}
+@media (prefers-reduced-motion:no-preference){
+  @supports (animation-timeline:view()){
+    #packL{animation:packL linear both;animation-timeline:--cas}
+    #packR{animation:packR linear both;animation-timeline:--cas}
+    .spin{animation:spin linear both;animation-timeline:--cas}
+  }
+}
+@keyframes packL{to{transform:scale(.53)}}
+@keyframes packR{to{transform:scale(1.89)}}
+@keyframes spin{to{transform:rotate(1440deg)}}
+
+/* vibes: masonry-ish grid, exact cell count */
+.vibes .head{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap}
+.vibes .head .btns{margin-top:0}
+.vibes .grid{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:clamp(200px,22vw,290px);gap:16px;margin-top:48px}
+.vibes figure{border-radius:var(--r);overflow:hidden}
+.vibes .grid figure:nth-child(1),.vibes .grid figure:nth-child(3),.vibes .grid figure:nth-child(6){grid-row:span 2}
+.vibes img{width:100%;height:100%;object-fit:cover}
+
+/* friends club: the paper poster from the kiosk window, taped up */
+.friends{display:grid;place-items:center;overflow-x:clip}
+.poster{position:relative;width:min(520px,100% - 28px);background:#EFE3CC;color:#141414;padding:clamp(28px,5vw,48px) clamp(24px,4.5vw,44px) clamp(32px,5vw,52px);border-radius:3px;rotate:-1.5deg;box-shadow:0 1px 0 rgba(60,48,30,.12),0 24px 40px -18px rgba(60,48,30,.45)}
+.poster::before,.poster::after{content:"";position:absolute;top:-14px;width:110px;height:30px;background:rgba(243,235,221,.72);box-shadow:0 1px 2px rgba(60,48,30,.18)}
+.poster::before{right:-18px;rotate:28deg}
+.poster::after{left:-18px;rotate:-24deg}
+.poster .top{display:block;height:20px;width:auto;margin-inline-start:auto}
+.bubble{position:relative;display:inline-block;margin-top:clamp(24px,4vw,36px);background:#F7B984;color:#141414;border-radius:22px;padding:18px 22px 20px}
+.bubble::after{content:"";position:absolute;bottom:-18px;right:34px;width:30px;height:24px;background:inherit;clip-path:polygon(0 0,100% 0,85% 100%)}
+.bubble h2{font-size:clamp(34px,5.4vw,56px);line-height:1;letter-spacing:-.02em}
+.bubble img{display:block;width:clamp(180px,30vw,280px);height:auto;margin-top:10px}
+.perks{list-style:none;margin-top:clamp(32px,5vw,44px);display:grid;gap:14px;font-size:clamp(17px,1.6vw,19px);font-weight:500}
+.perks li{display:flex;gap:12px;align-items:baseline}
+.perks li::before{content:"";flex:none;width:9px;height:9px;border-radius:50%;background:#141414;translate:0 -2px}
+.join{margin-top:28px;padding-top:18px;border-top:1.5px solid #141414;font-size:15px}
+.js .poster[data-reveal]{transform:translateY(16px) rotate(-3deg)}
+.js .poster[data-reveal].in{transform:none}
+
+/* visit: the one deliberate color-block switch, it carries into the footer */
+.visit{background:var(--deep);color:var(--on-deep)}
+.visit .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(40px,6vw,96px);align-items:start}
+.visit .addr{font-size:clamp(28px,3.4vw,44px);font-weight:900;line-height:1.1;margin-top:28px}
+.visit .addr span{display:block;font-family:var(--mono);font-size:14px;font-weight:400;letter-spacing:.06em;margin-top:10px;color:var(--on-deep-muted)}
+.visit .status{margin-top:28px}
+.hours{border-top:1.5px solid var(--on-deep)}
+.hours div{display:flex;justify-content:space-between;padding:16px 4px}
+.hours span:first-child{font-size:17px}
+.hours span:last-child{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:16px}
+.hours div.today{color:var(--accent);font-weight:700}
+.hours div.today span:first-child::after{content:" · היום"}
+.walker{width:clamp(150px,16vw,220px);margin-top:48px;transform:scaleX(-1)}
+
+footer{background:var(--deep);color:var(--on-deep);padding:36px 0 44px;border-top:1.5px solid rgba(243,235,221,.3)}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;font-family:var(--mono);font-size:13px}
+footer img{height:22px;width:auto}
+footer .soc{display:flex;gap:6px}
+footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radius:999px;transition:background-color 200ms ease;-webkit-tap-highlight-color:transparent}
+
+/* below 900px every split collapses to one column */
+@media (max-width:900px){
+  .visit .wrap,.shop .wrap{grid-template-columns:1fr}
+  .shop .wrap>div:last-child{order:-1}
+  .infobar .btn{margin-inline-start:0;width:100%;min-height:44px}
+  .infobar .status,.infobar .addr{font-size:14.5px}
+  .collage{grid-template-columns:1fr 1fr}
+  .collage .lead{grid-column:1/-1;order:-1}
+  .collage .small{margin-top:48px}
+  .vibes .grid{grid-template-columns:1fr 1fr}
+  .walker{width:120px;margin:40px 0 0;margin-inline-start:auto}
+}
+@media (max-width:520px){
+  .vibes .grid{grid-auto-rows:170px;gap:10px}
+}
+/* hover effects only where a real mouse exists, so taps never get stuck in hover */
+@media (hover:hover) and (pointer:fine){
+  .btn:hover{background:var(--fg);color:var(--bg)}
+  .btn.fill:hover{background:var(--fg);border-color:var(--fg);color:var(--bg)}
+  .visit .btn.fill:hover{background:var(--on-deep);border-color:var(--on-deep);color:var(--deep)}
+  header nav a:not([aria-current=true]):hover{scale:1.06}
+  .tlink:hover{text-underline-offset:.2em}
+  .tlink:hover svg{transform:translateX(-3px)}
+  footer .soc a:hover{background:rgba(243,235,221,.12)}
+}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+  .vibes figure.in img{transition:transform 600ms var(--ease-out)}
+  .vibes figure.in:hover img{transform:scale(1.03)}
+}
+
+/* reduced motion: keep gentle fades, drop movement */
+@media (prefers-reduced-motion:reduce){
+  .js [data-reveal]{transform:none;transition:opacity 300ms ease}
+  .js figure[data-reveal]{clip-path:none;opacity:0}
+  .js figure[data-reveal] img{transform:none;transition:none}
+  .js figure[data-reveal].in{opacity:1}
+  .btn:active,.tlink:hover svg,.tlink:active svg{transform:none}
+  header nav a,html:not(.navin) header nav a{transform:none;transition:opacity 300ms ease}
+  .sp-logo.go{animation:spIn 300ms ease-out both}
+  html{scroll-behavior:auto}
+}
+</style>
+<script>document.documentElement.classList.add('js','splashing');history.scrollRestoration='manual'</script>
+</head>
+<body>
+<a class="skip" href="#main">דלגו לתוכן</a>
+<div class="splash" id="splash" aria-hidden="true">
+  <div class="sp-fly" id="spFly"><picture><source srcset="img/logo-cream.png" media="(prefers-color-scheme: dark)"><img class="sp-logo" id="spLogo" src="img/logo-black.png" alt="" width="570" height="120"></picture></div>
+</div>
+
+<header id="hdr">
+  <div class="wrap">
+    <a class="logo" href="#home" aria-label="OTTOTO, לראש העמוד">
+      <picture><source srcset="img/logo-cream.png" media="(prefers-color-scheme: dark)"><img src="img/logo-black.png" alt="OTTOTO קפה רמת אביב" width="570" height="120"></picture>
+    </a>
+    <nav id="nav" aria-label="ניווט ראשי">
+      <a href="#home" style="--n:0" aria-current="true">HOME</a>
+      <a href="#shop" style="--n:1">SHOP</a>
+      <a href="#playlist" style="--n:2">PLAYLIST</a>
+      <a href="#vibes" style="--n:3">VIBES</a>
+      <a href="#friends" style="--n:4">FRIENDS</a>
+      <a href="#visit" style="--n:5">VISIT</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <span id="main" tabindex="-1"></span>
+
+  <!-- the whole first screen (logo, video, info line) is sized to exactly one screen height -->
+  <div class="home-screen">
+  <div class="bigmark" id="home">
+    <picture><source srcset="img/logo-cream.png" media="(prefers-color-scheme: dark)"><img src="img/logo-black.png" alt="" width="570" height="120"></picture>
+  </div>
+  <div class="hero" data-nav="home">
+    <!-- the original "Welcome to OTTOTO" reel across the whole page: on wide screens the reel sits in the middle
+         and a blurred still of it fills the sides; on phones it simply runs edge to edge -->
+    <div class="reel-band">
+      <img class="bg" src="img/reel-poster.jpg" alt="" aria-hidden="true">
+      <video id="reel" src="video/welcome.mp4" poster="img/reel-poster.jpg" muted loop playsinline preload="metadata" aria-label="Welcome to OTTOTO: איורי קו של אנשים בקיוסק, עם קפה, מאצ׳ה ועוגיות"></video>
+    </div>
+    <div class="wrap">
+      <h1 class="sr-only">OTTOTO, קפה ויין ברמת אביב</h1>
+      <div class="infobar">
+        <span class="status" data-status><i></i><span>שעות פתיחה</span></span>
+        <span class="addr"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z"/></svg>גרונמן 8, תל אביב</span>
+        <a class="btn fill" href="https://maps.google.com/?q=Gronemann+8+Tel+Aviv" target="_blank" rel="noopener">נווטו אלינו</a>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <section class="shop" id="shop">
+    <div class="wrap">
+      <div data-reveal>
+        <div class="stage" id="stage">
+          <img class="on" src="img/shop/kit-2.jpg" alt="ערכת המאצ׳ה של matto פתוחה: קערה, מקצף במבוק, כפית, מסננת ופחית מאצ׳ה" width="1000" height="1000">
+          <img src="img/shop/kit-1.jpg" alt="קופסת ערכת המאצ׳ה של matto סגורה" width="1000" height="1000" loading="lazy">
+          <img src="img/shop/kit-3.jpg" alt="קופסת ערכת המאצ׳ה נפתחת מהצד" width="1000" height="1000" loading="lazy">
+        </div>
+        <div class="thumbs" role="group" aria-label="תמונות הערכה">
+          <button aria-pressed="true" aria-label="תמונה 1"><img src="img/shop/kit-2.jpg" alt="" loading="lazy"></button>
+          <button aria-pressed="false" aria-label="תמונה 2"><img src="img/shop/kit-1.jpg" alt="" loading="lazy"></button>
+          <button aria-pressed="false" aria-label="תמונה 3"><img src="img/shop/kit-3.jpg" alt="" loading="lazy"></button>
+        </div>
+      </div>
+      <div>
+        <h2 class="en">Shop</h2>
+        <p class="by">MATCHA BY MATTO</p>
+        <h3>YOUR MATTO MATCHA KIT</h3>
+        <ul class="kit-list">
+          <li><span>מאצ׳ה <bdi dir="ltr">100% ceremonial grade</bdi></span><span>30g</span></li>
+          <li><span>קערת מאצ׳ה מזכוכית</span></li>
+          <li><span>מקצף במבוק</span></li>
+          <li><span>כפית מאצ׳ה</span></li>
+          <li><span>מסננת</span></li>
+        </ul>
+        <p class="price"><span class="draft">359 ₪</span></p>
+        <p class="how"><span class="draft">[איך קונים באוטוטו: בקיוסק, בוואטסאפ או באתר, מהלקוח]</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="playlist" id="playlist">
+    <div class="wrap">
+      <h2 class="en">Our autumn playlist</h2>
+      <p class="lead">מה שמתנגן אצלנו בקופה, עכשיו גם אצלכם.</p>
+      <div class="btns">
+        <a class="btn" href="https://open.spotify.com/playlist/4zsaFyuyAfIeqs3lRRJgPa" target="_blank" rel="noopener">
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M8 11.973c2.5 -1.473 5.5 -.973 7.5 .527"/><path d="M9 15c1.5 -1 4 -1 5 .5"/><path d="M7 9c2 -1 6 -2 10 .5"/></svg>
+          להאזנה בספוטיפיי
+        </a>
+      </div>
+      <!-- the cassette is the cafe's own brand motif (it hangs on the kiosk), drawn here so the tape can wind as you scroll -->
+      <div class="cassette" aria-hidden="true">
+        <svg viewBox="0 0 520 330">
+          <rect x="4" y="4" width="512" height="322" rx="22" fill="#F7F2E8" stroke="#141414" stroke-width="3"/>
+          <circle cx="26" cy="26" r="5" fill="none" stroke="#141414" stroke-width="2"/><circle cx="494" cy="26" r="5" fill="none" stroke="#141414" stroke-width="2"/>
+          <circle cx="26" cy="304" r="5" fill="none" stroke="#141414" stroke-width="2"/><circle cx="494" cy="304" r="5" fill="none" stroke="#141414" stroke-width="2"/>
+          <rect x="46" y="34" width="428" height="206" rx="10" fill="#F3EBDD" stroke="#141414" stroke-width="2"/>
+          <text x="260" y="68" text-anchor="middle" font-size="15" font-weight="700" fill="#141414" letter-spacing=".5">PAUSE IF YOU MUST, BUT DON'T STOP.</text>
+          <line x1="66" y1="82" x2="454" y2="82" stroke="#141414" stroke-width="1.5"/>
+          <text x="66" y="150" font-size="13" font-weight="700" fill="#141414">SIDE</text>
+          <text x="64" y="196" font-size="56" font-weight="900" fill="#141414" style="font-family:Rubik,sans-serif">1</text>
+          <rect x="130" y="100" width="300" height="104" rx="52" fill="#FBF6EE" stroke="#141414" stroke-width="2.5"/>
+          <rect x="226" y="128" width="108" height="48" rx="4" fill="#2B211A" stroke="#141414" stroke-width="2"/>
+          <circle id="packL" class="pack" cx="182" cy="152" r="34" fill="#5A3E2B"/>
+          <circle id="packR" class="pack" cx="378" cy="152" r="18" fill="#5A3E2B"/>
+          <g class="spin"><circle cx="182" cy="152" r="17" fill="#FBF6EE" stroke="#141414" stroke-width="2.5"/><path d="M182 139v8M193.3 158.5l-6.9-4M170.7 158.5l6.9-4" stroke="#141414" stroke-width="3" stroke-linecap="round"/><circle cx="182" cy="152" r="5" fill="none" stroke="#141414" stroke-width="2"/></g>
+          <g class="spin"><circle cx="378" cy="152" r="17" fill="#FBF6EE" stroke="#141414" stroke-width="2.5"/><path d="M378 139v8M389.3 158.5l-6.9-4M366.7 158.5l6.9-4" stroke="#141414" stroke-width="3" stroke-linecap="round"/><circle cx="378" cy="152" r="5" fill="none" stroke="#141414" stroke-width="2"/></g>
+          <image href="img/logo-black.png" x="170" y="206" width="180" height="38"/>
+          <path d="M110 326l22-62h256l22 62" fill="#EDE5D6" stroke="#141414" stroke-width="3" stroke-linejoin="round"/>
+          <circle cx="170" cy="300" r="7" fill="none" stroke="#141414" stroke-width="2"/><circle cx="350" cy="300" r="7" fill="none" stroke="#141414" stroke-width="2"/>
+          <rect x="236" y="290" width="48" height="16" rx="3" fill="none" stroke="#141414" stroke-width="2"/>
+          <text x="260" y="282" text-anchor="middle" font-size="12" fill="#141414">autumn playlist</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="vibes" id="vibes">
+    <div class="wrap">
+      <div class="about" id="about">
+        <h2 class="draft" data-reveal>קפה של שכונה. יין של ערב.</h2>
+        <div class="collage">
+          <p class="lead draft" data-reveal>קפה, מאפים טריים וכריכים מהבוקר, ובערב כוס יין בחוץ. ברמת אביב, ברחוב גרונמן.</p>
+          <figure class="big" data-reveal><img src="img/ig-05.jpg" alt="אנשים יושבים בשולחנות בחוץ באוטוטו" width="480" height="640" loading="lazy"></figure>
+          <figure class="small" data-reveal><img src="img/ig-01.jpg" alt="ויטרינת מאפים בבוקר" width="480" height="640" loading="lazy"></figure>
+        </div>
+      </div>
+      <div class="head">
+        <h2 class="en">By you</h2>
+        <div class="btns">
+          <a class="btn" href="https://www.instagram.com/ottoto.tlv/" target="_blank" rel="noopener">
+            <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4m0 4a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z"/><path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M16.5 7.5l0 .01"/></svg>
+            <span class="en">@ottoto.tlv</span>
+          </a>
+        </div>
+      </div>
+      <div class="grid">
+        <figure data-reveal><img src="img/ig-03.jpg" alt="שלט הקלטת של אוטוטו על הקיוסק" width="480" height="640" loading="lazy"></figure>
+        <figure data-reveal><img src="img/ig-12.jpg" alt="מגש מאפים" width="480" height="640" loading="lazy"></figure>
+        <figure data-reveal><img src="img/ig-06.jpg" alt="מאצ׳ה קרה וגלידה עם סוכריות" width="480" height="640" loading="lazy"></figure>
+        <figure data-reveal><img src="img/ig-10.jpg" alt="כריך פסטרמה על מגש" width="480" height="640" loading="lazy"></figure>
+        <figure data-reveal><img src="img/ig-02.jpg" alt="פיקניק בפארק ליד" width="480" height="640" loading="lazy"></figure>
+        <figure data-reveal><img src="img/ig-07.jpg" alt="ויטרינת כריכים" width="480" height="640" loading="lazy"></figure>
+        <figure data-reveal><img src="img/ig-11.jpg" alt="טוסט על מגש נירוסטה" width="480" height="640" loading="lazy"></figure>
+        <figure data-reveal><img src="img/ig-09.jpg" alt="קפה קר ביד" width="480" height="640" loading="lazy"></figure>
+        <figure data-reveal><img src="img/ig-08.jpg" alt="שייקים קרים" width="480" height="640" loading="lazy"></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="friends" id="friends">
+    <div class="wrap friends">
+      <article class="poster" data-reveal>
+        <img class="top" src="img/logo-black.png" alt="" width="570" height="120">
+        <div class="bubble">
+          <h2>החברים של</h2>
+          <img src="img/logo-black.png" alt="OTTOTO" width="570" height="120">
+        </div>
+        <ul class="perks">
+          <li><span class="draft">[הטבה ראשונה, מהלקוח]</span></li>
+          <li><span class="draft">[הטבה שנייה, מהלקוח]</span></li>
+          <li><span class="draft">[הטבה שלישית, מהלקוח]</span></li>
+        </ul>
+        <p class="join"><span class="draft">[איך מצטרפים, מהלקוח]</span></p>
+      </article>
+    </div>
+  </section>
+
+  <section class="visit" id="visit">
+    <div class="wrap">
+      <div>
+        <h2 class="en">Come by</h2>
+        <p class="addr">גרונמן 8, תל אביב<span class="en">GRONEMANN 8, RAMAT AVIV</span></p>
+        <p class="status" data-status><i></i><span>שעות פתיחה</span></p>
+        <div class="btns">
+          <a class="btn fill" href="https://maps.google.com/?q=Gronemann+8+Tel+Aviv" target="_blank" rel="noopener">נווטו אלינו</a>
+        </div>
+      </div>
+      <div>
+        <div class="hours" id="hours">
+          <div data-days="0,1,2,3,4"><span>א׳-ה׳</span><span class="en">07:30 - 20:00</span></div>
+          <div data-days="5"><span>שישי</span><span class="en">07:30 - 15:30</span></div>
+          <div data-days="6"><span>שבת</span><span class="en">08:30 - 20:00</span></div>
+        </div>
+        <img class="walker" src="img/walker-cream.png" alt="" aria-hidden="true">
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <img src="img/logo-cream.png" alt="OTTOTO" width="570" height="120">
+    <div class="soc">
+      <a href="https://www.instagram.com/ottoto.tlv/" target="_blank" rel="noopener" aria-label="אינסטגרם"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4m0 4a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z"/><path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M16.5 7.5l0 .01"/></svg></a>
+      <a href="https://open.spotify.com/playlist/4zsaFyuyAfIeqs3lRRJgPa" target="_blank" rel="noopener" aria-label="ספוטיפיי"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M8 11.973c2.5 -1.473 5.5 -.973 7.5 .527"/><path d="M9 15c1.5 -1 4 -1 5 .5"/><path d="M7 9c2 -1 6 -2 10 .5"/></svg></a>
+    </div>
+    <span class="en">© <span id="yr"></span> OTTOTO TLV, CAFE &amp; WINE</span>
+  </div>
+</footer>
+
+<script>
+const root=document.documentElement,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const hdr=document.getElementById('hdr'),nav=document.getElementById('nav');
+const heroLogo=document.querySelector('.bigmark img');
+
+/* first screen = exactly one screen: subtract the sticky menu row from the height */
+const setHdr=()=>root.style.setProperty('--hdr',hdr.offsetHeight+'px');
+new ResizeObserver(setHdr).observe(hdr);setHdr();
+
+/* once the big logo leaves the screen: header rule + small logo in the row */
+new IntersectionObserver(([e])=>{root.classList.toggle('scrolled',!e.isIntersecting);hdr.classList.toggle('lined',!e.isIntersecting)}).observe(heroLogo);
+
+/* splash: logo fades in and sways, then flies into the big logo's place */
+(function(){
+  const splash=document.getElementById('splash'),fly=document.getElementById('spFly'),logo=document.getElementById('spLogo');
+  let gone=false,started=false;
+  scrollTo(0,0);document.body.style.overflow='hidden';
+  function done(){
+    if(root.classList.contains('navin'))return;
+    root.classList.remove('splashing');splash.hidden=true;
+    root.classList.add('navin');document.body.style.overflow='';
+  }
+  function hide(){
+    if(gone)return;gone=true;
+    const a=fly.getBoundingClientRect(),b=heroLogo.getBoundingClientRect();
+    splash.classList.add('out');
+    if(reduce||!fly.animate||!a.width||!b.width){setTimeout(done,reduce?300:0);return}
+    /* settle the sway to level while it flies, so it lands straight */
+    const tilt=getComputedStyle(logo).transform;
+    logo.style.animation='none';
+    logo.animate([{transform:tilt==='none'?'none':tilt},{transform:'none'}],{duration:500,easing:'ease-out',fill:'forwards'});
+    const sc=b.width/a.width,dx=b.left-a.left,dy=b.top-a.top;
+    const an=fly.animate([{transform:'translate(0,0) scale(1)'},{transform:`translate(${dx}px,${dy}px) scale(${sc})`}],{duration:1000,easing:'cubic-bezier(.6,0,.2,1)',fill:'forwards'});
+    an.onfinish=done;setTimeout(done,1400);
+  }
+  function start(){
+    if(started)return;started=true;
+    setTimeout(()=>{logo.classList.add('go');splash.addEventListener('click',hide);setTimeout(hide,reduce?600:1600)},200);
+  }
+  (logo.decode?logo.decode():Promise.resolve()).then(start,start);
+  setTimeout(start,3000);
+})();
+
+/* reveal key blocks once, as they enter */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.2,rootMargin:'0px 0px -8% 0px'});
+document.querySelectorAll('[data-reveal]').forEach((el,i)=>{el.style.transitionDelay=(i%3)*60+'ms';io.observe(el)});
+
+
+/* open now, by Tel Aviv time */
+const HOURS={0:['07:30','20:00'],1:['07:30','20:00'],2:['07:30','20:00'],3:['07:30','20:00'],4:['07:30','20:00'],5:['07:30','15:30'],6:['08:30','20:00']};
+const toMin=t=>{const[h,m]=t.split(':');return h*60+ +m};
+function status(){
+  const p=Object.fromEntries(new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Jerusalem',weekday:'short',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date()).map(x=>[x.type,x.value]));
+  const day=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].indexOf(p.weekday),now=+p.hour*60+ +p.minute;
+  const [o,c]=HOURS[day],open=now>=toMin(o)&&now<toMin(c);
+  const txt=open?`פתוח עכשיו · עד ${c}`:now<toMin(o)?`סגור עכשיו, נפתח היום ב־${o}`:`סגור עכשיו, נפתח מחר ב־${HOURS[(day+1)%7][0]}`;
+  document.querySelectorAll('[data-status]').forEach(s=>{s.classList.toggle('open',open);s.lastElementChild.textContent=txt});
+  document.querySelectorAll('#hours [data-days]').forEach(r=>r.classList.toggle('today',r.dataset.days.split(',').includes(String(day))));
+}
+status();setInterval(status,60000);
+
+/* mark the nav link of the section on screen */
+const links=[...nav.querySelectorAll('a')];
+const mark=id=>links.forEach(a=>a.setAttribute('aria-current',a.hash==='#'+id));
+const navIO=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)mark(e.target.dataset.nav||e.target.id)}),{rootMargin:'-45% 0px -50% 0px'});
+['shop','playlist','vibes','friends','visit'].forEach(id=>navIO.observe(document.getElementById(id)));
+navIO.observe(document.querySelector('.hero'));
+/* the home page always lights HOME while the big logo is on screen */
+new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(heroLogo);
+
+/* shop: thumbnails swap the big photo */
+const stage=[...document.querySelectorAll('#stage img')],thumbs=[...document.querySelectorAll('.thumbs button')];
+thumbs.forEach((t,i)=>t.addEventListener('click',()=>{thumbs.forEach((x,j)=>x.setAttribute('aria-pressed',i===j));stage.forEach((im,j)=>im.classList.toggle('on',i===j))}));
+
+/* welcome reel: plays only while on screen, never for reduced motion */
+const reel=document.getElementById('reel');
+if(!reduce){new IntersectionObserver(([e])=>{e.isIntersecting?reel.play().catch(()=>{}):reel.pause()},{threshold:.25}).observe(reel)}
+
+document.getElementById('yr').textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
