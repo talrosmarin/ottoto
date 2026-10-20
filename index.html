@@ -15,15 +15,13 @@
 <meta property="og:url" content="https://talrosmarin.github.io/ottoto/">
 <meta property="og:locale" content="he_IL">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23F3EBDD'/%3E%3Crect x='14' y='10' width='36' height='44' rx='13' fill='none' stroke='%23141414' stroke-width='9'/%3E%3C/svg%3E">
-<link rel="preload" href="fonts/mplus1p-900-hebrew.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/lunasima-700-hebrew.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="img/reel-poster.jpg" as="image">
 <style>
 /* fonts: self-hosted, SIL Open Font License */
-/* Hebrew letters come from M PLUS 1p (square, blocky, close to the "קפה רמת אביב" in the logo); Latin stays Rubik */
-@font-face{font-family:"Rubik";font-weight:400;font-display:swap;src:url(fonts/mplus1p-400-hebrew.woff2) format("woff2");unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
-@font-face{font-family:"Rubik";font-weight:500;font-display:swap;src:url(fonts/mplus1p-500-hebrew.woff2) format("woff2");unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
-@font-face{font-family:"Rubik";font-weight:700;font-display:swap;src:url(fonts/mplus1p-700-hebrew.woff2) format("woff2");unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
-@font-face{font-family:"Rubik";font-weight:900;font-display:swap;src:url(fonts/mplus1p-900-hebrew.woff2) format("woff2");unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
+/* Hebrew letters come from Lunasima (round, geometric, like the menu board in the kiosk); Latin stays Rubik */
+@font-face{font-family:"Lunasima";font-weight:400 500;font-display:swap;src:url(fonts/lunasima-400-hebrew.woff2) format("woff2");unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
+@font-face{font-family:"Lunasima";font-weight:600 900;font-display:swap;src:url(fonts/lunasima-700-hebrew.woff2) format("woff2");unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
 @font-face{font-family:"Rubik";font-weight:400 900;font-display:swap;src:url(fonts/rubik-400-900-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 @font-face{font-family:"Cousine";font-weight:400;font-display:swap;src:url(fonts/cousine-400-hebrew.woff2) format("woff2");unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
 @font-face{font-family:"Cousine";font-weight:400;font-display:swap;src:url(fonts/cousine-400-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
@@ -48,7 +46,7 @@
   --line:#141414;
   --soft-line:rgba(20,20,20,.18);
   --mono:"Cousine",ui-monospace,monospace;
-  --sans:"Rubik",system-ui,sans-serif;
+  --sans:"Rubik","Lunasima",system-ui,sans-serif;
   --r:20px;
   --ease:cubic-bezier(.16,1,.3,1);
   --ease-out:cubic-bezier(.23,1,.32,1);
@@ -135,9 +133,9 @@ html.splashing .bigmark img{visibility:hidden}
 @media (max-width:700px){
   .home-screen{height:auto;min-height:calc(100svh - var(--hdr,44px))}
   .hero{flex:none;padding-bottom:4px}
-  .hero .reel-band{flex:none}
+  .hero .reel-band{flex:none;background:none}
   .hero .reel-band .bg{display:none}
-  .hero .reel-band video{width:100%;height:auto;box-shadow:none}
+  .hero .reel-band video{width:86%;height:auto;box-shadow:none;border-radius:var(--r)}
   .hero .infobar{display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 12px;margin-top:8px;padding-block:7px}
   .hero .infobar .status,.hero .infobar .addr{font-size:13.5px;grid-column:1}
   .infobar .addr svg{width:16px;height:16px}
@@ -147,11 +145,10 @@ html.splashing .bigmark img{visibility:hidden}
 /* splash: the logo appears, sways, then flies into its place on the page */
 .splash{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:var(--bg);cursor:pointer;transition:background-color 900ms ease}
 .splash.out{background-color:transparent;pointer-events:none}
-.sp-fly{width:min(72vw,560px);line-height:0;transform-origin:0 0;will-change:transform}
+.sp-fly{width:min(84vw,680px);line-height:0;transform-origin:0 0;will-change:transform}
 .sp-logo{display:block;width:100%;height:auto;transform-origin:50% 60%;opacity:0}
-.sp-logo.go{opacity:1;animation:spIn 400ms ease-out both,wob 2.6s ease-in-out infinite}
+.sp-logo.go{opacity:1;animation:spIn 400ms ease-out both}
 @keyframes spIn{from{opacity:0}}
-@keyframes wob{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
 
 /* buttons: one primary per view, ghost for the rest */
 .btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
@@ -168,9 +165,9 @@ html.splashing .bigmark img{visibility:hidden}
 .hero{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 0 clamp(12px,2.4svh,28px)}
 .hero .wrap{flex:none}
 /* first screen: the welcome reel edge to edge, then a single info line: open now, address, navigate */
-.reel-band{flex:1;min-height:0;position:relative;overflow:hidden;background:#141414;isolation:isolate}
+.reel-band{flex:1;min-height:0;position:relative;overflow:hidden;background:#141414;isolation:isolate;display:flex;align-items:center;justify-content:center}
 .reel-band .bg{position:absolute;inset:-60px;width:calc(100% + 120px);height:calc(100% + 120px);max-width:none;object-fit:cover;filter:blur(18px) brightness(.8);z-index:-1}
-.reel-band video{display:block;height:100%;width:auto;aspect-ratio:9/16;margin:0 auto;object-fit:cover;box-shadow:0 0 60px rgba(0,0,0,.35)}
+.reel-band video{display:block;height:88%;width:auto;aspect-ratio:9/16;object-fit:contain;box-shadow:0 0 60px rgba(0,0,0,.35)}
 .infobar{flex:none;display:flex;align-items:center;gap:8px clamp(20px,4vw,48px);flex-wrap:wrap;margin-top:clamp(10px,1.8svh,18px);padding-block:clamp(8px,1.4svh,14px);border-block:1.5px solid var(--line)}
 .infobar .addr{display:inline-flex;align-items:center;gap:6px;font-size:17px}
 .infobar .btn{margin-inline-start:auto}
@@ -180,7 +177,7 @@ html.splashing .bigmark img{visibility:hidden}
 section{padding:clamp(88px,11vw,150px) 0 clamp(100px,12.5vw,170px)}
 h2{font-weight:900;font-size:clamp(40px,6.2vw,88px);line-height:.95;letter-spacing:-.02em;text-wrap:balance}
 h2.en{text-transform:uppercase}
-h2:not(.en),.visit .addr{letter-spacing:.03em}
+h2:not(.en),.visit .addr{letter-spacing:0}
 .lead{max-width:34ch;font-weight:400;margin-top:22px;font-size:clamp(18px,1.7vw,22px);line-height:1.5;text-wrap:pretty}
 
 /* about (now the opening of VIBES): offset collage */
@@ -321,7 +318,7 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
   html{scroll-behavior:auto}
 }
 </style>
-<script>document.documentElement.classList.add('js','splashing');history.scrollRestoration='manual'</script>
+<script>document.documentElement.classList.add('js','splashing');history.scrollRestoration='manual';if(location.hash)history.replaceState(null,'',location.pathname+location.search);scrollTo(0,0)</script>
 </head>
 <body>
 <a class="skip" href="#main">דלגו לתוכן</a>
@@ -336,10 +333,10 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
     </a>
     <nav id="nav" aria-label="ניווט ראשי">
       <a href="#home" style="--n:0" aria-current="true">HOME</a>
-      <a href="#shop" style="--n:1">SHOP</a>
+      <a href="#vibes" style="--n:1">VIBES</a>
       <a href="#playlist" style="--n:2">PLAYLIST</a>
-      <a href="#vibes" style="--n:3">VIBES</a>
-      <a href="#friends" style="--n:4">FRIENDS</a>
+      <a href="#friends" style="--n:3">FRIENDS</a>
+      <a href="#shop" style="--n:4">SHOP</a>
       <a href="#visit" style="--n:5">VISIT</a>
     </nav>
   </div>
@@ -371,33 +368,35 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
   </div>
   </div>
 
-  <section class="shop" id="shop">
+  <section class="vibes" id="vibes">
     <div class="wrap">
-      <div data-reveal>
-        <div class="stage" id="stage">
-          <img class="on" src="img/shop/kit-2.jpg" alt="ערכת המאצ׳ה של matto פתוחה: קערה, מקצף במבוק, כפית, מסננת ופחית מאצ׳ה" width="1000" height="1000">
-          <img src="img/shop/kit-1.jpg" alt="קופסת ערכת המאצ׳ה של matto סגורה" width="1000" height="1000" loading="lazy">
-          <img src="img/shop/kit-3.jpg" alt="קופסת ערכת המאצ׳ה נפתחת מהצד" width="1000" height="1000" loading="lazy">
-        </div>
-        <div class="thumbs" role="group" aria-label="תמונות הערכה">
-          <button aria-pressed="true" aria-label="תמונה 1"><img src="img/shop/kit-2.jpg" alt="" loading="lazy"></button>
-          <button aria-pressed="false" aria-label="תמונה 2"><img src="img/shop/kit-1.jpg" alt="" loading="lazy"></button>
-          <button aria-pressed="false" aria-label="תמונה 3"><img src="img/shop/kit-3.jpg" alt="" loading="lazy"></button>
+      <div class="about" id="about">
+        <h2 class="draft" data-reveal>קפה של שכונה. יין של ערב.</h2>
+        <div class="collage">
+          <p class="lead draft" data-reveal>קפה, מאפים טריים וכריכים מהבוקר, ובערב כוס יין בחוץ. ברמת אביב, ברחוב גרונמן.</p>
+          <figure class="big" data-reveal><img src="img/ig-05.jpg" alt="אנשים יושבים בשולחנות בחוץ באוטוטו" width="480" height="640" loading="lazy"></figure>
+          <figure class="small" data-reveal><img src="img/ig-01.jpg" alt="ויטרינת מאפים בבוקר" width="480" height="640" loading="lazy"></figure>
         </div>
       </div>
-      <div>
-        <h2 class="en">Shop</h2>
-        <p class="by">MATCHA BY MATTO</p>
-        <h3>YOUR MATTO MATCHA KIT</h3>
-        <ul class="kit-list">
-          <li><span>מאצ׳ה <bdi dir="ltr">100% ceremonial grade</bdi></span><span>30g</span></li>
-          <li><span>קערת מאצ׳ה מזכוכית</span></li>
-          <li><span>מקצף במבוק</span></li>
-          <li><span>כפית מאצ׳ה</span></li>
-          <li><span>מסננת</span></li>
-        </ul>
-        <p class="price"><span class="draft">359 ₪</span></p>
-        <p class="how"><span class="draft">[איך קונים באוטוטו: בקיוסק, בוואטסאפ או באתר, מהלקוח]</span></p>
+      <div class="head">
+        <h2 class="en">By you</h2>
+        <div class="btns">
+          <a class="btn" href="https://www.instagram.com/ottoto.tlv/" target="_blank" rel="noopener">
+            <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4m0 4a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z"/><path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M16.5 7.5l0 .01"/></svg>
+            <span class="en">@ottoto.tlv</span>
+          </a>
+        </div>
+      </div>
+      <div class="grid">
+        <figure data-reveal><img src="img/ig-03.jpg" alt="שלט הקלטת של אוטוטו על הקיוסק" width="480" height="640" loading="lazy"></figure>
+        <figure data-reveal><img src="img/ig-12.jpg" alt="מגש מאפים" width="480" height="640" loading="lazy"></figure>
+        <figure data-reveal><img src="img/ig-06.jpg" alt="מאצ׳ה קרה וגלידה עם סוכריות" width="480" height="640" loading="lazy"></figure>
+        <figure data-reveal><img src="img/ig-10.jpg" alt="כריך פסטרמה על מגש" width="480" height="640" loading="lazy"></figure>
+        <figure data-reveal><img src="img/ig-02.jpg" alt="פיקניק בפארק ליד" width="480" height="640" loading="lazy"></figure>
+        <figure data-reveal><img src="img/ig-07.jpg" alt="ויטרינת כריכים" width="480" height="640" loading="lazy"></figure>
+        <figure data-reveal><img src="img/ig-11.jpg" alt="טוסט על מגש נירוסטה" width="480" height="640" loading="lazy"></figure>
+        <figure data-reveal><img src="img/ig-09.jpg" alt="קפה קר ביד" width="480" height="640" loading="lazy"></figure>
+        <figure data-reveal><img src="img/ig-08.jpg" alt="שייקים קרים" width="480" height="640" loading="lazy"></figure>
       </div>
     </div>
   </section>
@@ -439,39 +438,6 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
     </div>
   </section>
 
-  <section class="vibes" id="vibes">
-    <div class="wrap">
-      <div class="about" id="about">
-        <h2 class="draft" data-reveal>קפה של שכונה. יין של ערב.</h2>
-        <div class="collage">
-          <p class="lead draft" data-reveal>קפה, מאפים טריים וכריכים מהבוקר, ובערב כוס יין בחוץ. ברמת אביב, ברחוב גרונמן.</p>
-          <figure class="big" data-reveal><img src="img/ig-05.jpg" alt="אנשים יושבים בשולחנות בחוץ באוטוטו" width="480" height="640" loading="lazy"></figure>
-          <figure class="small" data-reveal><img src="img/ig-01.jpg" alt="ויטרינת מאפים בבוקר" width="480" height="640" loading="lazy"></figure>
-        </div>
-      </div>
-      <div class="head">
-        <h2 class="en">By you</h2>
-        <div class="btns">
-          <a class="btn" href="https://www.instagram.com/ottoto.tlv/" target="_blank" rel="noopener">
-            <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4m0 4a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z"/><path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M16.5 7.5l0 .01"/></svg>
-            <span class="en">@ottoto.tlv</span>
-          </a>
-        </div>
-      </div>
-      <div class="grid">
-        <figure data-reveal><img src="img/ig-03.jpg" alt="שלט הקלטת של אוטוטו על הקיוסק" width="480" height="640" loading="lazy"></figure>
-        <figure data-reveal><img src="img/ig-12.jpg" alt="מגש מאפים" width="480" height="640" loading="lazy"></figure>
-        <figure data-reveal><img src="img/ig-06.jpg" alt="מאצ׳ה קרה וגלידה עם סוכריות" width="480" height="640" loading="lazy"></figure>
-        <figure data-reveal><img src="img/ig-10.jpg" alt="כריך פסטרמה על מגש" width="480" height="640" loading="lazy"></figure>
-        <figure data-reveal><img src="img/ig-02.jpg" alt="פיקניק בפארק ליד" width="480" height="640" loading="lazy"></figure>
-        <figure data-reveal><img src="img/ig-07.jpg" alt="ויטרינת כריכים" width="480" height="640" loading="lazy"></figure>
-        <figure data-reveal><img src="img/ig-11.jpg" alt="טוסט על מגש נירוסטה" width="480" height="640" loading="lazy"></figure>
-        <figure data-reveal><img src="img/ig-09.jpg" alt="קפה קר ביד" width="480" height="640" loading="lazy"></figure>
-        <figure data-reveal><img src="img/ig-08.jpg" alt="שייקים קרים" width="480" height="640" loading="lazy"></figure>
-      </div>
-    </div>
-  </section>
-
   <section class="friends" id="friends">
     <div class="wrap friends">
       <article class="poster" data-reveal>
@@ -487,6 +453,37 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
         </ul>
         <p class="join"><span class="draft">[איך מצטרפים, מהלקוח]</span></p>
       </article>
+    </div>
+  </section>
+
+  <section class="shop" id="shop">
+    <div class="wrap">
+      <div data-reveal>
+        <div class="stage" id="stage">
+          <img class="on" src="img/shop/kit-2.jpg" alt="ערכת המאצ׳ה של matto פתוחה: קערה, מקצף במבוק, כפית, מסננת ופחית מאצ׳ה" width="1000" height="1000">
+          <img src="img/shop/kit-1.jpg" alt="קופסת ערכת המאצ׳ה של matto סגורה" width="1000" height="1000" loading="lazy">
+          <img src="img/shop/kit-3.jpg" alt="קופסת ערכת המאצ׳ה נפתחת מהצד" width="1000" height="1000" loading="lazy">
+        </div>
+        <div class="thumbs" role="group" aria-label="תמונות הערכה">
+          <button aria-pressed="true" aria-label="תמונה 1"><img src="img/shop/kit-2.jpg" alt="" loading="lazy"></button>
+          <button aria-pressed="false" aria-label="תמונה 2"><img src="img/shop/kit-1.jpg" alt="" loading="lazy"></button>
+          <button aria-pressed="false" aria-label="תמונה 3"><img src="img/shop/kit-3.jpg" alt="" loading="lazy"></button>
+        </div>
+      </div>
+      <div>
+        <h2 class="en">Shop</h2>
+        <p class="by">MATCHA BY MATTO</p>
+        <h3>YOUR MATTO MATCHA KIT</h3>
+        <ul class="kit-list">
+          <li><span>מאצ׳ה <bdi dir="ltr">100% ceremonial grade</bdi></span><span>30g</span></li>
+          <li><span>קערת מאצ׳ה מזכוכית</span></li>
+          <li><span>מקצף במבוק</span></li>
+          <li><span>כפית מאצ׳ה</span></li>
+          <li><span>מסננת</span></li>
+        </ul>
+        <p class="price"><span class="draft">359 ₪</span></p>
+        <p class="how"><span class="draft">[איך קונים באוטוטו: בקיוסק, בוואטסאפ או באתר, מהלקוח]</span></p>
+      </div>
     </div>
   </section>
 
@@ -541,6 +538,7 @@ new IntersectionObserver(([e])=>{root.classList.toggle('scrolled',!e.isIntersect
   const splash=document.getElementById('splash'),fly=document.getElementById('spFly'),logo=document.getElementById('spLogo');
   let gone=false,started=false;
   scrollTo(0,0);document.body.style.overflow='hidden';
+  addEventListener('load',()=>scrollTo(0,0));addEventListener('pageshow',e=>{if(e.persisted)location.reload()});
   function done(){
     if(root.classList.contains('navin'))return;
     root.classList.remove('splashing');splash.hidden=true;
