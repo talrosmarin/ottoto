@@ -167,7 +167,7 @@ html.splashing .bigmark img{visibility:hidden}
 /* first screen: the welcome reel edge to edge, then a single info line: open now, address, navigate */
 .reel-band{flex:1;min-height:0;position:relative;overflow:hidden;background:#141414;isolation:isolate;display:flex;align-items:center;justify-content:center}
 .reel-band .bg{position:absolute;inset:-60px;width:calc(100% + 120px);height:calc(100% + 120px);max-width:none;object-fit:cover;filter:blur(18px) brightness(.8);z-index:-1}
-.reel-band video{display:block;height:88%;width:auto;aspect-ratio:9/15;object-fit:cover;object-position:50% 0;box-shadow:0 0 60px rgba(0,0,0,.35)}
+.reel-band video{display:block;height:88%;width:auto;aspect-ratio:9/16;object-fit:contain;box-shadow:0 0 60px rgba(0,0,0,.35)}
 .infobar{flex:none;display:flex;align-items:center;gap:8px clamp(20px,4vw,48px);flex-wrap:wrap;margin-top:clamp(10px,1.8svh,18px);padding-block:clamp(8px,1.4svh,14px);border-block:1.5px solid var(--line)}
 .infobar .addr{display:inline-flex;align-items:center;gap:6px;font-size:17px}
 .infobar .btn{margin-inline-start:auto}
