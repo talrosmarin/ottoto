@@ -119,7 +119,8 @@ html:not(.navin) header nav a{opacity:0;visibility:hidden;transform:translateY(-
 /* the big centered logo on the first screen */
 .home-screen{height:calc(100svh - var(--hdr,56px));min-height:460px;display:flex;flex-direction:column}
 .bigmark{flex:none;display:flex;justify-content:center;padding:clamp(18px,3vw,36px) 16px clamp(8px,2vw,20px)}
-.bigmark img{display:block;width:min(660px,92%);height:auto}
+.bigmark picture{display:block;width:calc(var(--rw,300px) * 1.04);max-width:92%}
+.bigmark img{display:block;width:100%;height:auto}
 html.splashing .bigmark img{visibility:hidden}
 .sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 @media (max-width:600px){
@@ -135,7 +136,7 @@ html.splashing .bigmark img{visibility:hidden}
   .hero{flex:none;padding-bottom:4px}
   .hero .reel-band{flex:none;background:none}
   .hero .reel-band .bg{display:none}
-  .hero .reel-band video{width:86%;height:auto;box-shadow:none;border-radius:var(--r)}
+  .hero .reel-band video{width:78%;height:auto;box-shadow:none;border-radius:var(--r)}
   .hero .infobar{display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 12px;margin-top:8px;padding-block:7px}
   .hero .infobar .status,.hero .infobar .addr{font-size:13.5px;grid-column:1}
   .infobar .addr svg{width:16px;height:16px}
@@ -167,7 +168,7 @@ html.splashing .bigmark img{visibility:hidden}
 /* first screen: the welcome reel edge to edge, then a single info line: open now, address, navigate */
 .reel-band{flex:1;min-height:0;position:relative;overflow:hidden;background:#141414;isolation:isolate;display:flex;align-items:center;justify-content:center}
 .reel-band .bg{position:absolute;inset:-60px;width:calc(100% + 120px);height:calc(100% + 120px);max-width:none;object-fit:cover;filter:blur(18px) brightness(.8);z-index:-1}
-.reel-band video{display:block;height:88%;width:auto;aspect-ratio:9/16;object-fit:contain;box-shadow:0 0 60px rgba(0,0,0,.35)}
+.reel-band video{display:block;height:80%;width:auto;aspect-ratio:9/16;object-fit:contain;box-shadow:0 0 60px rgba(0,0,0,.35)}
 .infobar{flex:none;display:flex;align-items:center;gap:8px clamp(20px,4vw,48px);flex-wrap:wrap;margin-top:clamp(10px,1.8svh,18px);padding-block:clamp(8px,1.4svh,14px);border-block:1.5px solid var(--line)}
 .infobar .addr{display:inline-flex;align-items:center;gap:6px;font-size:17px}
 .infobar .btn{margin-inline-start:auto}
@@ -599,6 +600,8 @@ thumbs.forEach((t,i)=>t.addEventListener('click',()=>{thumbs.forEach((x,j)=>x.se
 /* welcome reel: plays only while on screen, never for reduced motion */
 /* it waits for the opening logo to finish, then always starts from its first frame */
 const reel=document.getElementById('reel');let reelSeen=false;
+/* the big logo is as wide as the video (a hair wider), centered above it */
+new ResizeObserver(()=>{const w=reel.getBoundingClientRect().width;if(w)root.style.setProperty('--rw',w.toFixed(1)+'px')}).observe(reel);
 const ready=()=>root.classList.contains('navin');
 const startReel=()=>{reel.currentTime=0;if(reelSeen&&!reduce)reel.play().catch(()=>{})};
 if(!reduce){new IntersectionObserver(([e])=>{reelSeen=e.isIntersecting;if(!ready())return;reelSeen?reel.play().catch(()=>{}):reel.pause()},{threshold:.25}).observe(reel)}
