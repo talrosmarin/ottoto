@@ -129,14 +129,15 @@ html.splashing .bigmark img{visibility:hidden}
   header nav{grid-column:1;gap:2px 9px;flex-wrap:nowrap}
   header nav a{font-size:11.5px;letter-spacing:.04em}
 }
-/* phones: the reel is as wide as the content (no side gaps), shown whole at 9:16.
-   to keep the first screen to one screen, the logo gets smaller and the info line becomes one compact row */
+/* phones: the first screen is exactly the visible screen (Safari bars included).
+   the reel, whole and uncut at 9:16, takes whatever height is left (never wider than 78%),
+   and the logo follows the reel's width, so menu, logo, reel and info line always fit */
 @media (max-width:700px){
-  .home-screen{height:auto;min-height:calc(100svh - var(--hdr,44px))}
-  .hero{flex:none;padding-bottom:4px}
-  .hero .reel-band{flex:none;background:none}
+  .home-screen{height:calc(100svh - var(--hdr,44px));min-height:0}
+  .hero{flex:1;min-height:0;padding-bottom:4px}
+  .hero .reel-band{flex:1;min-height:0;background:none}
   .hero .reel-band .bg{display:none}
-  .hero .reel-band video{width:78%;height:auto;box-shadow:none;border-radius:var(--r)}
+  .hero .reel-band video{height:auto;width:auto;max-height:100%;max-width:78%;box-shadow:none;border-radius:var(--r);background:none}
   .hero .infobar{display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 12px;margin-top:8px;padding-block:7px}
   .hero .infobar .status,.hero .infobar .addr{font-size:13.5px;grid-column:1}
   .infobar .addr svg{width:16px;height:16px}
