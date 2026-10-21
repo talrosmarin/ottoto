@@ -187,28 +187,25 @@ h2.en{text-transform:uppercase}
 h2:not(.en),.visit .addr{letter-spacing:0}
 .lead{max-width:34ch;font-weight:400;margin-top:22px;font-size:clamp(18px,1.7vw,22px);line-height:1.5;text-wrap:pretty}
 
-/* THE VIBE: each photo is served on a brushed stainless tray (like the kiosk's own trays),
-   with a peach paper liner peeking out; trays slide in one after another as you scroll */
-.vibes{overflow-x:clip}  /* trays start outside before they slide in */
-h2.vibe-title{text-align:center;margin:0 0 clamp(36px,5vw,64px)}
-.trays{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(28px,4vw,56px) clamp(20px,3vw,44px);max-width:1080px;margin-inline:auto;padding-inline:16px;list-style:none}
-.trays li{margin:0}
-.tray{position:relative;padding:clamp(10px,1.4vw,16px);border-radius:clamp(10px,1.4vw,16px);transform:rotate(var(--tilt,0deg));
-  background:linear-gradient(125deg,#f7f7f5 0%,#cfd0d1 18%,#f1f1ef 38%,#bfc0c2 62%,#ecedeb 82%,#c8c9ca 100%);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 0 0 1px rgba(255,255,255,.55),inset 0 -2px 3px rgba(0,0,0,.18),0 22px 34px -18px rgba(20,20,20,.5),0 6px 10px -6px rgba(20,20,20,.35)}
-/* brushed-metal grain */
-.tray::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:repeating-linear-gradient(90deg,rgba(255,255,255,.12) 0 1px,rgba(0,0,0,.025) 1px 3px)}
-/* the raised rim: a thin inner groove */
-.tray::after{content:"";position:absolute;inset:clamp(4px,.6vw,6px);border-radius:calc(clamp(10px,1.4vw,16px) - 5px);pointer-events:none;box-shadow:inset 0 1px 2px rgba(0,0,0,.22),0 1px 0 rgba(255,255,255,.8)}
-.liner{position:relative;z-index:1;background:#F2C3A2;padding:5px;border-radius:3px;transform:rotate(var(--paper,1.2deg));box-shadow:0 1px 2px rgba(0,0,0,.18)}
-.liner img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;border-radius:2px;transform:rotate(calc(var(--paper,1.2deg) * -1))}
-.ticket{display:flex;justify-content:space-between;gap:8px;margin-top:14px;padding-inline:4px;font-family:var(--mono);font-size:13px;letter-spacing:.08em;direction:ltr;color:var(--muted)}
-.ticket b{font-weight:700;color:var(--fg)}
-/* served: slide in from the side, settle with a little overshoot-free ease */
-@media (prefers-reduced-motion:no-preference){
-  html.js .trays li{opacity:0;transform:translateX(var(--from,60px)) rotate(var(--spin,6deg));transition:opacity 500ms ease,transform 750ms var(--ease);transition-delay:calc(var(--col,0) * 110ms)}
-  html.js .trays li.served{opacity:1;transform:none}
-}
+/* THE VIBE: photos pinned to a sagging washing line that drifts on its own; drag to move it
+   (after "Teams or Gallery with cool effect" by Nirav Joshi on Dribbble) */
+.vibes{overflow-x:clip}
+h2.vibe-title{text-align:center;margin:0 0 clamp(20px,3vw,40px)}
+.washline{--cw:clamp(140px,16vw,230px);position:relative;direction:ltr;height:calc(var(--cw) * 1.25 + 170px);overflow:hidden;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
+.washline.dragging{cursor:grabbing}
+.washline svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.washline path{fill:none;stroke:var(--fg);stroke-width:1.3;opacity:.6}
+.pins{list-style:none;margin:0;padding:0}
+.pin{position:absolute;left:0;top:0;width:var(--cw);transform-origin:50% 0;will-change:transform}
+.pin figure{margin:5px 0 0;background:#fff;padding:8px 8px 0;border-radius:6px;box-shadow:0 1px 2px rgba(0,0,0,.08),0 16px 26px -16px rgba(20,20,20,.5)}
+.pin img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;border-radius:3px;pointer-events:none;-webkit-user-drag:none}
+.pin figcaption{text-align:center;padding:9px 4px 11px;line-height:1.2}
+.pin figcaption b{display:block;font-size:13px;letter-spacing:.03em;color:#141414}
+.pin figcaption span{display:block;margin-top:3px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:#6b645a}
+/* the little black clip that holds each photo on the line */
+.clip{position:absolute;z-index:1;left:50%;top:-5px;width:10px;height:15px;margin-left:-5px;background:#141414;border-radius:2px}
+.clip::after{content:"";position:absolute;left:3px;top:3px;width:4px;height:4px;border-radius:50%;background:#F3EBDD}
 
 .note{margin-top:28px;font-size:15px;color:var(--muted)}
 
@@ -307,9 +304,6 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
   .walker{width:120px;margin:40px 0 0;margin-inline-start:auto}
 }
 @media (max-width:520px){
-  .trays{grid-template-columns:1fr 1fr;gap:28px 14px;padding-inline:14px}
-  .ticket{font-size:11px;margin-top:10px;letter-spacing:.04em}
-  .liner{padding:4px}
 }
 /* hover effects only where a real mouse exists, so taps never get stuck in hover */
 @media (hover:hover) and (pointer:fine){
@@ -389,17 +383,20 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
 
   <section class="vibes" id="vibes">
     <div class="wrap"><h2 class="en vibe-title">The Vibe</h2></div>
-    <ul class="trays">
-      <li style="--tilt:-1.5deg;--paper:1.5deg"><div class="tray"><div class="liner"><img src="img/vibe/awning.jpg" alt="הסוכך של אוטוטו ואנשים יושבים בחוץ" width="640" height="640" loading="lazy"></div></div><p class="ticket"><span>NO. 01</span><b>THE KIOSK</b></p></li>
-      <li style="--tilt:1deg;--paper:-1.2deg"><div class="tray"><div class="liner"><img src="img/vibe/matcha-heart.jpg" alt="מאצ׳ה לאטה עם לב" width="640" height="640" loading="lazy"></div></div><p class="ticket"><span>NO. 02</span><b>MATCHA</b></p></li>
-      <li style="--tilt:-.5deg;--paper:2deg"><div class="tray"><div class="liner"><img src="img/vibe/pastries.jpg" alt="מאפי פירות יער ועוגיות" width="640" height="640" loading="lazy"></div></div><p class="ticket"><span>NO. 03</span><b>PASTRIES</b></p></li>
-      <li style="--tilt:1.5deg;--paper:-1.8deg"><div class="tray"><div class="liner"><img src="img/vibe/latte-pour.jpg" alt="שפיכת לאטה ארט" width="640" height="640" loading="lazy"></div></div><p class="ticket"><span>NO. 04</span><b>LATTE ART</b></p></li>
-      <li style="--tilt:-1deg;--paper:1deg"><div class="tray"><div class="liner"><img src="img/vibe/focaccia-heart.jpg" alt="פוקאצ׳ה בצורת לב על מגש" width="640" height="640" loading="lazy"></div></div><p class="ticket"><span>NO. 05</span><b>FOCACCIA</b></p></li>
-      <li style="--tilt:.5deg;--paper:-1.5deg"><div class="tray"><div class="liner"><img src="img/vibe/drinks-chair.jpg" alt="ארבעה משקאות קרים על כיסא עץ" width="640" height="640" loading="lazy"></div></div><p class="ticket"><span>NO. 06</span><b>ICED</b></p></li>
-      <li style="--tilt:-1.2deg;--paper:1.8deg"><div class="tray"><div class="liner"><img src="img/vibe/sandwich.jpg" alt="כריך טונה על מגש ליד תיק ירוק" width="640" height="640" loading="lazy"></div></div><p class="ticket"><span>NO. 07</span><b>SANDWICH</b></p></li>
-      <li style="--tilt:1.2deg;--paper:-1deg"><div class="tray"><div class="liner"><img src="img/vibe/latte-matcha.jpg" alt="לאטה, מאצ׳ה קרה ומאפה פירות יער" width="640" height="640" loading="lazy"></div></div><p class="ticket"><span>NO. 08</span><b>MORNING</b></p></li>
-      <li style="--tilt:-.8deg;--paper:1.4deg"><div class="tray"><div class="liner"><img src="img/vibe/focaccia-tray.jpg" alt="מגש פוקאצ׳ה טרייה" width="640" height="640" loading="lazy"></div></div><p class="ticket"><span>NO. 09</span><b>FRESH BAKE</b></p></li>
-    </ul>
+    <div class="washline" aria-label="תמונות מאוטוטו על חבל כביסה">
+      <svg aria-hidden="true"><path d=""/></svg>
+      <ul class="pins">
+        <li class="pin"><span class="clip"></span><figure><img src="img/vibe/awning.jpg" alt="הסוכך של אוטוטו ואנשים יושבים בחוץ" width="640" height="800" draggable="false"><figcaption><b>THE KIOSK</b><span>NO. 01</span></figcaption></figure></li>
+        <li class="pin"><span class="clip"></span><figure><img src="img/vibe/matcha-heart.jpg" alt="מאצ׳ה לאטה עם לב" width="640" height="800" draggable="false"><figcaption><b>MATCHA</b><span>NO. 02</span></figcaption></figure></li>
+        <li class="pin"><span class="clip"></span><figure><img src="img/vibe/pastries.jpg" alt="מאפי פירות יער ועוגיות" width="640" height="800" draggable="false"><figcaption><b>PASTRIES</b><span>NO. 03</span></figcaption></figure></li>
+        <li class="pin"><span class="clip"></span><figure><img src="img/vibe/latte-pour.jpg" alt="שפיכת לאטה ארט" width="640" height="800" draggable="false"><figcaption><b>LATTE ART</b><span>NO. 04</span></figcaption></figure></li>
+        <li class="pin"><span class="clip"></span><figure><img src="img/vibe/focaccia-heart.jpg" alt="פוקאצ׳ה בצורת לב על מגש" width="640" height="800" draggable="false"><figcaption><b>FOCACCIA</b><span>NO. 05</span></figcaption></figure></li>
+        <li class="pin"><span class="clip"></span><figure><img src="img/vibe/drinks-chair.jpg" alt="ארבעה משקאות קרים על כיסא עץ" width="640" height="800" draggable="false"><figcaption><b>ICED</b><span>NO. 06</span></figcaption></figure></li>
+        <li class="pin"><span class="clip"></span><figure><img src="img/vibe/sandwich.jpg" alt="כריך טונה על מגש ליד תיק ירוק" width="640" height="800" draggable="false"><figcaption><b>SANDWICH</b><span>NO. 07</span></figcaption></figure></li>
+        <li class="pin"><span class="clip"></span><figure><img src="img/vibe/latte-matcha.jpg" alt="לאטה, מאצ׳ה קרה ומאפה פירות יער" width="640" height="800" draggable="false"><figcaption><b>MORNING</b><span>NO. 08</span></figcaption></figure></li>
+        <li class="pin"><span class="clip"></span><figure><img src="img/vibe/focaccia-tray.jpg" alt="מגש פוקאצ׳ה טרייה" width="640" height="800" draggable="false"><figcaption><b>FRESH BAKE</b><span>NO. 09</span></figcaption></figure></li>
+      </ul>
+    </div>
   </section>
 
   <section class="playlist" id="playlist">
@@ -631,14 +628,40 @@ new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(hero
   },3500);
 })();
 
-/* THE VIBE: trays are served as they reach the screen; each column slides in from its own side */
+/* THE VIBE washing line: the line is a parabola (one quadratic curve); each photo hangs where it sits on it,
+   tilts with the slope and sways a little. The row drifts left by itself; a drag moves it and flings it */
 (function(){
-  const items=[...document.querySelectorAll('.trays li')];if(!items.length)return;
-  const lay=()=>{const cols=getComputedStyle(items[0].parentElement).gridTemplateColumns.split(' ').length;
-    items.forEach((li,i)=>{const c=i%cols;li.style.setProperty('--col',c);li.style.setProperty('--from',(c<cols/2?1:-1)*(cols===1?40:70)+'px');li.style.setProperty('--spin',(c<cols/2?6:-6)+'deg')})};
-  lay();addEventListener('resize',lay);
-  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('served');io.unobserve(e.target)}}),{threshold:.2,rootMargin:'0px 0px -8% 0px'});
-  items.forEach(li=>io.observe(li));
+  const wrap=document.querySelector('.washline');if(!wrap)return;
+  const path=wrap.querySelector('path'),list=wrap.querySelector('.pins');
+  const Y0=22,DRIFT=reduce?0:-36;  /* px per second */
+  let pins=[...list.children],W=0,S=0,cw=0,step=0,span=0,off=0,fling=0,last=0,raf=0,seen=false,drag=null;
+  const measure=()=>{
+    W=wrap.clientWidth;cw=pins[0].offsetWidth;step=cw*1.2;S=Math.min(90,Math.max(22,W*.06));
+    while(pins.length*step<W+2*step){[...list.querySelectorAll('.pin:not([aria-hidden])')].forEach(p=>{const c=p.cloneNode(true);c.setAttribute('aria-hidden','true');list.append(c)});pins=[...list.children]}
+    span=pins.length*step;wrap.style.height=Math.ceil(Y0+S+6+pins[0].offsetHeight+40)+'px';
+  };
+  const paint=t=>{
+    const s=S+Math.sin(t/1500)*3,h=W/2;
+    path.setAttribute('d',`M0 ${Y0} Q ${h} ${Y0+2*s} ${W} ${Y0}`);
+    pins.forEach((p,i)=>{
+      const x=((i*step+off)%span+span)%span-step,cx=x+cw/2,u=(cx-h)/h;
+      const y=Y0+s*(1-u*u),tilt=Math.atan(-2*s*u/h)*57.3*.8,sway=reduce?0:Math.sin(t/950+i*1.7)*1.5;
+      p.style.transform=`translate(${x.toFixed(1)}px,${y.toFixed(1)}px) rotate(${(tilt+sway).toFixed(2)}deg)`;
+    });
+  };
+  const tick=t=>{
+    const dt=last?Math.min(.05,(t-last)/1000):0;last=t;
+    if(!drag){off+=(DRIFT+fling)*dt;fling*=Math.pow(.04,dt)}
+    paint(t);raf=seen?requestAnimationFrame(tick):0;
+  };
+  const start=()=>{if(!raf){last=0;raf=requestAnimationFrame(tick)}};
+  wrap.addEventListener('pointerdown',e=>{drag={x:e.clientX,off,lx:e.clientX,lt:e.timeStamp,v:0};wrap.setPointerCapture(e.pointerId);wrap.classList.add('dragging')});
+  wrap.addEventListener('pointermove',e=>{if(!drag)return;off=drag.off+(e.clientX-drag.x);const dt=e.timeStamp-drag.lt;if(dt>0)drag.v=(e.clientX-drag.lx)/dt*1000;drag.lx=e.clientX;drag.lt=e.timeStamp;if(!raf)paint(performance.now())});
+  const up=()=>{if(!drag)return;fling=Math.max(-1500,Math.min(1500,drag.v));drag=null;wrap.classList.remove('dragging')};
+  wrap.addEventListener('pointerup',up);wrap.addEventListener('pointercancel',up);
+  new IntersectionObserver(([e])=>{seen=e.isIntersecting;if(seen)start()}).observe(wrap);
+  addEventListener('resize',()=>{measure();paint(performance.now())});
+  measure();paint(0);
 })();
 
 /* shop: thumbnails swap the big photo */
