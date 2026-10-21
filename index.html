@@ -187,16 +187,28 @@ h2.en{text-transform:uppercase}
 h2:not(.en),.visit .addr{letter-spacing:0}
 .lead{max-width:34ch;font-weight:400;margin-top:22px;font-size:clamp(18px,1.7vw,22px);line-height:1.5;text-wrap:pretty}
 
-/* about (now the opening of VIBES): offset collage */
-/* OUR VIBE: three photo columns; the middle one sticks to the screen while the sides scroll past it
-   (plain CSS take on the 21st.dev "sticky scroll" gallery) */
-h2.vibe-title{position:relative;text-align:center;margin:0 0 clamp(28px,4vw,56px)}
-.stack{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;align-items:start;max-width:1040px;margin-inline:auto;padding-inline:8px}
-.st-col{display:grid;gap:8px}
-.st-col figure{margin:0;border-radius:12px;overflow:hidden;background:var(--surface)}
-.st-col img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover}
-.st-mid{position:sticky;top:calc(var(--hdr,56px) + 12px)}
-.st-mid img{aspect-ratio:4/3}
+/* THE VIBE: each photo is served on a brushed stainless tray (like the kiosk's own trays),
+   with a peach paper liner peeking out; trays slide in one after another as you scroll */
+.vibes{overflow-x:clip}  /* trays start outside before they slide in */
+h2.vibe-title{text-align:center;margin:0 0 clamp(36px,5vw,64px)}
+.trays{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(28px,4vw,56px) clamp(20px,3vw,44px);max-width:1080px;margin-inline:auto;padding-inline:16px;list-style:none}
+.trays li{margin:0}
+.tray{position:relative;padding:clamp(10px,1.4vw,16px);border-radius:clamp(10px,1.4vw,16px);transform:rotate(var(--tilt,0deg));
+  background:linear-gradient(125deg,#f7f7f5 0%,#cfd0d1 18%,#f1f1ef 38%,#bfc0c2 62%,#ecedeb 82%,#c8c9ca 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 0 0 1px rgba(255,255,255,.55),inset 0 -2px 3px rgba(0,0,0,.18),0 22px 34px -18px rgba(20,20,20,.5),0 6px 10px -6px rgba(20,20,20,.35)}
+/* brushed-metal grain */
+.tray::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:repeating-linear-gradient(90deg,rgba(255,255,255,.12) 0 1px,rgba(0,0,0,.025) 1px 3px)}
+/* the raised rim: a thin inner groove */
+.tray::after{content:"";position:absolute;inset:clamp(4px,.6vw,6px);border-radius:calc(clamp(10px,1.4vw,16px) - 5px);pointer-events:none;box-shadow:inset 0 1px 2px rgba(0,0,0,.22),0 1px 0 rgba(255,255,255,.8)}
+.liner{position:relative;z-index:1;background:#F2C3A2;padding:5px;border-radius:3px;transform:rotate(var(--paper,1.2deg));box-shadow:0 1px 2px rgba(0,0,0,.18)}
+.liner img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;border-radius:2px;transform:rotate(calc(var(--paper,1.2deg) * -1))}
+.ticket{display:flex;justify-content:space-between;gap:8px;margin-top:14px;padding-inline:4px;font-family:var(--mono);font-size:13px;letter-spacing:.08em;direction:ltr;color:var(--muted)}
+.ticket b{font-weight:700;color:var(--fg)}
+/* served: slide in from the side, settle with a little overshoot-free ease */
+@media (prefers-reduced-motion:no-preference){
+  html.js .trays li{opacity:0;transform:translateX(var(--from,60px)) rotate(var(--spin,6deg));transition:opacity 500ms ease,transform 750ms var(--ease);transition-delay:calc(var(--col,0) * 110ms)}
+  html.js .trays li.served{opacity:1;transform:none}
+}
 
 .note{margin-top:28px;font-size:15px;color:var(--muted)}
 
@@ -295,6 +307,9 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
   .walker{width:120px;margin:40px 0 0;margin-inline-start:auto}
 }
 @media (max-width:520px){
+  .trays{grid-template-columns:1fr 1fr;gap:28px 14px;padding-inline:14px}
+  .ticket{font-size:11px;margin-top:10px;letter-spacing:.04em}
+  .liner{padding:4px}
 }
 /* hover effects only where a real mouse exists, so taps never get stuck in hover */
 @media (hover:hover) and (pointer:fine){
@@ -374,11 +389,17 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
 
   <section class="vibes" id="vibes">
     <div class="wrap"><h2 class="en vibe-title">The Vibe</h2></div>
-    <div class="stack">
-    <div class="st-col"><figure><img src="img/vibe/awning.jpg" alt="הסוכך של אוטוטו ואנשים יושבים בחוץ" width="640" height="800" loading="lazy"></figure><figure><img src="img/vibe/pastries.jpg" alt="מאפי פירות יער ועוגיות" width="640" height="800" loading="lazy"></figure><figure><img src="img/vibe/latte-pour.jpg" alt="שפיכת לאטה ארט" width="640" height="800" loading="lazy"></figure></div>
-    <div class="st-col st-mid"><figure><img src="img/vibe/matcha-heart.jpg" alt="מאצ׳ה לאטה עם לב" width="640" height="800" loading="lazy"></figure><figure><img src="img/vibe/drinks-chair.jpg" alt="ארבעה משקאות קרים על כיסא עץ" width="640" height="800" loading="lazy"></figure><figure><img src="img/vibe/focaccia-heart.jpg" alt="פוקאצ׳ה בצורת לב על מגש" width="640" height="800" loading="lazy"></figure></div>
-    <div class="st-col"><figure><img src="img/vibe/latte-matcha.jpg" alt="לאטה, מאצ׳ה קרה ומאפה פירות יער" width="640" height="800" loading="lazy"></figure><figure><img src="img/vibe/sandwich.jpg" alt="כריך טונה על מגש ליד תיק ירוק" width="640" height="800" loading="lazy"></figure><figure><img src="img/vibe/focaccia-tray.jpg" alt="מגש פוקאצ׳ה טרייה" width="640" height="800" loading="lazy"></figure></div>
-    </div>
+    <ul class="trays">
+      <li style="--tilt:-1.5deg;--paper:1.5deg"><div class="tray"><div class="liner"><img src="img/vibe/awning.jpg" alt="הסוכך של אוטוטו ואנשים יושבים בחוץ" width="640" height="640" loading="lazy"></div></div><p class="ticket"><span>NO. 01</span><b>THE KIOSK</b></p></li>
+      <li style="--tilt:1deg;--paper:-1.2deg"><div class="tray"><div class="liner"><img src="img/vibe/matcha-heart.jpg" alt="מאצ׳ה לאטה עם לב" width="640" height="640" loading="lazy"></div></div><p class="ticket"><span>NO. 02</span><b>MATCHA</b></p></li>
+      <li style="--tilt:-.5deg;--paper:2deg"><div class="tray"><div class="liner"><img src="img/vibe/pastries.jpg" alt="מאפי פירות יער ועוגיות" width="640" height="640" loading="lazy"></div></div><p class="ticket"><span>NO. 03</span><b>PASTRIES</b></p></li>
+      <li style="--tilt:1.5deg;--paper:-1.8deg"><div class="tray"><div class="liner"><img src="img/vibe/latte-pour.jpg" alt="שפיכת לאטה ארט" width="640" height="640" loading="lazy"></div></div><p class="ticket"><span>NO. 04</span><b>LATTE ART</b></p></li>
+      <li style="--tilt:-1deg;--paper:1deg"><div class="tray"><div class="liner"><img src="img/vibe/focaccia-heart.jpg" alt="פוקאצ׳ה בצורת לב על מגש" width="640" height="640" loading="lazy"></div></div><p class="ticket"><span>NO. 05</span><b>FOCACCIA</b></p></li>
+      <li style="--tilt:.5deg;--paper:-1.5deg"><div class="tray"><div class="liner"><img src="img/vibe/drinks-chair.jpg" alt="ארבעה משקאות קרים על כיסא עץ" width="640" height="640" loading="lazy"></div></div><p class="ticket"><span>NO. 06</span><b>ICED</b></p></li>
+      <li style="--tilt:-1.2deg;--paper:1.8deg"><div class="tray"><div class="liner"><img src="img/vibe/sandwich.jpg" alt="כריך טונה על מגש ליד תיק ירוק" width="640" height="640" loading="lazy"></div></div><p class="ticket"><span>NO. 07</span><b>SANDWICH</b></p></li>
+      <li style="--tilt:1.2deg;--paper:-1deg"><div class="tray"><div class="liner"><img src="img/vibe/latte-matcha.jpg" alt="לאטה, מאצ׳ה קרה ומאפה פירות יער" width="640" height="640" loading="lazy"></div></div><p class="ticket"><span>NO. 08</span><b>MORNING</b></p></li>
+      <li style="--tilt:-.8deg;--paper:1.4deg"><div class="tray"><div class="liner"><img src="img/vibe/focaccia-tray.jpg" alt="מגש פוקאצ׳ה טרייה" width="640" height="640" loading="lazy"></div></div><p class="ticket"><span>NO. 09</span><b>FRESH BAKE</b></p></li>
+    </ul>
   </section>
 
   <section class="playlist" id="playlist">
@@ -608,6 +629,16 @@ new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(hero
     if(!seen||Date.now()<pausedUntil||document.hidden)return;
     if(next.disabled)track.scrollTo({left:0,behavior:'smooth'});else go(1);
   },3500);
+})();
+
+/* THE VIBE: trays are served as they reach the screen; each column slides in from its own side */
+(function(){
+  const items=[...document.querySelectorAll('.trays li')];if(!items.length)return;
+  const lay=()=>{const cols=getComputedStyle(items[0].parentElement).gridTemplateColumns.split(' ').length;
+    items.forEach((li,i)=>{const c=i%cols;li.style.setProperty('--col',c);li.style.setProperty('--from',(c<cols/2?1:-1)*(cols===1?40:70)+'px');li.style.setProperty('--spin',(c<cols/2?6:-6)+'deg')})};
+  lay();addEventListener('resize',lay);
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('served');io.unobserve(e.target)}}),{threshold:.2,rootMargin:'0px 0px -8% 0px'});
+  items.forEach(li=>io.observe(li));
 })();
 
 /* shop: thumbnails swap the big photo */
