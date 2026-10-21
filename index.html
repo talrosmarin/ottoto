@@ -48,6 +48,8 @@
   --mono:"Cousine",ui-monospace,monospace;
   --sans:"Rubik","Lunasima",system-ui,sans-serif;
   --r:20px;
+  /* faint graph-paper squares (home screen + behind OUR VIBE) */
+  --grid-lines:linear-gradient(to right,color-mix(in srgb,var(--fg) 9%,transparent) 1px,transparent 1px),linear-gradient(to bottom,color-mix(in srgb,var(--fg) 9%,transparent) 1px,transparent 1px);
   --ease:cubic-bezier(.16,1,.3,1);
   --ease-out:cubic-bezier(.23,1,.32,1);
   --ease-in-out:cubic-bezier(.77,0,.175,1);
@@ -117,7 +119,7 @@ header nav a[aria-current=true]::before{scale:1 1}
 html:not(.navin) header nav a{opacity:0;visibility:hidden;transform:translateY(-60px) rotate(-4deg)}
 
 /* the big centered logo on the first screen */
-.home-screen{height:calc(100svh - var(--hdr,56px));min-height:460px;display:flex;flex-direction:column}
+.home-screen{height:calc(100svh - var(--hdr,56px));min-height:460px;display:flex;flex-direction:column;background-image:var(--grid-lines);background-size:54px 54px;background-position:center top}
 .bigmark{flex:none;display:flex;justify-content:center;padding:clamp(18px,3vw,36px) 16px clamp(8px,2vw,20px)}
 .bigmark picture{display:block;flex:none;width:calc(var(--rw,300px) * 1.04);max-width:92%}
 .bigmark img{display:block;width:100%;height:auto}
@@ -190,8 +192,7 @@ h2:not(.en),.visit .addr{letter-spacing:0}
    (plain CSS take on the 21st.dev "sticky scroll" gallery) */
 .vibes{position:relative}
 .vibes::before{content:"";position:absolute;inset:0 0 auto;height:min(70vh,640px);pointer-events:none;
-  background-image:linear-gradient(to right,color-mix(in srgb,var(--fg) 9%,transparent) 1px,transparent 1px),linear-gradient(to bottom,color-mix(in srgb,var(--fg) 9%,transparent) 1px,transparent 1px);
-  background-size:54px 54px;-webkit-mask-image:radial-gradient(ellipse 60% 70% at 50% 0%,#000 60%,transparent 100%);mask-image:radial-gradient(ellipse 60% 70% at 50% 0%,#000 60%,transparent 100%)}
+  background-image:var(--grid-lines);background-size:54px 54px;-webkit-mask-image:radial-gradient(ellipse 60% 70% at 50% 0%,#000 60%,transparent 100%);mask-image:radial-gradient(ellipse 60% 70% at 50% 0%,#000 60%,transparent 100%)}
 h2.vibe-title{position:relative;text-align:center;font-size:clamp(64px,14vw,190px);line-height:.9;letter-spacing:-.01em;margin:0 0 clamp(28px,4vw,56px)}
 .stack{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;align-items:start;max-width:1600px;margin-inline:auto;padding-inline:8px}
 .st-col{display:grid;gap:8px}
@@ -262,7 +263,16 @@ h2.vibe-title{position:relative;text-align:center;font-size:clamp(64px,14vw,190p
 /* visit: the one deliberate color-block switch, it carries into the footer */
 .visit{background:var(--deep);color:var(--on-deep)}
 .visit .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(40px,6vw,96px);align-items:start}
-.visit .addr{font-size:clamp(28px,3.4vw,44px);font-weight:900;line-height:1.1;margin-top:28px}
+.visit .addr{font-size:clamp(28px,3.4vw,44px);font-weight:900;line-height:1.1;margin-top:0}
+.visit .v-head{display:flex;justify-content:space-between;align-items:end;gap:16px}
+.v-arrows{display:flex;gap:8px;flex:none}
+.v-arrow{width:48px;height:48px;border-radius:50%;border:1.5px solid var(--on-deep);background:none;color:var(--on-deep);display:grid;place-items:center;cursor:pointer;transition:background-color 160ms ease,color 160ms ease,transform 160ms var(--ease-out)}
+.v-arrow:active{transform:scale(.94)}
+.v-arrow:disabled{opacity:.3;cursor:default}
+.v-track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:max(16px,(100% - 1200px)/2);padding:clamp(28px,4vw,48px) max(16px,(100% - 1200px)/2) clamp(48px,6vw,80px);scrollbar-width:none;overscroll-behavior-x:contain}
+.v-track::-webkit-scrollbar{display:none}
+.v-track figure{flex:none;width:min(78vw,420px);margin:0;border-radius:var(--r);overflow:hidden;scroll-snap-align:start}
+.v-track img{display:block;width:100%;aspect-ratio:9/10;object-fit:cover}
 .visit .addr span{display:block;font-family:var(--mono);font-size:14px;font-weight:400;letter-spacing:.06em;margin-top:10px;color:var(--on-deep-muted)}
 .visit .status{margin-top:28px}
 .hours{border-top:1.5px solid var(--on-deep)}
@@ -294,6 +304,7 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
   .btn:hover{background:var(--fg);color:var(--bg)}
   .btn.fill:hover{background:var(--fg);border-color:var(--fg);color:var(--bg)}
   .visit .btn.fill:hover{background:var(--on-deep);border-color:var(--on-deep);color:var(--deep)}
+  .v-arrow:not(:disabled):hover{background:var(--on-deep);color:var(--deep)}
   header nav a:not([aria-current=true]):hover{scale:1.06}
   .tlink:hover{text-underline-offset:.2em}
   .tlink:hover svg{transform:translateX(-3px)}
@@ -460,9 +471,23 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
   </section>
 
   <section class="visit" id="visit">
+    <div class="wrap v-head">
+      <h2 class="en">Come visit us</h2>
+      <div class="v-arrows">
+        <button type="button" class="v-arrow" data-dir="-1" aria-label="התמונה הקודמת"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6l-6 6"/></svg></button>
+        <button type="button" class="v-arrow" data-dir="1" aria-label="התמונה הבאה"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6l6 6"/></svg></button>
+      </div>
+    </div>
+    <!-- weekend on film: swipe or use the arrows -->
+    <div class="v-track" tabindex="0" aria-label="תמונות מאוטוטו">
+      <figure><img src="img/visit/1-front.jpg" alt="אנשים מדברים ליד הקיוסק של אוטוטו" width="720" height="800" loading="lazy"></figure>
+      <figure><img src="img/visit/2-tray.jpg" alt="מגיש מחייך עם מגש כריכים" width="720" height="800" loading="lazy"></figure>
+      <figure><img src="img/visit/3-vitrine.jpg" alt="ויטרינת קרואסונים, עוגות וכריכים" width="720" height="800" loading="lazy"></figure>
+      <figure><img src="img/visit/4-barista.jpg" alt="בריסטה מוזג חלב ליד מכונת האספרסו" width="720" height="800" loading="lazy"></figure>
+      <figure><img src="img/visit/5-baker.jpg" alt="האופה מחזיק פוקאצ׳ה טרייה" width="720" height="800" loading="lazy"></figure>
+    </div>
     <div class="wrap">
       <div>
-        <h2 class="en">Come by</h2>
         <p class="addr">גרונמן 8, תל אביב<span class="en">GRONEMANN 8, RAMAT AVIV</span></p>
         <p class="status" data-status><i></i><span>שעות פתיחה</span></p>
         <div class="btns">
@@ -563,6 +588,17 @@ const navIO=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)mark
 navIO.observe(document.querySelector('.hero'));
 /* the home page always lights HOME while the big logo is on screen */
 new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(heroLogo);
+
+/* visit carousel: arrows move one photo; they fade out at either end */
+(function(){
+  const track=document.querySelector('.v-track');if(!track)return;
+  const [prev,next]=document.querySelectorAll('.v-arrow');
+  const step=()=>track.firstElementChild.offsetWidth+12;
+  const rtl=getComputedStyle(track).direction==='rtl'?-1:1;
+  const sync=()=>{const x=Math.abs(track.scrollLeft),max=track.scrollWidth-track.clientWidth;prev.disabled=x<4;next.disabled=x>max-4};
+  [prev,next].forEach(b=>b.addEventListener('click',()=>track.scrollBy({left:rtl*+b.dataset.dir*step(),behavior:reduce?'auto':'smooth'})));
+  track.addEventListener('scroll',sync,{passive:true});addEventListener('resize',sync);sync();
+})();
 
 /* shop: thumbnails swap the big photo */
 const stage=[...document.querySelectorAll('#stage img')],thumbs=[...document.querySelectorAll('.thumbs button')];
