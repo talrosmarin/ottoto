@@ -186,14 +186,21 @@ h2:not(.en),.visit .addr{letter-spacing:0}
 .lead{max-width:34ch;font-weight:400;margin-top:22px;font-size:clamp(18px,1.7vw,22px);line-height:1.5;text-wrap:pretty}
 
 /* about (now the opening of VIBES): offset collage */
-.vibes .about{margin-bottom:clamp(72px,9vw,120px)}
-.about h2{font-size:clamp(48px,8.4vw,120px);max-width:12ch}
-.collage{display:grid;grid-template-columns:4fr 5fr 3fr;gap:clamp(16px,2.5vw,32px);margin-top:clamp(40px,6vw,72px);align-items:start}
-.collage .lead{margin-top:0;align-self:end}
-.collage figure{border-radius:var(--r);overflow:hidden}
-.collage figure img{width:100%;height:100%;object-fit:cover}
-.collage .big{aspect-ratio:4/5}
-.collage .small{aspect-ratio:3/4;margin-top:clamp(60px,10vw,140px)}
+/* OUR VIBE: Instagram photos unfurl in 3D while you scroll
+   (plain CSS/JS take on the 21st.dev "3D parallax unfurling gallery") */
+.vibes{padding-top:0}
+.unfurl{position:relative;height:340svh;margin-bottom:clamp(72px,9vw,120px)}
+.uf-stick{position:sticky;top:var(--hdr,56px);height:calc(100svh - var(--hdr,56px));overflow:hidden}
+.uf-banner{position:absolute;inset:0;background:#141414;overflow:hidden;display:flex;align-items:center;justify-content:center;perspective:1000px;clip-path:inset(8% 5% round 40px)}
+.uf-banner::before,.uf-banner::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none}
+.uf-banner::before{box-shadow:inset 0 100px 150px -50px #141414,inset 0 -100px 150px -50px #141414}
+.uf-banner::after{box-shadow:inset 150px 0 150px -50px #141414,inset -150px 0 150px -50px #141414}
+.uf-grid{flex:none;display:flex;gap:clamp(10px,1.6vw,24px);justify-content:center;align-items:center;width:120vw;height:150svh;transform-style:preserve-3d;will-change:transform}
+.uf-col{flex:none;display:flex;flex-direction:column;gap:clamp(10px,1.6vw,24px);width:max(22vw,150px);will-change:transform}
+.uf-col img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;background:#2a2723;opacity:.85}
+h2.uf-title{position:absolute;z-index:3;inset:auto 0;margin:0;text-align:center;color:#F3EBDD;font-size:clamp(64px,14vw,190px);font-weight:900;line-height:.9;letter-spacing:-.01em;text-shadow:0 6px 40px rgba(0,0,0,.55);pointer-events:none}
+.unfurl.still{height:auto}
+.unfurl.still .uf-stick{position:relative;top:0;height:min(100svh,900px)}
 
 .note{margin-top:28px;font-size:15px;color:var(--muted)}
 
@@ -287,13 +294,12 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
   .shop .wrap>div:last-child{order:-1}
   .infobar .btn{margin-inline-start:0;width:100%;min-height:44px}
   .infobar .status,.infobar .addr{font-size:14.5px}
-  .collage{grid-template-columns:1fr 1fr}
-  .collage .lead{grid-column:1/-1;order:-1}
-  .collage .small{margin-top:48px}
   .vibes .grid{grid-template-columns:1fr 1fr}
   .walker{width:120px;margin:40px 0 0;margin-inline-start:auto}
 }
 @media (max-width:520px){
+  .uf-banner::before{box-shadow:inset 0 60px 90px -40px #141414,inset 0 -60px 90px -40px #141414}
+  .uf-banner::after{box-shadow:inset 60px 0 80px -40px #141414,inset -60px 0 80px -40px #141414}
   .vibes .grid{grid-auto-rows:170px;gap:10px}
 }
 /* hover effects only where a real mouse exists, so taps never get stuck in hover */
@@ -374,15 +380,21 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
   </div>
 
   <section class="vibes" id="vibes">
-    <div class="wrap">
-      <div class="about" id="about">
-        <h2 class="draft" data-reveal>קפה של שכונה. יין של ערב.</h2>
-        <div class="collage">
-          <p class="lead draft" data-reveal>קפה, מאפים טריים וכריכים מהבוקר, ובערב כוס יין בחוץ. ברמת אביב, ברחוב גרונמן.</p>
-          <figure class="big" data-reveal><img src="img/ig-05.jpg" alt="אנשים יושבים בשולחנות בחוץ באוטוטו" width="480" height="640" loading="lazy"></figure>
-          <figure class="small" data-reveal><img src="img/ig-01.jpg" alt="ויטרינת מאפים בבוקר" width="480" height="640" loading="lazy"></figure>
+  <!-- OUR VIBE: a dark card that opens to the full screen, then the photo wall untilts as you scroll -->
+  <div class="unfurl" id="about">
+    <div class="uf-stick">
+      <div class="uf-banner">
+        <div class="uf-grid">
+          <div class="uf-col"><img data-src="img/vibe/awning.jpg" alt="הסוכך של אוטוטו ואנשים יושבים בחוץ" width="640" height="800"><img data-src="img/vibe/latte-matcha.jpg" alt="לאטה, מאצ׳ה קרה ומאפה פירות יער" width="640" height="800"><img data-src="img/vibe/focaccia-heart.jpg" alt="פוקאצ׳ה בצורת לב על מגש" width="640" height="800"><img data-src="img/vibe/awning.jpg" alt="הסוכך של אוטוטו ואנשים יושבים בחוץ" width="640" height="800"><img data-src="img/vibe/latte-matcha.jpg" alt="לאטה, מאצ׳ה קרה ומאפה פירות יער" width="640" height="800"><img data-src="img/vibe/focaccia-heart.jpg" alt="פוקאצ׳ה בצורת לב על מגש" width="640" height="800"><img data-src="img/vibe/awning.jpg" alt="הסוכך של אוטוטו ואנשים יושבים בחוץ" width="640" height="800"><img data-src="img/vibe/latte-matcha.jpg" alt="לאטה, מאצ׳ה קרה ומאפה פירות יער" width="640" height="800"><img data-src="img/vibe/focaccia-heart.jpg" alt="פוקאצ׳ה בצורת לב על מגש" width="640" height="800"><img data-src="img/vibe/awning.jpg" alt="הסוכך של אוטוטו ואנשים יושבים בחוץ" width="640" height="800"></div>
+          <div class="uf-col"><img data-src="img/vibe/drinks-chair.jpg" alt="ארבעה משקאות קרים על כיסא עץ" width="640" height="800"><img data-src="img/vibe/pastries.jpg" alt="מאפי פירות יער ועוגיות" width="640" height="800"><img data-src="img/vibe/drinks-chair.jpg" alt="ארבעה משקאות קרים על כיסא עץ" width="640" height="800"><img data-src="img/vibe/pastries.jpg" alt="מאפי פירות יער ועוגיות" width="640" height="800"><img data-src="img/vibe/drinks-chair.jpg" alt="ארבעה משקאות קרים על כיסא עץ" width="640" height="800"><img data-src="img/vibe/pastries.jpg" alt="מאפי פירות יער ועוגיות" width="640" height="800"><img data-src="img/vibe/drinks-chair.jpg" alt="ארבעה משקאות קרים על כיסא עץ" width="640" height="800"><img data-src="img/vibe/pastries.jpg" alt="מאפי פירות יער ועוגיות" width="640" height="800"><img data-src="img/vibe/drinks-chair.jpg" alt="ארבעה משקאות קרים על כיסא עץ" width="640" height="800"><img data-src="img/vibe/pastries.jpg" alt="מאפי פירות יער ועוגיות" width="640" height="800"></div>
+          <div class="uf-col"><img data-src="img/vibe/matcha-heart.jpg" alt="מאצ׳ה לאטה עם לב" width="640" height="800"><img data-src="img/vibe/sandwich.jpg" alt="כריך טונה על מגש ליד תיק ירוק" width="640" height="800"><img data-src="img/vibe/matcha-heart.jpg" alt="מאצ׳ה לאטה עם לב" width="640" height="800"><img data-src="img/vibe/sandwich.jpg" alt="כריך טונה על מגש ליד תיק ירוק" width="640" height="800"><img data-src="img/vibe/matcha-heart.jpg" alt="מאצ׳ה לאטה עם לב" width="640" height="800"><img data-src="img/vibe/sandwich.jpg" alt="כריך טונה על מגש ליד תיק ירוק" width="640" height="800"><img data-src="img/vibe/matcha-heart.jpg" alt="מאצ׳ה לאטה עם לב" width="640" height="800"><img data-src="img/vibe/sandwich.jpg" alt="כריך טונה על מגש ליד תיק ירוק" width="640" height="800"><img data-src="img/vibe/matcha-heart.jpg" alt="מאצ׳ה לאטה עם לב" width="640" height="800"><img data-src="img/vibe/sandwich.jpg" alt="כריך טונה על מגש ליד תיק ירוק" width="640" height="800"></div>
+          <div class="uf-col"><img data-src="img/vibe/latte-pour.jpg" alt="שפיכת לאטה ארט" width="640" height="800"><img data-src="img/vibe/focaccia-tray.jpg" alt="מגש פוקאצ׳ה טרייה" width="640" height="800"><img data-src="img/vibe/latte-pour.jpg" alt="שפיכת לאטה ארט" width="640" height="800"><img data-src="img/vibe/focaccia-tray.jpg" alt="מגש פוקאצ׳ה טרייה" width="640" height="800"><img data-src="img/vibe/latte-pour.jpg" alt="שפיכת לאטה ארט" width="640" height="800"><img data-src="img/vibe/focaccia-tray.jpg" alt="מגש פוקאצ׳ה טרייה" width="640" height="800"><img data-src="img/vibe/latte-pour.jpg" alt="שפיכת לאטה ארט" width="640" height="800"><img data-src="img/vibe/focaccia-tray.jpg" alt="מגש פוקאצ׳ה טרייה" width="640" height="800"><img data-src="img/vibe/latte-pour.jpg" alt="שפיכת לאטה ארט" width="640" height="800"><img data-src="img/vibe/focaccia-tray.jpg" alt="מגש פוקאצ׳ה טרייה" width="640" height="800"></div>
         </div>
+        <h2 class="uf-title en">Our Vibe</h2>
       </div>
+    </div>
+  </div>
+    <div class="wrap">
       <div class="head">
         <h2 class="en">By you</h2>
         <div class="btns">
@@ -596,6 +608,30 @@ const navIO=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)mark
 navIO.observe(document.querySelector('.hero'));
 /* the home page always lights HOME while the big logo is on screen */
 new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(heroLogo);
+
+/* OUR VIBE: the scroll position drives the unfurl; the drawing eases toward it so it glides like a spring */
+(function(){
+  const uf=document.querySelector('.unfurl');if(!uf)return;
+  const stick=uf.querySelector('.uf-stick'),banner=uf.querySelector('.uf-banner'),grid=uf.querySelector('.uf-grid'),cols=[...uf.querySelectorAll('.uf-col')];
+  const lerp=(a,b,t)=>a+(b-a)*t,seg=(p,a,b)=>Math.min(1,Math.max(0,(p-a)/(b-a)));
+  const colY=[[0,-25],[-30,10],[0,-25],[-25,20]];  /* gentler than the original so a column never runs out on tall phones */
+  const paint=p=>{
+    const a=seg(p,0,.15),b=seg(p,.15,1);
+    banner.style.clipPath=`inset(${lerp(8,0,a)}% ${lerp(5,0,a)}% round ${lerp(40,0,a)}px)`;
+    grid.style.transform=`translateZ(${lerp(-800,0,b)}px) rotateX(${lerp(25,4,b)}deg) rotateY(${lerp(-45,-8,b)}deg) rotateZ(${lerp(15,2,b)}deg)`;
+    cols.forEach((c,i)=>c.style.transform=`translateY(${lerp(colY[i][0],colY[i][1],b)}%)`);
+  };
+  const target=()=>{const r=uf.getBoundingClientRect(),run=r.height-stick.offsetHeight;return run>0?Math.min(1,Math.max(0,(hdr.offsetHeight-r.top)/run)):1};
+  let cur=0,raf=0,near=false,loaded=false;
+  const tick=()=>{const t=target();cur+=(t-cur)*.14;if(Math.abs(t-cur)<.0005)cur=t;paint(cur);raf=near&&cur!==t?requestAnimationFrame(tick):0};
+  const kick=()=>{if(!raf)raf=requestAnimationFrame(tick)};
+  const load=()=>{if(loaded)return;loaded=true;uf.querySelectorAll('img[data-src]').forEach(im=>{im.src=im.dataset.src})};
+  new IntersectionObserver(([e])=>{near=e.isIntersecting;if(near){load();if(!reduce)kick()}},{rootMargin:'100% 0px'}).observe(uf);
+  if(reduce){uf.classList.add('still');paint(1);return}
+  addEventListener('scroll',()=>{if(near)kick()},{passive:true});
+  addEventListener('resize',kick);
+  cur=target();paint(cur);
+})();
 
 /* shop: thumbnails swap the big photo */
 const stage=[...document.querySelectorAll('#stage img')],thumbs=[...document.querySelectorAll('.thumbs button')];
