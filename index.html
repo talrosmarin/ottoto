@@ -119,12 +119,12 @@ html:not(.navin) header nav a{opacity:0;visibility:hidden;transform:translateY(-
 /* the big centered logo on the first screen */
 .home-screen{height:calc(100svh - var(--hdr,56px));min-height:460px;display:flex;flex-direction:column}
 .bigmark{flex:none;display:flex;justify-content:center;padding:clamp(18px,3vw,36px) 16px clamp(8px,2vw,20px)}
-.bigmark picture{display:block;width:calc(var(--rw,300px) * 1.04);max-width:92%}
+.bigmark picture{display:block;flex:none;width:calc(var(--rw,300px) * 1.04);max-width:92%}
 .bigmark img{display:block;width:100%;height:auto}
 html.splashing .bigmark img{visibility:hidden}
 .sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 @media (max-width:600px){
-  header .wrap{grid-template-columns:1fr;padding-block:10px}
+  header .wrap{grid-template-columns:1fr;padding-block:4px 2px}
   header .logo{display:none}
   header nav{grid-column:1;gap:2px 9px;flex-wrap:nowrap}
   header nav a{font-size:11.5px;letter-spacing:.04em}
@@ -134,8 +134,8 @@ html.splashing .bigmark img{visibility:hidden}
    and the logo follows the reel's width, so menu, logo, reel and info line always fit */
 @media (max-width:700px){
   .home-screen{height:calc(100svh - var(--hdr,44px));min-height:0}
-  .bigmark{padding:6px 16px 6px}
-  .bigmark picture{max-width:100%}
+  .bigmark{padding:0 16px 4px}
+  .bigmark picture{max-width:calc(100vw - 8px)}
   .hero{flex:1;min-height:0;padding-bottom:2px}
   .hero .reel-band{flex:1;min-height:0;background:none}
   .hero .reel-band .bg{display:none}
