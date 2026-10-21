@@ -48,7 +48,7 @@
   --mono:"Cousine",ui-monospace,monospace;
   --sans:"Rubik","Lunasima",system-ui,sans-serif;
   --r:20px;
-  /* faint graph-paper squares (home screen + behind OUR VIBE) */
+  /* faint graph-paper squares behind the home screen */
   --grid-lines:linear-gradient(to right,color-mix(in srgb,var(--fg) 9%,transparent) 1px,transparent 1px),linear-gradient(to bottom,color-mix(in srgb,var(--fg) 9%,transparent) 1px,transparent 1px);
   --ease:cubic-bezier(.16,1,.3,1);
   --ease-out:cubic-bezier(.23,1,.32,1);
@@ -190,16 +190,13 @@ h2:not(.en),.visit .addr{letter-spacing:0}
 /* about (now the opening of VIBES): offset collage */
 /* OUR VIBE: three photo columns; the middle one sticks to the screen while the sides scroll past it
    (plain CSS take on the 21st.dev "sticky scroll" gallery) */
-.vibes{position:relative}
-.vibes::before{content:"";position:absolute;inset:0 0 auto;height:min(70vh,640px);pointer-events:none;
-  background-image:var(--grid-lines);background-size:54px 54px;-webkit-mask-image:radial-gradient(ellipse 60% 70% at 50% 0%,#000 60%,transparent 100%);mask-image:radial-gradient(ellipse 60% 70% at 50% 0%,#000 60%,transparent 100%)}
-h2.vibe-title{position:relative;text-align:center;font-size:clamp(64px,14vw,190px);line-height:.9;letter-spacing:-.01em;margin:0 0 clamp(28px,4vw,56px)}
-.stack{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;align-items:start;max-width:1600px;margin-inline:auto;padding-inline:8px}
+h2.vibe-title{position:relative;text-align:center;margin:0 0 clamp(28px,4vw,56px)}
+.stack{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;align-items:start;max-width:1040px;margin-inline:auto;padding-inline:8px}
 .st-col{display:grid;gap:8px}
 .st-col figure{margin:0;border-radius:12px;overflow:hidden;background:var(--surface)}
-.st-col img{display:block;width:100%;height:max(22rem,55svh);object-fit:cover}
-.st-mid{position:sticky;top:var(--hdr,56px);height:calc(100svh - var(--hdr,56px));grid-template-rows:repeat(3,minmax(0,1fr));padding-block:8px}
-.st-mid img{height:100%}
+.st-col img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover}
+.st-mid{position:sticky;top:calc(var(--hdr,56px) + 12px)}
+.st-mid img{aspect-ratio:4/3}
 
 .note{margin-top:28px;font-size:15px;color:var(--muted)}
 
@@ -376,7 +373,7 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
   </div>
 
   <section class="vibes" id="vibes">
-    <div class="wrap"><h2 class="en vibe-title">Our Vibe</h2></div>
+    <div class="wrap"><h2 class="en vibe-title">The Vibe</h2></div>
     <div class="stack">
     <div class="st-col"><figure><img src="img/vibe/awning.jpg" alt="הסוכך של אוטוטו ואנשים יושבים בחוץ" width="640" height="800" loading="lazy"></figure><figure><img src="img/vibe/pastries.jpg" alt="מאפי פירות יער ועוגיות" width="640" height="800" loading="lazy"></figure><figure><img src="img/vibe/latte-pour.jpg" alt="שפיכת לאטה ארט" width="640" height="800" loading="lazy"></figure></div>
     <div class="st-col st-mid"><figure><img src="img/vibe/matcha-heart.jpg" alt="מאצ׳ה לאטה עם לב" width="640" height="800" loading="lazy"></figure><figure><img src="img/vibe/drinks-chair.jpg" alt="ארבעה משקאות קרים על כיסא עץ" width="640" height="800" loading="lazy"></figure><figure><img src="img/vibe/focaccia-heart.jpg" alt="פוקאצ׳ה בצורת לב על מגש" width="640" height="800" loading="lazy"></figure></div>
