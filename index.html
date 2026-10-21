@@ -130,15 +130,17 @@ html.splashing .bigmark img{visibility:hidden}
   header nav a{font-size:11.5px;letter-spacing:.04em}
 }
 /* phones: the first screen is exactly the visible screen (Safari bars included).
-   the reel, whole and uncut at 9:16, takes whatever height is left (never wider than 78%),
+   the reel, whole and uncut at 9:16, takes whatever height is left (never wider than 94%),
    and the logo follows the reel's width, so menu, logo, reel and info line always fit */
 @media (max-width:700px){
   .home-screen{height:calc(100svh - var(--hdr,44px));min-height:0}
-  .hero{flex:1;min-height:0;padding-bottom:4px}
+  .bigmark{padding:6px 16px 6px}
+  .bigmark picture{max-width:100%}
+  .hero{flex:1;min-height:0;padding-bottom:2px}
   .hero .reel-band{flex:1;min-height:0;background:none}
   .hero .reel-band .bg{display:none}
-  .hero .reel-band video{height:auto;width:auto;max-height:100%;max-width:78%;box-shadow:none;border-radius:var(--r);background:none}
-  .hero .infobar{display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 12px;margin-top:8px;padding-block:7px}
+  .hero .reel-band video{height:auto;width:auto;max-height:100%;max-width:94%;box-shadow:none;border-radius:var(--r);background:none}
+  .hero .infobar{display:grid;grid-template-columns:1fr auto;align-items:center;gap:0 12px;margin-top:6px;padding-block:5px}
   .hero .infobar .status,.hero .infobar .addr{font-size:13.5px;grid-column:1}
   .infobar .addr svg{width:16px;height:16px}
   .hero .infobar .btn{grid-column:2;grid-row:1/3;width:auto;min-height:44px;padding:0 18px;margin:0}
