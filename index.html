@@ -269,7 +269,7 @@ h2.vibe-title{position:relative;text-align:center;margin:0 0 clamp(28px,4vw,56px
 .v-track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:max(16px,(100% - 1200px)/2);padding:clamp(28px,4vw,48px) max(16px,(100% - 1200px)/2) clamp(48px,6vw,80px);scrollbar-width:none;overscroll-behavior-x:contain}
 .v-track::-webkit-scrollbar{display:none}
 .v-track figure{flex:none;width:min(78vw,420px);margin:0;border-radius:var(--r);overflow:hidden;scroll-snap-align:start}
-.v-track img{display:block;width:100%;aspect-ratio:9/10;object-fit:cover}
+.v-track img{display:block;width:100%;height:auto;aspect-ratio:9/10;object-fit:cover}
 .visit .addr span{display:block;font-family:var(--mono);font-size:14px;font-weight:400;letter-spacing:.06em;margin-top:10px;color:var(--on-deep-muted)}
 .visit .status{margin-top:28px}
 .hours{border-top:1.5px solid var(--on-deep)}
@@ -593,8 +593,21 @@ new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(hero
   const step=()=>track.firstElementChild.offsetWidth+12;
   const rtl=getComputedStyle(track).direction==='rtl'?-1:1;
   const sync=()=>{const x=Math.abs(track.scrollLeft),max=track.scrollWidth-track.clientWidth;prev.disabled=x<4;next.disabled=x>max-4};
-  [prev,next].forEach(b=>b.addEventListener('click',()=>track.scrollBy({left:rtl*+b.dataset.dir*step(),behavior:reduce?'auto':'smooth'})));
+  const go=d=>track.scrollBy({left:rtl*d*step(),behavior:reduce?'auto':'smooth'});
+  [prev,next].forEach(b=>b.addEventListener('click',()=>{go(+b.dataset.dir);hold()}));
   track.addEventListener('scroll',sync,{passive:true});addEventListener('resize',sync);sync();
+  /* moves by itself every few seconds while on screen; any touch, hover or click pauses it for a while */
+  if(reduce)return;
+  let seen=false,pausedUntil=0;
+  const hold=()=>{pausedUntil=Date.now()+8000};
+  ['pointerdown','wheel','focusin'].forEach(e=>track.addEventListener(e,hold,{passive:true}));
+  track.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse')pausedUntil=Infinity});
+  track.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse')pausedUntil=0});
+  new IntersectionObserver(([e])=>{seen=e.isIntersecting},{threshold:.4}).observe(track);
+  setInterval(()=>{
+    if(!seen||Date.now()<pausedUntil||document.hidden)return;
+    if(next.disabled)track.scrollTo({left:0,behavior:'smooth'});else go(1);
+  },3500);
 })();
 
 /* shop: thumbnails swap the big photo */
