@@ -41,7 +41,7 @@
   --deep:#141414;
   --on-deep:#F3EBDD;
   --on-deep-muted:#F2C3A2;
-  --accent:#EFB3A1;  /* the pink of the tray paper and the loyalty card (was the hot-cup orange #F7B984) */
+  --accent:#FBD0B3;  /* the peach of the VIBES highlight on Ottoto's Instagram (was #EFB3A1, before that #F7B984) */
   --draft:#D9824A;
   --on-accent:#141414;
   --line:#141414;
@@ -187,25 +187,26 @@ h2.en{text-transform:uppercase}
 h2:not(.en),.visit .addr{letter-spacing:0}
 .lead{max-width:34ch;font-weight:400;margin-top:22px;font-size:clamp(18px,1.7vw,22px);line-height:1.5;text-wrap:pretty}
 
-/* THE VIBE: photos pinned to a sagging washing line that drifts on its own; drag to move it
-   (after "Teams or Gallery with cool effect" by Nirav Joshi on Dribbble) */
+/* THE VIBE: a row of photo cards gliding sideways non-stop; a finger or mouse can drag it, holding it pauses it
+   (after the 21st.dev "specials linear carousel") */
 .vibes{overflow-x:clip;background-image:var(--grid-lines);background-size:54px 54px;background-position:center top}
 h2.vibe-title{text-align:center;margin:0 0 clamp(20px,3vw,40px)}
-.washline{--cw:clamp(140px,16vw,230px);position:relative;direction:ltr;height:calc(var(--cw) * 1.25 + 170px);overflow:hidden;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none;
-  -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
-.washline.dragging{cursor:grabbing}
-.washline svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
-.washline path{fill:none;stroke:var(--fg);stroke-width:1.3;opacity:.6}
-.pins{list-style:none;margin:0;padding:0}
-.pin{position:absolute;left:0;top:0;width:var(--cw);transform-origin:50% 0;will-change:transform}
-.pin figure{margin:5px 0 0;background:#fff;padding:8px 8px 0;border-radius:6px;box-shadow:0 1px 2px rgba(0,0,0,.08),0 16px 26px -16px rgba(20,20,20,.5)}
-.pin img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;border-radius:3px;pointer-events:none;-webkit-user-drag:none}
-.pin figcaption{text-align:center;padding:9px 4px 11px;line-height:1.2}
-.pin figcaption b{display:block;font-size:13px;letter-spacing:.03em;color:#141414}
-.pin figcaption span{display:block;margin-top:3px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:#6b645a}
-/* the little black clip that holds each photo on the line */
-.clip{position:absolute;z-index:1;left:50%;top:-5px;width:10px;height:15px;margin-left:-5px;background:#141414;border-radius:2px}
-.clip::after{content:"";position:absolute;left:3px;top:3px;width:4px;height:4px;border-radius:50%;background:#F3EBDD}
+.lc{position:relative;direction:ltr;overflow:hidden;padding:clamp(16px,3vw,40px) 0;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.lc.dragging{cursor:grabbing}
+.lc-track{display:flex;gap:16px;width:max-content;will-change:transform}
+.lc-card{position:relative;flex:none;width:224px;height:240px;border-radius:24px;overflow:hidden;background:#e9e3d8;margin:0}
+.lc-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-user-drag:none;filter:blur(6px);transition:filter 300ms ease}
+.lc-card img.ok{filter:none}
+.lc-card::after{content:"";position:absolute;inset:auto 0 0;height:66%;background:linear-gradient(to top,rgba(0,0,0,.8),rgba(0,0,0,.4) 45%,transparent)}
+.lc-card figcaption{position:absolute;z-index:1;left:0;right:0;bottom:0;padding:22px 24px;text-align:left;color:#fff;font-family:var(--mono)}
+.lc-card figcaption span{display:block;font-size:13px;letter-spacing:.06em}
+.lc-card figcaption b{display:block;margin-top:6px;font-size:20px;line-height:1.1}
+@media (min-width:768px){.lc-card{width:320px;height:384px}.lc-card figcaption{padding:30px 32px}.lc-card figcaption b{font-size:28px}}
+@media (prefers-reduced-motion:no-preference){
+  html.js .lc-card{opacity:0;translate:0 20px;transition:opacity 500ms ease-out,translate 500ms ease-out;transition-delay:calc(var(--k) * 200ms)}
+  html.js .lc.in .lc-card{opacity:1;translate:0 0}
+}
 
 .note{margin-top:28px;font-size:15px;color:var(--muted)}
 
@@ -258,7 +259,7 @@ h2.vibe-title{text-align:center;margin:0 0 clamp(20px,3vw,40px)}
 .f-face img{display:block;width:100%;height:100%;object-fit:cover;-webkit-user-drag:none;pointer-events:none}
 .f-back{transform:rotateY(180deg)}
 /* "HI!" stamped into the 4th spot when you join */
-.f-hi{position:absolute;left:13.4%;top:48.4%;width:19.2%;aspect-ratio:1;border-radius:50%;background:#141414;color:#EFB3A1;display:grid;place-items:center;
+.f-hi{position:absolute;left:13.4%;top:48.4%;width:19.2%;aspect-ratio:1;border-radius:50%;background:#141414;color:var(--accent);display:grid;place-items:center;
   font-family:"Rubik",var(--sans);font-weight:900;font-size:clamp(14px,5vw,19px);direction:ltr;rotate:-12deg;opacity:0;scale:2.2}
 .f-hi.on{opacity:1;scale:1;transition:scale 420ms var(--ease-out),opacity 200ms ease}
 .f-hint{margin-top:14px;font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--muted);display:flex;align-items:center;gap:8px;justify-content:center}
@@ -278,15 +279,11 @@ h2.vibe-title{text-align:center;margin:0 0 clamp(20px,3vw,40px)}
 .visit .v-info{display:flex;flex-direction:column;align-items:center;gap:28px;max-width:440px;text-align:center}
 .visit .v-info>div{width:100%;display:flex;flex-direction:column;align-items:center}
 .visit .addr{font-size:clamp(24px,2.8vw,34px);font-weight:900;line-height:1.1;margin-top:0;text-align:center}
-.visit .v-head{display:flex;justify-content:space-between;align-items:end;gap:16px}
+.visit .v-head{display:flex;justify-content:center;align-items:end;gap:16px}
 /* the cups' big 8, used here as a little brand mark beside the title */
 .v-title{display:flex;align-items:center;gap:clamp(14px,2vw,24px)}
 .v-eight{flex:none;height:clamp(64px,8vw,110px);width:auto;fill:#EFB3A1}
 .v-eight .h{fill:var(--deep)}
-.v-arrows{display:flex;gap:8px;flex:none}
-.v-arrow{width:48px;height:48px;border-radius:50%;border:1.5px solid var(--on-deep);background:none;color:var(--on-deep);display:grid;place-items:center;cursor:pointer;transition:background-color 160ms ease,color 160ms ease,transform 160ms var(--ease-out)}
-.v-arrow:active{transform:scale(.94)}
-.v-arrow:disabled{opacity:.3;cursor:default}
 /* visit: the photos stand around a ring in 3D; drag to turn it (it keeps turning a little), tap a photo to open it big */
 .v-stage{position:relative;height:clamp(250px,34vw,440px);margin:clamp(20px,3vw,36px) 0 clamp(40px,5vw,72px);overflow:hidden;perspective:1000px;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none;outline-offset:-4px;
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
@@ -311,8 +308,8 @@ h2.vibe-title{text-align:center;margin:0 0 clamp(20px,3vw,40px)}
 .hours div.today span:first-child::after{content:" · היום"}
 .g-rate{width:100%;display:grid;grid-template-columns:auto 1fr auto;grid-template-areas:"g s a" "g t a";align-items:center;column-gap:14px;row-gap:6px;margin-top:22px;padding:14px 16px;border:1.5px solid rgba(243,235,221,.35);border-radius:var(--r);color:var(--on-deep);text-decoration:none;transition:border-color 200ms ease,background-color 200ms ease}
 .g-rate:active{transform:scale(.98)}
-.g-badge{grid-area:g;width:44px;height:44px;border-radius:50%;background:#fff;display:grid;place-items:center}
-.g-logo{width:26px;height:26px}
+.g-badge{grid-area:g;width:46px;height:46px;border-radius:50%;border:1.5px solid var(--accent);color:var(--accent);display:grid;place-items:center}
+.g-logo{width:22px;height:22px}
 .g-stars{grid-area:s;display:flex;gap:3px;direction:ltr;justify-content:flex-end}
 .g-stars svg{width:17px;height:17px;fill:var(--accent);stroke:none}
 .g-text{grid-area:t;display:flex;flex-direction:column;gap:3px;line-height:1.25;text-align:start}
@@ -330,7 +327,7 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:2
 footer img{height:22px;width:auto}
 /* the cups' 8 beside the logo, as the brand's second mark */
 .foot-brand{display:flex;align-items:center;gap:14px;direction:ltr}  /* the 8 follows the "קפה רמת אביב" end of the logo */
-.foot-eight{height:30px;width:auto;fill:var(--accent)}
+.foot-eight{height:30px;width:auto;fill:#EFB3A1}  /* the 8 keeps the tray/cup pink */
 .foot-eight .h{fill:var(--deep)}
 footer .soc{display:flex;gap:2px;flex-wrap:wrap}
 footer .legal{flex-basis:100%;display:flex;gap:6px 22px;flex-wrap:wrap;padding-top:18px;border-top:1px solid rgba(243,235,221,.18)}
@@ -347,7 +344,6 @@ footer .legal button{background:none;border:0;padding:6px 0;color:var(--on-deep)
 /* accessibility modes */
 html.a11y-big{zoom:1.15}
 html.a11y-contrast{--muted:var(--fg);--soft-line:var(--fg);--on-deep-muted:var(--on-deep)}
-html.a11y-contrast .washline{opacity:1}
 html.a11y-links a,html.a11y-links button{text-decoration:underline!important;text-underline-offset:3px}
 html.a11y-links a:focus,html.a11y-links button:focus{outline:3px solid var(--accent);outline-offset:2px}
 html.a11y-still *,html.a11y-still *::before,html.a11y-still *::after{animation:none!important;transition:none!important}
@@ -366,8 +362,7 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
   .btn:hover{background:var(--fg);color:var(--bg)}
   .btn.fill:hover{background:var(--fg);border-color:var(--fg);color:var(--bg)}
   .visit .btn.fill:hover{background:var(--on-deep);border-color:var(--on-deep);color:var(--deep)}
-  .v-arrow:not(:disabled):hover{background:var(--on-deep);color:var(--deep)}
-  .g-rate:hover{border-color:var(--accent);background:rgba(239,179,161,.08)}
+  .g-rate:hover{border-color:var(--accent);background:rgba(251,208,179,.08)}
   .g-rate:hover .g-go{transform:translateX(-4px)}
   header nav a:not([aria-current=true]):hover{scale:1.06}
   .tlink:hover{text-underline-offset:.2em}
@@ -444,19 +439,18 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
 
   <section class="vibes" id="vibes">
     <div class="wrap"><h2 class="en vibe-title">The Vibe</h2></div>
-    <div class="washline" aria-label="תמונות מאוטוטו על חבל כביסה">
-      <svg aria-hidden="true"><path d=""/></svg>
-      <ul class="pins">
-        <li class="pin"><span class="clip"></span><figure><img src="img/vibe/awning.jpg" alt="הסוכך של אוטוטו ואנשים יושבים בחוץ" width="640" height="800" draggable="false"><figcaption><b>THE KIOSK</b><span>NO. 01</span></figcaption></figure></li>
-        <li class="pin"><span class="clip"></span><figure><img src="img/vibe/matcha-heart.jpg" alt="מאצ׳ה לאטה עם לב" width="640" height="800" draggable="false"><figcaption><b>MATCHA</b><span>NO. 02</span></figcaption></figure></li>
-        <li class="pin"><span class="clip"></span><figure><img src="img/vibe/pastries.jpg" alt="מאפי פירות יער ועוגיות" width="640" height="800" draggable="false"><figcaption><b>PASTRIES</b><span>NO. 03</span></figcaption></figure></li>
-        <li class="pin"><span class="clip"></span><figure><img src="img/vibe/latte-pour.jpg" alt="שפיכת לאטה ארט" width="640" height="800" draggable="false"><figcaption><b>LATTE ART</b><span>NO. 04</span></figcaption></figure></li>
-        <li class="pin"><span class="clip"></span><figure><img src="img/vibe/focaccia-heart.jpg" alt="פוקאצ׳ה בצורת לב על מגש" width="640" height="800" draggable="false"><figcaption><b>FOCACCIA</b><span>NO. 05</span></figcaption></figure></li>
-        <li class="pin"><span class="clip"></span><figure><img src="img/vibe/drinks-chair.jpg" alt="ארבעה משקאות קרים על כיסא עץ" width="640" height="800" draggable="false"><figcaption><b>ICED</b><span>NO. 06</span></figcaption></figure></li>
-        <li class="pin"><span class="clip"></span><figure><img src="img/vibe/sandwich.jpg" alt="כריך טונה על מגש ליד תיק ירוק" width="640" height="800" draggable="false"><figcaption><b>SANDWICH</b><span>NO. 07</span></figcaption></figure></li>
-        <li class="pin"><span class="clip"></span><figure><img src="img/vibe/latte-matcha.jpg" alt="לאטה, מאצ׳ה קרה ומאפה פירות יער" width="640" height="800" draggable="false"><figcaption><b>MORNING</b><span>NO. 08</span></figcaption></figure></li>
-        <li class="pin"><span class="clip"></span><figure><img src="img/vibe/focaccia-tray.jpg" alt="מגש פוקאצ׳ה טרייה" width="640" height="800" draggable="false"><figcaption><b>FRESH BAKE</b><span>NO. 09</span></figcaption></figure></li>
-      </ul>
+    <div class="lc" aria-label="תמונות מאוטוטו">
+      <div class="lc-track">
+        <figure class="lc-card" style="--k:0"><img src="img/vibe/awning.jpg" alt="הסוכך של אוטוטו ואנשים יושבים בחוץ" width="640" height="800" loading="lazy" draggable="false"><figcaption><span>NO. 01</span><b>THE KIOSK</b></figcaption></figure>
+        <figure class="lc-card" style="--k:1"><img src="img/vibe/matcha-heart.jpg" alt="מאצ׳ה לאטה עם לב" width="640" height="800" loading="lazy" draggable="false"><figcaption><span>NO. 02</span><b>MATCHA</b></figcaption></figure>
+        <figure class="lc-card" style="--k:2"><img src="img/vibe/pastries.jpg" alt="מאפי פירות יער ועוגיות" width="640" height="800" loading="lazy" draggable="false"><figcaption><span>NO. 03</span><b>PASTRIES</b></figcaption></figure>
+        <figure class="lc-card" style="--k:3"><img src="img/vibe/latte-pour.jpg" alt="שפיכת לאטה ארט" width="640" height="800" loading="lazy" draggable="false"><figcaption><span>NO. 04</span><b>LATTE ART</b></figcaption></figure>
+        <figure class="lc-card" style="--k:4"><img src="img/vibe/focaccia-heart.jpg" alt="פוקאצ׳ה בצורת לב על מגש" width="640" height="800" loading="lazy" draggable="false"><figcaption><span>NO. 05</span><b>FOCACCIA</b></figcaption></figure>
+        <figure class="lc-card" style="--k:5"><img src="img/vibe/drinks-chair.jpg" alt="ארבעה משקאות קרים על כיסא עץ" width="640" height="800" loading="lazy" draggable="false"><figcaption><span>NO. 06</span><b>ICED</b></figcaption></figure>
+        <figure class="lc-card" style="--k:6"><img src="img/vibe/sandwich.jpg" alt="כריך טונה על מגש ליד תיק ירוק" width="640" height="800" loading="lazy" draggable="false"><figcaption><span>NO. 07</span><b>SANDWICH</b></figcaption></figure>
+        <figure class="lc-card" style="--k:7"><img src="img/vibe/latte-matcha.jpg" alt="לאטה, מאצ׳ה קרה ומאפה פירות יער" width="640" height="800" loading="lazy" draggable="false"><figcaption><span>NO. 08</span><b>MORNING</b></figcaption></figure>
+        <figure class="lc-card" style="--k:8"><img src="img/vibe/focaccia-tray.jpg" alt="מגש פוקאצ׳ה טרייה" width="640" height="800" loading="lazy" draggable="false"><figcaption><span>NO. 09</span><b>FRESH BAKE</b></figcaption></figure>
+      </div>
     </div>
   </section>
 
@@ -533,10 +527,6 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
   <section class="visit" id="visit">
     <div class="wrap v-head">
       <div class="v-title"><svg class="v-eight" viewBox="725 95 550 815" aria-hidden="true"><rect x="745" y="95" width="510" height="400" rx="150"/><rect x="725" y="440" width="550" height="470" rx="165"/><rect class="h" x="915" y="210" width="170" height="135" rx="48"/><rect class="h" x="905" y="590" width="190" height="175" rx="55"/></svg><h2 class="en">Come visit us</h2></div>
-      <div class="v-arrows">
-        <button type="button" class="v-arrow" data-dir="1" aria-label="התמונה הבאה"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6l-6 6"/></svg></button>
-        <button type="button" class="v-arrow" data-dir="-1" aria-label="התמונה הקודמת"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6l6 6"/></svg></button>
-      </div>
     </div>
     <!-- weekend on film: a 3D ring of photos; drag, use the arrows, or tap a photo to see it big -->
     <div class="v-stage" tabindex="0" aria-label="תמונות מאוטוטו. גוררים כדי לסובב, לחיצה על תמונה מגדילה אותה">
@@ -565,7 +555,7 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
         </div>
         <!-- Google rating: stars fill one by one; opens OTTOTO's Google Maps page, where "כתיבת ביקורת" is -->
         <a class="g-rate" href="https://maps.google.com/?cid=13286087321447341267" target="_blank" rel="noopener">
-          <span class="g-badge"><svg class="g-logo" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 8 3l5.7-5.7C34 6.1 29.3 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.7-.4-3.9z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 8 3l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.7-.4-3.9z"/></svg></span>
+          <span class="g-badge"><svg class="i g-logo" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.945 11a9 9 0 1 1 -3.284 -5.997l-2.655 2.392a5.5 5.5 0 1 0 2.119 6.605h-4.125v-3h7.945z"/></svg></span>
           <span class="g-stars" aria-hidden="true"><svg viewBox="0 0 24 24" style="--i:0"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z"/></svg><svg viewBox="0 0 24 24" style="--i:1"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z"/></svg><svg viewBox="0 0 24 24" style="--i:2"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z"/></svg><svg viewBox="0 0 24 24" style="--i:3"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z"/></svg><svg viewBox="0 0 24 24" style="--i:4"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z"/></svg></span>
           <span class="g-text"><b>אהבתם? דרגו אותנו בגוגל</b><span class="en">RATE US ON GOOGLE</span></span>
           <svg class="i g-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6l6 6"/></svg>
@@ -739,7 +729,6 @@ new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(hero
     if(hit)open(hit.querySelector('img'));
   };
   stage.addEventListener('pointerup',up);stage.addEventListener('pointercancel',()=>{drag=null;stage.classList.remove('dragging')});
-  document.querySelectorAll('.v-arrow').forEach(b=>b.addEventListener('click',()=>nudge(-(+b.dataset.dir))));
   stage.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();nudge(e.key==='ArrowRight'?-1:1)}});
   /* the big view */
   const zoom=document.getElementById('vZoom'),zimg=zoom.querySelector('img');
@@ -749,40 +738,27 @@ new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(hero
   zoom.addEventListener('click',close);addEventListener('keydown',e=>{if(e.key==='Escape')close()});
 })();
 
-/* THE VIBE washing line: the line is a parabola (one quadratic curve); each photo hangs where it sits on it,
-   tilts with the slope and sways a little. The row drifts left by itself; a drag moves it and flings it */
+/* THE VIBE carousel: the cards are copied once so the row can loop; it glides left all the time, wraps around at
+   the halfway point, and pauses while a mouse is over it or a finger holds it. Dragging moves it by hand */
 (function(){
-  const wrap=document.querySelector('.washline');if(!wrap)return;
-  const path=wrap.querySelector('path'),list=wrap.querySelector('.pins');
-  const Y0=22,DRIFT=reduce?0:-36;  /* px per second */
-  let pins=[...list.children],W=0,S=0,cw=0,step=0,span=0,off=0,fling=0,last=0,raf=0,seen=false,drag=null;
-  const measure=()=>{
-    W=wrap.clientWidth;cw=pins[0].offsetWidth;step=cw*1.2;S=Math.min(90,Math.max(22,W*.06));
-    while(pins.length*step<W+2*step){[...list.querySelectorAll('.pin:not([aria-hidden])')].forEach(p=>{const c=p.cloneNode(true);c.setAttribute('aria-hidden','true');list.append(c)});pins=[...list.children]}
-    span=pins.length*step;wrap.style.height=Math.ceil(Y0+S+6+pins[0].offsetHeight+40)+'px';
-  };
-  const paint=t=>{
-    const s=S+Math.sin(t/1500)*3,h=W/2;
-    path.setAttribute('d',`M0 ${Y0} Q ${h} ${Y0+2*s} ${W} ${Y0}`);
-    pins.forEach((p,i)=>{
-      const x=((i*step+off)%span+span)%span-step,cx=x+cw/2,u=(cx-h)/h;
-      const y=Y0+s*(1-u*u),tilt=Math.atan(-2*s*u/h)*57.3*.8,sway=reduce?0:Math.sin(t/950+i*1.7)*1.5;
-      p.style.transform=`translate(${x.toFixed(1)}px,${y.toFixed(1)}px) rotate(${(tilt+sway).toFixed(2)}deg)`;
-    });
-  };
-  const tick=t=>{
-    const dt=last?Math.min(.05,(t-last)/1000):0;last=t;
-    if(!drag){off+=(DRIFT+fling)*dt;fling*=Math.pow(.04,dt)}
-    paint(t);raf=seen?requestAnimationFrame(tick):0;
-  };
-  const start=()=>{if(!raf){last=0;raf=requestAnimationFrame(tick)}};
-  wrap.addEventListener('pointerdown',e=>{drag={x:e.clientX,off,lx:e.clientX,lt:e.timeStamp,v:0};wrap.setPointerCapture(e.pointerId);wrap.classList.add('dragging')});
-  wrap.addEventListener('pointermove',e=>{if(!drag)return;off=drag.off+(e.clientX-drag.x);const dt=e.timeStamp-drag.lt;if(dt>0)drag.v=(e.clientX-drag.lx)/dt*1000;drag.lx=e.clientX;drag.lt=e.timeStamp;if(!raf)paint(performance.now())});
-  const up=()=>{if(!drag)return;fling=Math.max(-1500,Math.min(1500,drag.v));drag=null;wrap.classList.remove('dragging')};
-  wrap.addEventListener('pointerup',up);wrap.addEventListener('pointercancel',up);
-  new IntersectionObserver(([e])=>{seen=e.isIntersecting;if(seen)start()}).observe(wrap);
-  addEventListener('resize',()=>{measure();paint(performance.now())});
-  measure();paint(0);
+  const lc=document.querySelector('.lc');if(!lc)return;
+  const track=lc.querySelector('.lc-track');
+  [...track.children].forEach(c=>{const d=c.cloneNode(true);d.setAttribute('aria-hidden','true');track.append(d)});
+  track.querySelectorAll('img').forEach(im=>{const ok=()=>im.classList.add('ok');im.complete?ok():im.addEventListener('load',ok)});
+  const SPEED=reduce?0:.03;  /* px per millisecond, about the original's 0.5px a frame */
+  let x=0,last=0,raf=0,seen=false,hover=false,drag=null;
+  const wrap=()=>{const half=track.scrollWidth/2;if(half){x%=half;if(x>0)x-=half}};
+  const tick=t=>{const dt=last?Math.min(50,t-last):16;last=t;
+    if(!drag&&!hover){x-=SPEED*dt;wrap()}
+    track.style.transform=`translate3d(${x.toFixed(1)}px,0,0)`;
+    raf=seen?requestAnimationFrame(tick):0};
+  new IntersectionObserver(([e])=>{seen=e.isIntersecting;if(seen){lc.classList.add('in');if(!raf){last=0;raf=requestAnimationFrame(tick)}}}).observe(lc);
+  lc.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse')hover=true});
+  lc.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse')hover=false});
+  lc.addEventListener('pointerdown',e=>{drag={x:e.clientX,start:x};lc.setPointerCapture(e.pointerId);lc.classList.add('dragging')});
+  lc.addEventListener('pointermove',e=>{if(!drag)return;x=drag.start+(e.clientX-drag.x);wrap()});
+  const up=()=>{drag=null;lc.classList.remove('dragging')};
+  lc.addEventListener('pointerup',up);lc.addEventListener('pointercancel',up);
 })();
 
 /* footer documents + accessibility tools (choices are remembered in this browser) */
