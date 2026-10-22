@@ -307,7 +307,25 @@ h2.vibe-title{text-align:center;margin:0 0 clamp(20px,3vw,40px)}
 footer{background:var(--deep);color:var(--on-deep);padding:36px 0 44px;border-top:1.5px solid rgba(243,235,221,.3)}
 footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;font-family:var(--mono);font-size:13px}
 footer img{height:22px;width:auto}
-footer .soc{display:flex;gap:6px}
+footer .soc{display:flex;gap:2px;flex-wrap:wrap}
+footer .legal{flex-basis:100%;display:flex;gap:6px 22px;flex-wrap:wrap;padding-top:18px;border-top:1px solid rgba(243,235,221,.18)}
+footer .legal button{background:none;border:0;padding:6px 0;color:var(--on-deep);font:inherit;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;text-decoration:underline;text-decoration-color:transparent;text-underline-offset:4px;transition:text-decoration-color 200ms ease}
+.doc{width:min(560px,100% - 32px);max-height:min(80svh,720px);margin:auto;padding:28px 24px 26px;border:0;border-radius:var(--r);background:var(--bg);color:var(--fg);direction:rtl;overflow:auto;box-shadow:0 30px 60px -20px rgba(0,0,0,.5)}
+.doc::backdrop{background:rgba(20,20,20,.6)}
+.doc h3{font-size:26px;font-weight:900;line-height:1.1;margin:0 0 18px;padding-inline-end:44px}
+.doc p{margin:0 0 12px;font-size:16px;line-height:1.6}
+.doc .draft{margin-top:8px;padding:2px}
+.doc-x{position:absolute;top:14px;left:14px;width:44px;height:44px;border-radius:50%;border:0;background:none;color:inherit;display:grid;place-items:center;cursor:pointer}
+.a11y-tools{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.a11y-tools button{min-height:44px;padding:0 16px;border-radius:999px;border:1.5px solid var(--fg);background:none;color:var(--fg);font:inherit;font-size:15px;font-weight:700;cursor:pointer}
+.a11y-tools button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+/* accessibility modes */
+html.a11y-big{zoom:1.15}
+html.a11y-contrast{--muted:var(--fg);--soft-line:var(--fg);--on-deep-muted:var(--on-deep)}
+html.a11y-contrast .v-track figure,html.a11y-contrast .washline{opacity:1}
+html.a11y-links a,html.a11y-links button{text-decoration:underline!important;text-underline-offset:3px}
+html.a11y-links a:focus,html.a11y-links button:focus{outline:3px solid var(--accent);outline-offset:2px}
+html.a11y-still *,html.a11y-still *::before,html.a11y-still *::after{animation:none!important;transition:none!important}
 footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radius:999px;transition:background-color 200ms ease;-webkit-tap-highlight-color:transparent}
 
 /* below 900px every split collapses to one column */
@@ -331,6 +349,9 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
   .tlink:hover{text-underline-offset:.2em}
   .tlink:hover svg{transform:translateX(-3px)}
   footer .soc a:hover{background:rgba(243,235,221,.12)}
+  footer .legal button:hover{text-decoration-color:currentColor}
+  .doc-x:hover{background:var(--soft-line)}
+  .a11y-tools button:not([aria-pressed="true"]):hover{background:var(--soft-line)}
 }
 @media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
 }
@@ -347,7 +368,7 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
   html{scroll-behavior:auto}
 }
 </style>
-<script>document.documentElement.classList.add('js','splashing');history.scrollRestoration='manual';if(location.hash)history.replaceState(null,'',location.pathname+location.search);scrollTo(0,0)</script>
+<script>try{(JSON.parse(localStorage.getItem('ottoto-a11y'))||[]).forEach(c=>document.documentElement.classList.add('a11y-'+c))}catch(e){}document.documentElement.classList.add('js','splashing');history.scrollRestoration='manual';if(location.hash)history.replaceState(null,'',location.pathname+location.search);scrollTo(0,0)</script>
 </head>
 <body>
 <a class="skip" href="#main">דלגו לתוכן</a>
@@ -551,13 +572,58 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
     <div class="soc">
       <a href="https://www.instagram.com/ottoto.tlv/" target="_blank" rel="noopener" aria-label="אינסטגרם"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4m0 4a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z"/><path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M16.5 7.5l0 .01"/></svg></a>
       <a href="https://open.spotify.com/playlist/4zsaFyuyAfIeqs3lRRJgPa" target="_blank" rel="noopener" aria-label="ספוטיפיי"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M8 11.973c2.5 -1.473 5.5 -.973 7.5 .527"/><path d="M9 15c1.5 -1 4 -1 5 .5"/><path d="M7 9c2 -1 6 -2 10 .5"/></svg></a>
+      <a href="https://waze.com/ul?ll=32.1055048%2C34.7980642&amp;navigate=yes" target="_blank" rel="noopener" aria-label="ניווט עם וויז"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.66 17.52a7 7 0 0 1 -3.66 -4.52c2 0 3 -1 3 -2.51c0 -3.92 2.25 -7.49 7.38 -7.49c4.62 0 7.62 3.51 7.62 8a8.08 8.08 0 0 1 -3.39 6.62"/><path d="M10 18.69a17.29 17.29 0 0 0 3.33 .3h.54"/><path d="M16 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M7 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M16 9h.01"/><path d="M11 9h.01"/></svg></a>
+      <a href="https://maps.google.com/?cid=13286087321447341267" target="_blank" rel="noopener" aria-label="אוטוטו בגוגל מפות"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 9.5m-2.5 0a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0"/><path d="M6.428 12.494l7.314 -9.252"/><path d="M10.002 7.935l-2.937 -2.545"/><path d="M17.693 6.593l-8.336 9.979"/><path d="M17.591 6.376c.472 .907 .715 1.914 .709 2.935a7.263 7.263 0 0 1 -.72 3.18a19.085 19.085 0 0 1 -2.089 3c-.784 .933 -1.49 1.93 -2.11 2.98c-.314 .62 -.568 1.27 -.757 1.938c-.121 .36 -.277 .591 -.622 .591c-.315 0 -.463 -.136 -.626 -.593a10.595 10.595 0 0 0 -.779 -1.978a18.18 18.18 0 0 0 -1.423 -2.091c-.877 -1.184 -2.179 -2.535 -2.853 -4.071a7.077 7.077 0 0 1 -.621 -2.967a6.226 6.226 0 0 1 1.476 -4.055a6.25 6.25 0 0 1 4.811 -2.245a6.462 6.462 0 0 1 5.134 2.399z"/></svg></a>
     </div>
     <span class="en">© <span id="yr"></span> OTTOTO TLV, CAFE &amp; WINE</span>
+    <nav class="legal en" aria-label="מידע משפטי ונגישות">
+      <button type="button" data-doc="dlg-access">Accessibility</button>
+      <button type="button" data-doc="dlg-cookies">Cookies</button>
+      <button type="button" data-doc="dlg-terms">Terms</button>
+    </nav>
   </div>
 </footer>
 
+<!-- footer documents: accessibility (with a few display tools), cookies, terms. Text is a draft until the client approves it -->
+<dialog class="doc" id="dlg-access" aria-labelledby="dlg-access-t">
+  <button type="button" class="doc-x" aria-label="סגירה"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6l-12 12"/><path d="M6 6l12 12"/></svg></button>
+  <h3 id="dlg-access-t"><span class="en">Accessibility</span> · נגישות</h3>
+  <div class="a11y-tools">
+    <button type="button" data-a11y="big" aria-pressed="false">הגדלת טקסט</button>
+    <button type="button" data-a11y="contrast" aria-pressed="false">ניגודיות גבוהה</button>
+    <button type="button" data-a11y="links" aria-pressed="false">הדגשת קישורים</button>
+    <button type="button" data-a11y="still" aria-pressed="false">עצירת אנימציות</button>
+    <button type="button" data-a11y="reset">איפוס</button>
+  </div>
+  <div class="draft">
+    <p>חשוב לנו שכל אחד ואחת יוכלו להשתמש באתר של אוטוטו בנוחות. האתר נבנה כך שאפשר לנווט בו עם מקלדת ועם קורא מסך, הטקסט ניתן להגדלה, ולכל תמונה יש תיאור.</p>
+    <p>אם נתקלתם במשהו שלא עובד כמו שצריך, נשמח לשמוע ולתקן: [שם איש קשר לנגישות, טלפון ומייל, מהלקוח].</p>
+    <p>הקיוסק נמצא בגרונמן 8, תל אביב. [פרטי נגישות המקום: גישה לכיסא גלגלים, ישיבה בחוץ, מהלקוח].</p>
+    <p>עודכן לאחרונה: אוקטובר 2026.</p>
+  </div>
+</dialog>
+<dialog class="doc" id="dlg-cookies" aria-labelledby="dlg-cookies-t">
+  <button type="button" class="doc-x" aria-label="סגירה"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6l-12 12"/><path d="M6 6l12 12"/></svg></button>
+  <h3 id="dlg-cookies-t"><span class="en">Cookies</span> · עוגיות</h3>
+  <div class="draft">
+    <p>האתר של אוטוטו לא משתמש בעוגיות של פרסום או מעקב, ולא אוסף פרטים אישיים.</p>
+    <p>הדבר היחיד שנשמר בדפדפן שלכם הוא הגדרות הנגישות שבחרתם, כדי שיישארו גם בביקור הבא. אפשר למחוק אותן בכפתור "איפוס" בחלון הנגישות.</p>
+    <p>הקישורים לאינסטגרם, ספוטיפיי, וויז וגוגל מפות מובילים לאתרים שלהם, ושם חלה מדיניות העוגיות שלהם.</p>
+  </div>
+</dialog>
+<dialog class="doc" id="dlg-terms" aria-labelledby="dlg-terms-t">
+  <button type="button" class="doc-x" aria-label="סגירה"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6l-12 12"/><path d="M6 6l12 12"/></svg></button>
+  <h3 id="dlg-terms-t"><span class="en">Terms</span> · תקנון</h3>
+  <div class="draft">
+    <p>האתר מציג מידע על בית הקפה אוטוטו: שעות פתיחה, כתובת, תמונות ומוצרים. אנחנו משתדלים שהמידע יהיה מדויק, אבל שעות, מחירים ומוצרים יכולים להשתנות.</p>
+    <p>כל התמונות, הלוגו והאיורים באתר שייכים לאוטוטו או לצלמים שלהם, ואין להשתמש בהם בלי אישור.</p>
+    <p>[תנאי רכישה, משלוחים והחזרות של ערכת המאצ׳ה, ותנאי מועדון החברים, מהלקוח].</p>
+    <p>לשאלות: [פרטי יצירת קשר, מהלקוח].</p>
+  </div>
+</dialog>
+
 <script>
-const root=document.documentElement,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const root=document.documentElement,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches||root.classList.contains('a11y-still');
 const hdr=document.getElementById('hdr'),nav=document.getElementById('nav');
 const heroLogo=document.querySelector('.bigmark img');
 
@@ -696,6 +762,27 @@ new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(hero
   new IntersectionObserver(([e])=>{seen=e.isIntersecting;if(seen)start()}).observe(wrap);
   addEventListener('resize',()=>{measure();paint(performance.now())});
   measure();paint(0);
+})();
+
+/* footer documents + accessibility tools (choices are remembered in this browser) */
+(function(){
+  document.querySelectorAll('.legal [data-doc]').forEach(b=>b.addEventListener('click',()=>document.getElementById(b.dataset.doc).showModal()));
+  document.querySelectorAll('.doc').forEach(d=>{
+    d.querySelector('.doc-x').addEventListener('click',()=>d.close());
+    d.addEventListener('click',e=>{if(e.target===d)d.close()});  /* tap outside the box closes it */
+  });
+  const KEY='ottoto-a11y',btns=[...document.querySelectorAll('[data-a11y]')];
+  const on=()=>btns.map(b=>b.dataset.a11y).filter(k=>root.classList.contains('a11y-'+k));
+  const save=list=>{try{localStorage.setItem(KEY,JSON.stringify(list))}catch(e){}};
+  const sync=()=>btns.forEach(b=>{if(b.dataset.a11y!=='reset')b.setAttribute('aria-pressed',root.classList.contains('a11y-'+b.dataset.a11y))});
+  btns.forEach(b=>b.addEventListener('click',()=>{
+    const k=b.dataset.a11y,wasStill=root.classList.contains('a11y-still');
+    if(k==='reset')btns.forEach(x=>root.classList.remove('a11y-'+x.dataset.a11y));else root.classList.toggle('a11y-'+k);
+    save(on());sync();
+    /* the video, washing line and carousel read this once at load, so reload to stop or restart them */
+    if(wasStill!==root.classList.contains('a11y-still'))location.reload();
+  }));
+  sync();
 })();
 
 /* shop: thumbnails swap the big photo */
