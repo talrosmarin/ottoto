@@ -106,7 +106,13 @@ body::after{content:"";position:fixed;inset:0;z-index:30;pointer-events:none;opa
    down a row to make room) and then rides along with the header */
 header{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1.5px solid transparent;transition:border-color 200ms ease}
 header.lined{border-bottom-color:var(--line)}
-header .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;padding-block:14px}
+header .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;padding-block:14px;direction:ltr}
+/* language switch, end of the row: EN / HE, the current one sits on the accent marker */
+.lang{grid-column:3;justify-self:end;display:flex;gap:2px;padding:3px;border:1.5px solid var(--line);border-radius:999px;background:none;color:var(--fg);font:inherit;font-family:var(--mono);font-weight:700;font-size:12px;letter-spacing:.08em;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:opacity 400ms ease 500ms}
+.lang span{padding:3px 7px;border-radius:999px;transition:background-color 250ms ease,color 250ms ease}
+html[lang=he] .lang [data-l=he],html[lang=en] .lang [data-l=en]{background:var(--accent);color:var(--on-accent)}
+.lang:active{scale:.96}
+html:not(.navin) .lang{opacity:0}
 header .logo{justify-self:start;opacity:0;pointer-events:none;transition:opacity 300ms var(--ease-out)}
 html.scrolled header .logo{opacity:1;pointer-events:auto}
 /* while the big logo is flying into the slot (or sitting in it) a fixed copy shows it; the slot's own img and the
@@ -114,9 +120,7 @@ html.scrolled header .logo{opacity:1;pointer-events:auto}
 html.docking header .logo img,html.docking .bigmark img{visibility:hidden}
 .logo-fly{position:fixed;left:0;top:0;z-index:22;display:block;transform-origin:0 0;pointer-events:none;will-change:transform}
 .logo-fly img{display:block;width:100%;height:auto}
-header .logo img{height:22px;width:auto}
-/* while the big logo is flying into this slot (or sitting in it), the slot's own copy stays invisible */
-
+header .logo img{height:26px;width:auto}
 
 /* menu: one row of caps, the current section gets a hand-drawn marker in the cup color */
 header nav{grid-column:2;direction:ltr;display:flex;flex-wrap:wrap;justify-content:center;gap:4px clamp(14px,2.4vw,30px)}
@@ -127,6 +131,11 @@ header nav a[aria-current=true]{color:var(--on-accent);scale:1.12}
 header nav a[aria-current=true]::before{scale:1 1}
 html:not(.navin) header nav a{opacity:0;visibility:hidden;transform:translateY(-60px) rotate(-4deg)}
 
+/* English mode: the page turns left-to-right; doubled caps lines under translated text are hidden */
+html[lang=en] .doc{direction:ltr}
+html[lang=en] .v-info .addr .en,html[lang=en] .g-text .en{display:none}
+html[lang=en] .g-go{scale:-1 1}
+
 /* the big centered logo on the first screen */
 .home-screen{height:calc(100svh - var(--hdr,56px));min-height:460px;display:flex;flex-direction:column;background-image:var(--grid-lines);background-size:54px 54px;background-position:center top}
 .bigmark{flex:none;display:flex;justify-content:center;padding:clamp(18px,3vw,36px) 16px clamp(8px,2vw,20px)}
@@ -136,12 +145,14 @@ html.splashing .bigmark img{visibility:hidden}
 .sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 @media (max-width:600px){
   header .wrap{grid-template-columns:1fr;padding-block:4px 2px}
-  header .logo{position:absolute;left:0;right:0;justify-self:stretch;top:0;height:100%;display:grid;place-items:center}
-  header .logo img{height:18px}
-  header nav{position:relative;z-index:1;transform:translateY(calc(var(--e,0) * var(--hdr,31px)))}
-  header::after{content:"";position:absolute;left:0;right:0;top:100%;height:var(--hdr,31px);background:var(--bg);border-bottom:1.5px solid var(--line);opacity:var(--e,0);pointer-events:none}
+  header .logo{position:absolute;left:0;right:0;justify-self:stretch;top:0;height:calc(var(--hdr,31px) + 12px);display:grid;place-items:center;padding-top:4px}
+  header .logo img{height:24px}
+  header nav{position:relative;z-index:1;transform:translateY(calc(var(--e,0) * (var(--hdr,31px) + 12px)))}
+  header::after{content:"";position:absolute;left:0;right:0;top:100%;height:calc(var(--hdr,31px) + 12px);background:var(--bg);border-bottom:1.5px solid var(--line);opacity:var(--e,0);pointer-events:none}
+  .lang{position:absolute;right:10px;top:calc((var(--hdr,31px) + 12px * var(--e,0)) / 2);translate:0 -50%;z-index:2;font-size:10.5px;padding:2px}
+  .lang span{padding:2px 5px}
   header.lined{border-bottom-color:transparent}
-  header nav{grid-column:1;gap:2px 9px;flex-wrap:nowrap}
+  header nav{grid-column:1;gap:2px 9px;flex-wrap:nowrap;padding-inline:0 calc(64px * (1 - var(--e,0)))}  /* room for EN/HE until the menu drops to its own row */
   header nav a{font-size:11.5px;letter-spacing:.04em}
 }
 /* phones: the first screen is exactly the visible screen (Safari bars included).
@@ -222,22 +233,6 @@ h2.vibe-title{text-align:center;margin:0 0 clamp(20px,3vw,40px)}
 
 .note{margin-top:28px;font-size:15px;color:var(--muted)}
 
-/* shop: one product, the matto matcha kit. photo stage + facts, studio-white photos sit on paper */
-/* shop: the kiosk shelf, with the Matto kit (drawn) standing on it */
-.shop{background:var(--surface);border-block:1.5px solid var(--line)}
-.shop .wrap{text-align:center}
-.shop h2.en,.shop .lead{text-align:center;margin-inline:auto}
-.shelf{position:relative;max-width:380px;margin:clamp(32px,5vw,52px) auto clamp(24px,3vw,32px);padding:0 6%}
-.sh-row{display:flex;justify-content:center;align-items:flex-end;position:relative;z-index:1}
-.sh-item{width:62%;display:flex;flex-direction:column;align-items:center}
-.sh-item .sh-photo{width:100%;height:auto;display:block;margin-bottom:-3%}
-.sh-plank{position:relative;height:14px;margin-top:-2px;background:#D4AE85;border:1.5px solid #1d1d1d;border-radius:3px;box-shadow:inset 0 -5px 0 #BF946A}
-.sh-plank::before,.sh-plank::after{content:"";position:absolute;bottom:-24px;width:14px;height:24px;background:#BF946A;border:1.5px solid #1d1d1d;border-top:0;border-radius:0 0 5px 5px}
-.sh-plank::before{left:14%}.sh-plank::after{right:14%}
-@media (prefers-reduced-motion:no-preference){
-  html.js .sh-item{opacity:0;translate:0 -40px;transition:opacity 300ms ease,translate 520ms var(--ease)}
-  html.js .shelf.in .sh-item{opacity:1;translate:0 0}
-}
 
 /* playlist: centered stack, the cassette is the visual */
 .playlist{background:var(--band);color:var(--on-band);text-align:center}
@@ -318,6 +313,8 @@ h2.vibe-title{text-align:center;margin:0 0 clamp(20px,3vw,40px)}
 .hours span:last-child{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:16px}
 .hours div.today{color:var(--accent);font-weight:700}
 .hours div.today span:first-child::after{content:" · היום"}
+html[lang=en] .hours div.today span:first-child::after{content:" · today"}
+html[lang=en] .g-stars{justify-content:flex-start}
 .g-rate{width:100%;display:grid;grid-template-columns:auto 1fr auto;grid-template-areas:"g s a" "g t a";align-items:center;column-gap:14px;row-gap:6px;margin-top:22px;padding:14px 16px;border:1.5px solid rgba(243,235,221,.35);border-radius:var(--r);color:var(--on-deep);text-decoration:none;transition:border-color 200ms ease,background-color 200ms ease}
 .g-rate:active{transform:scale(.98)}
 .g-badge{grid-area:g;width:46px;height:46px;border-radius:50%;border:1.5px solid var(--accent);color:var(--accent);display:grid;place-items:center}
@@ -399,7 +396,7 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
   html{scroll-behavior:auto}
 }
 </style>
-<script>try{(JSON.parse(localStorage.getItem('ottoto-a11y'))||[]).forEach(c=>document.documentElement.classList.add('a11y-'+c))}catch(e){}document.documentElement.classList.add('js','splashing');history.scrollRestoration='manual';if(location.hash)history.replaceState(null,'',location.pathname+location.search);scrollTo(0,0)</script>
+<script>try{if(localStorage.getItem('ottoto-lang')==='en'){document.documentElement.lang='en';document.documentElement.dir='ltr'}}catch(e){}try{(JSON.parse(localStorage.getItem('ottoto-a11y'))||[]).forEach(c=>document.documentElement.classList.add('a11y-'+c))}catch(e){}document.documentElement.classList.add('js','splashing');history.scrollRestoration='manual';if(location.hash)history.replaceState(null,'',location.pathname+location.search);scrollTo(0,0)</script>
 </head>
 <body>
 <a class="skip" href="#main">דלגו לתוכן</a>
@@ -417,9 +414,9 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
       <a href="#vibes" style="--n:1">VIBES</a>
       <a href="#playlist" style="--n:2">PLAYLIST</a>
       <a href="#friends" style="--n:3">FRIENDS</a>
-      <a href="#shop" style="--n:4">SHOP</a>
-      <a href="#visit" style="--n:5">VISIT</a>
+      <a href="#visit" style="--n:4">VISIT</a>
     </nav>
+    <button class="lang" id="lang" type="button" aria-label="English / עברית"><span data-l="en">EN</span><span data-l="he">HE</span></button>
   </div>
 </header>
 
@@ -522,17 +519,6 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
         <button class="btn fill" type="submit">הצטרפו לחברים</button>
         <p class="f-msg" id="fMsg" role="status" aria-live="polite"></p>
       </form>
-    </div>
-  </section>
-
-  <section class="shop" id="shop">
-    <div class="wrap">
-      <h2 class="en">Take it home</h2>
-      <p class="lead">מה שאפשר לקחת מהקיוסק הביתה.</p>
-      <div class="shelf">
-        <div class="sh-row"><div class="sh-item" style="--i:0" role="img" aria-label="ערכת המאצ׳ה של matto"><img class="sh-art sh-photo" src="img/shop/kit-drawn.png" alt="" width="520" height="505"></div></div>
-        <div class="sh-plank" aria-hidden="true"></div>
-      </div>
     </div>
   </section>
 
@@ -690,7 +676,7 @@ function status(){
   const [o,c]=HOURS[day],open=now>=toMin(o)&&now<toMin(c);
   const txt=open?`פתוח עכשיו · עד ${c}`:now<toMin(o)?`סגור עכשיו, נפתח היום ב־${o}`:`סגור עכשיו, נפתח מחר ב־${HOURS[(day+1)%7][0]}`;
   const en=open?`Open now · until ${c}`:now<toMin(o)?`Closed now · opens today at ${o}`:`Closed now · opens tomorrow at ${HOURS[(day+1)%7][0]}`;  /* the info line under the reel is in English */
-  document.querySelectorAll('[data-status]').forEach(s=>{s.classList.toggle('open',open);s.lastElementChild.textContent=s.dataset.status==='en'?en:txt});
+  document.querySelectorAll('[data-status]').forEach(s=>{s.classList.toggle('open',open);s.lastElementChild.textContent=s.dataset.status==='en'||root.lang==='en'?en:txt});
   document.querySelectorAll('#hours [data-days]').forEach(r=>r.classList.toggle('today',r.dataset.days.split(',').includes(String(day))));
 }
 status();setInterval(status,60000);
@@ -699,7 +685,7 @@ status();setInterval(status,60000);
 const links=[...nav.querySelectorAll('a')];
 const mark=id=>links.forEach(a=>a.setAttribute('aria-current',a.hash==='#'+id));
 const navIO=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)mark(e.target.dataset.nav||e.target.id)}),{rootMargin:'-45% 0px -50% 0px'});
-['shop','playlist','vibes','friends','visit'].forEach(id=>navIO.observe(document.getElementById(id)));
+['playlist','vibes','friends','visit'].forEach(id=>navIO.observe(document.getElementById(id)));
 navIO.observe(document.querySelector('.hero'));
 /* the home page always lights HOME while the big logo is on screen */
 new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(heroLogo);
@@ -811,13 +797,13 @@ new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(hero
   form.addEventListener('submit',async e=>{
     e.preventDefault();
     const d=clean(tel.value);
-    if(!/^05\d{8}$/.test(d)){tel.setAttribute('aria-invalid','true');msg.textContent='נראה שמשהו חסר. מספר נייד מתחיל ב-05 ויש בו 10 ספרות.';tel.focus();return}
-    if(!ok.checked){msg.textContent='צריך לסמן את האישור כדי שנוכל לשלוח לכם הטבות.';ok.focus();return}
+    if(!/^05\d{8}$/.test(d)){tel.setAttribute('aria-invalid','true');msg.textContent=root.lang==='en'?'Something is missing. A mobile number starts with 05 and has 10 digits.':'נראה שמשהו חסר. מספר נייד מתחיל ב-05 ויש בו 10 ספרות.';tel.focus();return}
+    if(!ok.checked){msg.textContent=root.lang==='en'?'Please tick the box so we can send you perks.':'צריך לסמן את האישור כדי שנוכל לשלוח לכם הטבות.';ok.focus();return}
     if(Math.round(angle/180)%2===0)flip();  /* turn on to the punch side if the front is showing */
     setTimeout(()=>hi.classList.add('on'),reduce?0:650);
     const text=`היי אוטוטו! אני רוצה להצטרף לחברים של אוטוטו. הטלפון שלי: ${d.slice(0,3)}-${d.slice(3)}`;
     let copied=false;try{await navigator.clipboard.writeText(text);copied=true}catch(err){}
-    msg.textContent=copied?'ההודעה שלכם הועתקה. נפתח צ׳אט עם אוטוטו באינסטגרם: הדביקו ושלחו.':text;
+    msg.textContent=copied?(root.lang==='en'?'Your message was copied. Opening a chat with OTTOTO on Instagram: paste and send.':'ההודעה שלכם הועתקה. נפתח צ׳אט עם אוטוטו באינסטגרם: הדביקו ושלחו.'):text;
     setTimeout(()=>window.open('https://ig.me/m/ottoto.tlv','_blank','noopener'),1400);
   });
 })();
@@ -830,31 +816,31 @@ new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(hero
   if(!pic||!slotImg)return;
   const dock=e=>{hdr.style.setProperty('--e',e.toFixed(3));root.classList.toggle('scrolled',e>=1);hdr.classList.toggle('lined',e>=1)};
   if(reduce){new IntersectionObserver(([x])=>dock(x.isIntersecting?0:1)).observe(pic);return}
-  const ss=v=>{v=Math.min(1,Math.max(0,v));return v*v*(3-2*v)};  /* smoothstep */
-  let fly=null,ticking=false;
+  const cl=v=>Math.min(1,Math.max(0,v));
+  const io3=v=>{v=cl(v);return v<.5?4*v*v*v:1-Math.pow(-2*v+2,3)/2};  /* ease in-out */
+  /* the shown progress q follows the scroll progress softly (no jumps with a fast flick), and the size shrinks
+     evenly (geometric), so the logo lifts off, glides and settles into the slot */
+  let fly=null,q=0,raf=0;
   const paint=()=>{
-    ticking=false;if(!fly)return;
-    const p=scrollY/240;
-    dock(ss(p*1.8));  /* the menu makes room a little before the logo gets there */
-    const e=ss(p),n=pic.getBoundingClientRect(),t=slotImg.getBoundingClientRect();
+    raf=0;if(!fly)return;
+    const p=cl(scrollY/300);q+=(p-q)*.2;if(Math.abs(p-q)<.0015)q=p;
+    dock(io3(q*1.5));  /* the menu makes room a little before the logo gets there */
+    const e=io3(q),n=pic.getBoundingClientRect(),t=slotImg.getBoundingClientRect();
     fly.style.width=n.width+'px';
-    const x=n.left+(t.left-n.left)*e,y=n.top+(t.top-n.top)*e,k=1+(t.width/n.width-1)*e;
+    const x=n.left+(t.left-n.left)*e,y=n.top+(t.top-n.top)*e,k=Math.pow(t.width/n.width,e);
     fly.style.transform=`translate(${x.toFixed(1)}px,${y.toFixed(1)}px) scale(${k.toFixed(4)})`;
+    if(q!==p)raf=requestAnimationFrame(paint);
   };
+  const kick=()=>{if(!raf)raf=requestAnimationFrame(paint)};
   const start=()=>{
     fly=pic.cloneNode(true);fly.className='logo-fly';fly.setAttribute('aria-hidden','true');document.body.append(fly);
-    root.classList.add('docking');paint();
+    root.classList.add('docking');q=cl(scrollY/300);paint();
   };
-  addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(paint)}},{passive:true});
-  addEventListener('resize',paint);
+  addEventListener('scroll',kick,{passive:true});
+  addEventListener('resize',kick);
+  window.ottotoFly=kick;
   if(root.classList.contains('navin'))start();
   else new MutationObserver((m,o)=>{if(root.classList.contains('navin')){o.disconnect();start()}}).observe(root,{attributes:true,attributeFilter:['class']});
-})();
-
-/* shop shelf: the kit drops onto the shelf when it comes into view */
-(function(){
-  const shelf=document.querySelector('.shelf');if(!shelf)return;
-  new IntersectionObserver(([e],o)=>{if(e.isIntersecting){shelf.classList.add('in');o.disconnect()}},{threshold:.3}).observe(shelf);
 })();
 
 /* welcome reel: plays only while on screen, never for reduced motion */
@@ -868,6 +854,32 @@ if(!reduce){new IntersectionObserver(([e])=>{reelSeen=e.isIntersecting;if(!ready
 if(ready())startReel();else new MutationObserver((m,o)=>{if(ready()){o.disconnect();startReel()}}).observe(root,{attributes:true,attributeFilter:['class']});
 
 document.getElementById('yr').textContent=new Date().getFullYear();
+
+/* language: Hebrew is written in the page; English swaps every Hebrew text, label and alt from this list,
+   turns the page left-to-right and is remembered for the next visit */
+(function(){
+  const EN={"דלגו לתוכן": "Skip to content", "OTTOTO, קפה ויין ברמת אביב": "OTTOTO, coffee and wine in Ramat Aviv", "מה שמתנגן אצלנו בקופה, עכשיו גם אצלכם.": "What's playing at our counter, now at yours too.", "להאזנה בספוטיפיי": "Listen on Spotify", "מועדון הלקוחות של אוטוטו. כרטיסייה, חותמות, ומה שמגיע אחריהן.": "OTTOTO's friends club. A card, stamps, and what comes after them.", "הכניסו מספר טלפון כדי להצטרף": "Enter your phone number to join", "אני מאשר/ת לקבל מאוטוטו הודעות על הטבות ועדכונים. אפשר להסיר בכל רגע.": "I agree to get perks and updates from OTTOTO. You can opt out at any time.", "הצטרפו לחברים": "Join the club", "גרונמן 8, תל אביב": "Gronemann 8, Tel Aviv", "שעות פתיחה": "Opening hours", "נווטו אלינו": "Get directions", "א׳-ה׳": "Sun-Thu", "שישי": "Fri", "שבת": "Sat", "אהבתם? דרגו אותנו בגוגל": "Loved it? Rate us on Google", "· נגישות": "", "· עוגיות": "", "· תקנון": "", "הגדלת טקסט": "Bigger text", "ניגודיות גבוהה": "High contrast", "הדגשת קישורים": "Underline links", "עצירת אנימציות": "Stop animations", "איפוס": "Reset", "חשוב לנו שכל אחד ואחת יוכלו להשתמש באתר של אוטוטו בנוחות. האתר נבנה כך שאפשר לנווט בו עם מקלדת ועם קורא מסך, הטקסט ניתן להגדלה, ולכל תמונה יש תיאור.": "We want everyone to be able to use OTTOTO's site with ease. It can be used with a keyboard and a screen reader, the text can be enlarged, and every image has a description.", "אם נתקלתם במשהו שלא עובד כמו שצריך, נשמח לשמוע ולתקן: [שם איש קשר לנגישות, טלפון ומייל, מהלקוח].": "If something doesn't work as it should, we'd love to hear and fix it: [accessibility contact name, phone and email, from the client].", "הקיוסק נמצא בגרונמן 8, תל אביב. [פרטי נגישות המקום: גישה לכיסא גלגלים, ישיבה בחוץ, מהלקוח].": "The kiosk is at Gronemann 8, Tel Aviv. [Venue accessibility: wheelchair access, outdoor seating, from the client].", "עודכן לאחרונה: אוקטובר 2026.": "Last updated: October 2026.", "האתר של אוטוטו לא משתמש בעוגיות של פרסום או מעקב, ולא אוסף פרטים אישיים.": "OTTOTO's site uses no advertising or tracking cookies and collects no personal details.", "הדבר היחיד שנשמר בדפדפן שלכם הוא הגדרות הנגישות שבחרתם, כדי שיישארו גם בביקור הבא. אפשר למחוק אותן בכפתור \"איפוס\" בחלון הנגישות.": "The only things saved in your browser are your accessibility settings and language, so they stay for your next visit. Clear them with \"Reset\" in the accessibility window.", "הקישורים לאינסטגרם, ספוטיפיי, וויז וגוגל מפות מובילים לאתרים שלהם, ושם חלה מדיניות העוגיות שלהם.": "Links to Instagram, Spotify, Waze and Google Maps lead to their own sites, where their cookie policies apply.", "האתר מציג מידע על בית הקפה אוטוטו: שעות פתיחה, כתובת, תמונות ומוצרים. אנחנו משתדלים שהמידע יהיה מדויק, אבל שעות, מחירים ומוצרים יכולים להשתנות.": "This site shows information about OTTOTO cafe: opening hours, address, photos and products. We try to keep it accurate, but hours, prices and products may change.", "כל התמונות, הלוגו והאיורים באתר שייכים לאוטוטו או לצלמים שלהם, ואין להשתמש בהם בלי אישור.": "All photos, the logo and the illustrations on this site belong to OTTOTO or its photographers and may not be used without permission.", "[תנאי רכישה, משלוחים והחזרות של ערכת המאצ׳ה, ותנאי מועדון החברים, מהלקוח].": "[Friends club terms, from the client].", "לשאלות: [פרטי יצירת קשר, מהלקוח].": "Questions: [contact details, from the client].", "OTTOTO, לראש העמוד": "OTTOTO, back to top", "ניווט ראשי": "Main menu", "Welcome to OTTOTO: איורי קו של אנשים בקיוסק, עם קפה, מאצ׳ה ועוגיות": "Welcome to OTTOTO: line drawings of people at the kiosk, with coffee, matcha and cookies", "תמונות מאוטוטו": "Photos from OTTOTO", "כרטיסיית החברים של אוטוטו. לחיצה הופכת אותה לצד השני": "OTTOTO's friends card. Tap to flip it", "תמונות מאוטוטו. גוררים כדי לסובב, לחיצה על תמונה מגדילה אותה": "Photos from OTTOTO. Drag to turn, tap a photo to enlarge it", "תמונה מוגדלת": "Enlarged photo", "אינסטגרם": "Instagram", "ספוטיפיי": "Spotify", "ניווט עם וויז": "Navigate with Waze", "אוטוטו בגוגל מפות": "OTTOTO on Google Maps", "מידע משפטי ונגישות": "Legal and accessibility", "סגירה": "Close", "OTTOTO קפה רמת אביב": "OTTOTO Cafe Ramat Aviv", "הסוכך של אוטוטו ואנשים יושבים בחוץ": "OTTOTO's awning with people sitting outside", "מאצ׳ה לאטה עם לב": "Matcha latte with a heart", "מאפי פירות יער ועוגיות": "Berry pastries and cookies", "שפיכת לאטה ארט": "Pouring latte art", "פוקאצ׳ה בצורת לב על מגש": "Heart-shaped focaccia on a tray", "ארבעה משקאות קרים על כיסא עץ": "Four iced drinks on a wooden chair", "כריך טונה על מגש ליד תיק ירוק": "Tuna sandwich on a tray by a green bag", "לאטה, מאצ׳ה קרה ומאפה פירות יער": "Latte, iced matcha and a berry pastry", "מגש פוקאצ׳ה טרייה": "A tray of fresh focaccia", "אנשים מדברים ליד הקיוסק של אוטוטו": "People chatting by the OTTOTO kiosk", "מגיש מחייך עם מגש כריכים": "A smiling server with a tray of sandwiches", "ויטרינת קרואסונים, עוגות וכריכים": "A display of croissants, cakes and sandwiches", "בריסטה מוזג חלב ליד מכונת האספרסו": "A barista pouring milk by the espresso machine", "האופה מחזיק פוקאצ׳ה טרייה": "The baker holding fresh focaccia", "OTTOTO · קפה רמת אביב": "OTTOTO · Cafe Ramat Aviv"};
+  const ATTRS=['aria-label','alt','placeholder'],texts=[],attrs=[];
+  const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+  for(let n;(n=w.nextNode());){const k=n.nodeValue.trim();if(k in EN)texts.push([n,n.nodeValue,n.nodeValue.replace(k,EN[k])])}
+  document.querySelectorAll(ATTRS.map(a=>'['+a+']').join(',')).forEach(el=>ATTRS.forEach(a=>{const v=el.getAttribute(a);if(v&&v in EN)attrs.push([el,a,v,EN[v]])}));
+  const title=document.title;
+  const set=lang=>{
+    const en=lang==='en';
+    root.lang=lang;root.dir=en?'ltr':'rtl';
+    texts.forEach(([n,he,e])=>n.nodeValue=en?e:he);
+    attrs.forEach(([el,a,he,e])=>el.setAttribute(a,en?e:he));
+    document.title=en?(EN[title]||title):title;
+    status();
+    if(window.ottotoFly)ottotoFly();
+  };
+  if(root.lang==='en')set('en');
+  document.getElementById('lang').addEventListener('click',()=>{
+    const next=root.lang==='en'?'he':'en';
+    try{localStorage.setItem('ottoto-lang',next)}catch(e){}
+    set(next);
+  });
+})();
 </script>
 </body>
 </html>
