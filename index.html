@@ -211,8 +211,35 @@ h2.vibe-title{text-align:center;margin:0 0 clamp(20px,3vw,40px)}
 .note{margin-top:28px;font-size:15px;color:var(--muted)}
 
 /* shop: one product, the matto matcha kit. photo stage + facts, studio-white photos sit on paper */
+/* shop: the kiosk shelf. Everything you can take home stands on a wooden shelf; tap one and it lifts
+   off the shelf and its card opens underneath */
 .shop{background:var(--surface);border-block:1.5px solid var(--line)}
-.shop .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(32px,6vw,96px);align-items:center}
+.shop .wrap{text-align:center}
+.shop h2.en,.shop .lead{text-align:center;margin-inline:auto}
+.shelf{position:relative;max-width:720px;margin:clamp(36px,5vw,60px) auto 0;padding:0 4%}
+.sh-row{display:flex;justify-content:space-around;align-items:flex-end;gap:2%;position:relative;z-index:1}
+.sh-item{flex:1;max-width:150px;padding:0;border:0;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;-webkit-tap-highlight-color:transparent;
+  transition:transform 380ms var(--ease)}
+.sh-item .sh-art{width:100%;height:auto;display:block;overflow:visible;filter:drop-shadow(0 6px 0 rgba(20,20,20,.08))}
+.sh-item[aria-pressed=true]{transform:translateY(-16px)}
+.sh-item[aria-pressed=true] .sh-art{filter:drop-shadow(0 18px 10px rgba(20,20,20,.18))}
+.sh-item:focus-visible{outline-offset:6px}
+/* the plank, its front lip and two brackets, drawn like the cassette (ink outlines) */
+.sh-plank{position:relative;height:16px;margin-top:-2px;background:#C9A27A;border:2.5px solid var(--line);border-radius:4px;box-shadow:inset 0 -5px 0 #B38B62}
+.sh-plank::before,.sh-plank::after{content:"";position:absolute;bottom:-26px;width:16px;height:26px;background:#B38B62;border:2.5px solid var(--line);border-top:0;border-radius:0 0 6px 6px}
+.sh-plank::before{left:14%}.sh-plank::after{right:14%}
+.sh-names{display:flex;justify-content:space-around;gap:2%;margin-top:40px;padding:0 4%;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.sh-names span{flex:1;max-width:150px}
+.sh-card{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,56px);align-items:center;max-width:980px;margin:clamp(36px,5vw,56px) auto 0;padding:clamp(18px,3vw,32px);background:var(--bg);border:1.5px solid var(--line);border-radius:var(--r);text-align:start}
+.sh-card[hidden]{display:none}
+.sh-pic{aspect-ratio:1;border-radius:calc(var(--r) - 6px);background:#EFB3A1;display:grid;place-items:center}
+.sh-pic .sh-big{width:52%;height:auto}
+@media (prefers-reduced-motion:no-preference){
+  html.js .sh-item{opacity:0;translate:0 -40px;transition:transform 380ms var(--ease),opacity 300ms ease,translate 520ms var(--ease);transition-delay:0s,calc(var(--i) * 90ms),calc(var(--i) * 90ms)}
+  html.js .shelf.in .sh-item{opacity:1;translate:0 0}
+  .sh-card:not([hidden]){animation:sh-open 360ms var(--ease)}
+  @keyframes sh-open{from{opacity:0;transform:translateY(10px)}}
+}
 .stage{position:relative;aspect-ratio:1;border-radius:var(--r);overflow:hidden;background:#F1F1EF}
 .stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.03);filter:blur(6px);transition:opacity 240ms ease,filter 240ms ease,transform 420ms var(--ease-out)}
 .stage img.on{opacity:1;transform:none;filter:none}
@@ -348,8 +375,8 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
 
 /* below 900px every split collapses to one column */
 @media (max-width:900px){
-  .visit .wrap,.shop .wrap,.friends .wrap{grid-template-columns:1fr}
-  .shop .wrap>div:last-child{order:-1}
+  .visit .wrap,.friends .wrap{grid-template-columns:1fr}
+  .sh-card{grid-template-columns:1fr}
   .infobar .btn{margin-inline-start:0;width:100%;min-height:44px}
   .infobar .status,.infobar .addr{font-size:14.5px}
 }
@@ -515,7 +542,16 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
 
   <section class="shop" id="shop">
     <div class="wrap">
-      <div data-reveal>
+      <h2 class="en">Take it home</h2>
+      <p class="lead">מה שאפשר לקחת מהקיוסק הביתה. לחצו על מוצר מהמדף.</p>
+      <!-- the shelf: each product is a button; the pressed one lifts and its card shows below -->
+      <div class="shelf">
+        <div class="sh-row" role="group" aria-label="המוצרים על המדף"><button type="button" class="sh-item" data-p="kit" style="--i:0" aria-pressed="true" aria-label="Matto matcha kit"><svg class="sh-art" viewBox="0 0 120 160" aria-hidden="true"><rect x="10" y="62" width="100" height="96" rx="4" fill="#141414"/><rect x="10" y="62" width="100" height="16" fill="#2a2a2a"/><text x="60" y="122" text-anchor="middle" font-family="Rubik,sans-serif" font-weight="900" font-size="22" fill="#fff">matto</text><text x="60" y="138" text-anchor="middle" font-family="Cousine,monospace" font-size="7" letter-spacing="1" fill="#fff">MATCHA KIT</text></svg></button><button type="button" class="sh-item" data-p="beans" style="--i:1" aria-pressed="false" aria-label="Coffee beans"><svg class="sh-art" viewBox="0 0 120 160" aria-hidden="true"><path d="M22 40h76l6 118H16z" fill="#C9A27A" stroke="#141414" stroke-width="2.5" stroke-linejoin="round"/><path d="M22 40l6-14h64l6 14" fill="#B38B62" stroke="#141414" stroke-width="2.5" stroke-linejoin="round"/><path d="M30 33h60" stroke="#141414" stroke-width="2"/><rect x="32" y="74" width="56" height="58" rx="6" fill="#EFB3A1" stroke="#141414" stroke-width="2"/><g transform="translate(51 82) scale(0.0515) translate(-725 -95)"><g fill="#141414"><rect x="745" y="95" width="510" height="400" rx="150"/><rect x="725" y="440" width="550" height="470" rx="165"/></g><g fill="#EFB3A1"><rect x="915" y="210" width="170" height="135" rx="48"/><rect x="905" y="590" width="190" height="175" rx="55"/></g></g></svg></button><button type="button" class="sh-item" data-p="cup" style="--i:2" aria-pressed="false" aria-label="The 8 cup"><svg class="sh-art" viewBox="0 0 120 160" aria-hidden="true"><path d="M24 30h72l-8 128H32z" fill="#EFB3A1" stroke="#141414" stroke-width="2.5" stroke-linejoin="round"/><rect x="20" y="22" width="80" height="10" rx="4" fill="#fff" stroke="#141414" stroke-width="2.5"/><g transform="translate(42 58) scale(0.0761) translate(-725 -95)"><g fill="#141414"><rect x="745" y="95" width="510" height="400" rx="150"/><rect x="725" y="440" width="550" height="470" rx="165"/></g><g fill="#EFB3A1"><rect x="915" y="210" width="170" height="135" rx="48"/><rect x="905" y="590" width="190" height="175" rx="55"/></g></g></svg></button><button type="button" class="sh-item" data-p="tote" style="--i:3" aria-pressed="false" aria-label="Ottoto tote"><svg class="sh-art" viewBox="0 0 120 160" aria-hidden="true"><path d="M38 64c0-30 44-30 44 0" fill="none" stroke="#141414" stroke-width="4"/><path d="M18 62h84l6 96H12z" fill="#F3EBDD" stroke="#141414" stroke-width="2.5" stroke-linejoin="round"/><text x="60" y="118" text-anchor="middle" font-family="Rubik,sans-serif" font-weight="900" font-size="19" fill="#141414">OTTOTO</text></svg></button></div>
+        <div class="sh-plank" aria-hidden="true"></div>
+        <div class="sh-names" aria-hidden="true"><span>Matto matcha kit</span><span>Coffee beans</span><span>The 8 cup</span><span>Ottoto tote</span></div>
+      </div>
+        <article class="sh-card" data-p="kit">
+          <div>
         <div class="stage" id="stage">
           <img class="on" src="img/shop/kit-2.jpg" alt="ערכת המאצ׳ה של matto פתוחה: קערה, מקצף במבוק, כפית, מסננת ופחית מאצ׳ה" width="1000" height="1000">
           <img src="img/shop/kit-1.jpg" alt="קופסת ערכת המאצ׳ה של matto סגורה" width="1000" height="1000" loading="lazy">
@@ -526,9 +562,8 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
           <button aria-pressed="false" aria-label="תמונה 2"><img src="img/shop/kit-1.jpg" alt="" loading="lazy"></button>
           <button aria-pressed="false" aria-label="תמונה 3"><img src="img/shop/kit-3.jpg" alt="" loading="lazy"></button>
         </div>
-      </div>
-      <div>
-        <h2 class="en">Shop</h2>
+          </div>
+          <div>
         <p class="by">MATCHA BY MATTO</p>
         <h3>YOUR MATTO MATCHA KIT</h3>
         <ul class="kit-list">
@@ -540,7 +575,35 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
         </ul>
         <p class="price"><span class="draft">359 ₪</span></p>
         <p class="how"><span class="draft">[איך קונים באוטוטו: בקיוסק, בוואטסאפ או באתר, מהלקוח]</span></p>
-      </div>
+          </div>
+        </article>
+        <article class="sh-card" data-p="beans" hidden>
+          <div class="sh-pic"><svg class="sh-big" viewBox="0 0 120 160" aria-hidden="true"><path d="M22 40h76l6 118H16z" fill="#C9A27A" stroke="#141414" stroke-width="2.5" stroke-linejoin="round"/><path d="M22 40l6-14h64l6 14" fill="#B38B62" stroke="#141414" stroke-width="2.5" stroke-linejoin="round"/><path d="M30 33h60" stroke="#141414" stroke-width="2"/><rect x="32" y="74" width="56" height="58" rx="6" fill="#EFB3A1" stroke="#141414" stroke-width="2"/><g transform="translate(51 82) scale(0.0515) translate(-725 -95)"><g fill="#141414"><rect x="745" y="95" width="510" height="400" rx="150"/><rect x="725" y="440" width="550" height="470" rx="165"/></g><g fill="#EFB3A1"><rect x="915" y="210" width="170" height="135" rx="48"/><rect x="905" y="590" width="190" height="175" rx="55"/></g></g></svg></div>
+          <div>
+            <p class="by">OTTOTO ROAST</p>
+            <h3>COFFEE BEANS</h3>
+            <ul class="kit-list"><li><span class="draft">[איזה פולים, מאיזה בית קלייה, מהלקוח]</span></li><li><span class="draft">[משקל: 250g / 1kg, מהלקוח]</span></li></ul>
+            <p class="price"><span class="draft">[מחיר, מהלקוח]</span></p>
+          </div>
+        </article>
+        <article class="sh-card" data-p="cup" hidden>
+          <div class="sh-pic"><svg class="sh-big" viewBox="0 0 120 160" aria-hidden="true"><path d="M24 30h72l-8 128H32z" fill="#EFB3A1" stroke="#141414" stroke-width="2.5" stroke-linejoin="round"/><rect x="20" y="22" width="80" height="10" rx="4" fill="#fff" stroke="#141414" stroke-width="2.5"/><g transform="translate(42 58) scale(0.0761) translate(-725 -95)"><g fill="#141414"><rect x="745" y="95" width="510" height="400" rx="150"/><rect x="725" y="440" width="550" height="470" rx="165"/></g><g fill="#EFB3A1"><rect x="915" y="210" width="170" height="135" rx="48"/><rect x="905" y="590" width="190" height="175" rx="55"/></g></g></svg></div>
+          <div>
+            <p class="by">TAKE YOUR COFFEE TO GO</p>
+            <h3>THE 8 CUP</h3>
+            <ul class="kit-list"><li><span class="draft">[כוס רב־פעמית עם ה-8? מהלקוח]</span></li><li><span class="draft">[נפח וחומר, מהלקוח]</span></li></ul>
+            <p class="price"><span class="draft">[מחיר, מהלקוח]</span></p>
+          </div>
+        </article>
+        <article class="sh-card" data-p="tote" hidden>
+          <div class="sh-pic"><svg class="sh-big" viewBox="0 0 120 160" aria-hidden="true"><path d="M38 64c0-30 44-30 44 0" fill="none" stroke="#141414" stroke-width="4"/><path d="M18 62h84l6 96H12z" fill="#F3EBDD" stroke="#141414" stroke-width="2.5" stroke-linejoin="round"/><text x="60" y="118" text-anchor="middle" font-family="Rubik,sans-serif" font-weight="900" font-size="19" fill="#141414">OTTOTO</text></svg></div>
+          <div>
+            <p class="by">FOR THE PARK</p>
+            <h3>OTTOTO TOTE</h3>
+            <ul class="kit-list"><li><span class="draft">[תיק בד עם הלוגו? מהלקוח]</span></li><li><span class="draft">[מידות וצבע, מהלקוח]</span></li></ul>
+            <p class="price"><span class="draft">[מחיר, מהלקוח]</span></p>
+          </div>
+        </article>
     </div>
   </section>
 
@@ -850,6 +913,17 @@ new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(hero
     msg.textContent=copied?'ההודעה שלכם הועתקה. נפתח צ׳אט עם אוטוטו באינסטגרם: הדביקו ושלחו.':text;
     setTimeout(()=>window.open('https://ig.me/m/ottoto.tlv','_blank','noopener'),1400);
   });
+})();
+
+/* shop shelf: products drop onto the shelf when it comes into view; pressing one lifts it and shows its card */
+(function(){
+  const shelf=document.querySelector('.shelf');if(!shelf)return;
+  const items=[...shelf.querySelectorAll('.sh-item')],cards=[...document.querySelectorAll('.sh-card')];
+  items.forEach(b=>b.addEventListener('click',()=>{
+    items.forEach(x=>x.setAttribute('aria-pressed',x===b));
+    cards.forEach(c=>c.hidden=c.dataset.p!==b.dataset.p);
+  }));
+  new IntersectionObserver(([e],o)=>{if(e.isIntersecting){shelf.classList.add('in');o.disconnect()}},{threshold:.3}).observe(shelf);
 })();
 
 /* shop: thumbnails swap the big photo */
