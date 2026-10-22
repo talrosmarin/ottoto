@@ -136,8 +136,7 @@ html.splashing .bigmark img{visibility:hidden}
    the reel, whole and uncut at 9:16, takes whatever height is left (never wider than 94%),
    and the logo follows the reel's width, so menu, logo, reel and info line always fit */
 @media (max-width:700px){
-  /* dvh follows Safari's bar: when the bottom bar shrinks, the info line slides down to the screen's edge */
-  .home-screen{height:calc(100svh - var(--hdr,44px));height:calc(100dvh - var(--hdr,44px));min-height:0}
+  .home-screen{height:calc(100svh - var(--hdr,44px));min-height:0}  /* svh, not dvh: dvh grows while scrolling and zoomed the reel */
   .bigmark{padding:14px 12px 18px}
   .bigmark picture{width:calc(var(--rw,300px) * 1.1);max-width:calc(100vw - 24px)}
   .home-screen .hero{flex:1;min-height:0;padding-bottom:0}
@@ -211,51 +210,21 @@ h2.vibe-title{text-align:center;margin:0 0 clamp(20px,3vw,40px)}
 .note{margin-top:28px;font-size:15px;color:var(--muted)}
 
 /* shop: one product, the matto matcha kit. photo stage + facts, studio-white photos sit on paper */
-/* shop: the kiosk shelf. Everything you can take home stands on a wooden shelf; tap one and it lifts
-   off the shelf and its card opens underneath */
+/* shop: the kiosk shelf, with the Matto kit (drawn) standing on it */
 .shop{background:var(--surface);border-block:1.5px solid var(--line)}
 .shop .wrap{text-align:center}
 .shop h2.en,.shop .lead{text-align:center;margin-inline:auto}
-.shelf{position:relative;max-width:720px;margin:clamp(36px,5vw,60px) auto 0;padding:0 4%}
-.sh-row{display:flex;justify-content:space-around;align-items:flex-end;gap:2%;position:relative;z-index:1}
-.sh-item{flex:1;max-width:150px;padding:0;border:0;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;-webkit-tap-highlight-color:transparent;
-  transition:transform 380ms var(--ease)}
-.sh-item .sh-art{width:100%;height:auto;display:block;overflow:visible}
-.sh-item .sh-photo{width:118%;max-width:none;margin-bottom:-4%}
-.sh-item[aria-pressed=true]{transform:translateY(-16px)}
-.sh-item[aria-pressed=true] .sh-art{filter:drop-shadow(0 14px 8px rgba(20,20,20,.14))}
-.sh-item:focus-visible{outline-offset:6px}
-/* the plank, its front lip and two brackets, drawn like the cassette (ink outlines) */
+.shelf{position:relative;max-width:380px;margin:clamp(32px,5vw,52px) auto clamp(24px,3vw,32px);padding:0 6%}
+.sh-row{display:flex;justify-content:center;align-items:flex-end;position:relative;z-index:1}
+.sh-item{width:62%;display:flex;flex-direction:column;align-items:center}
+.sh-item .sh-photo{width:100%;height:auto;display:block;margin-bottom:-3%}
 .sh-plank{position:relative;height:14px;margin-top:-2px;background:#D4AE85;border:1.5px solid #1d1d1d;border-radius:3px;box-shadow:inset 0 -5px 0 #BF946A}
 .sh-plank::before,.sh-plank::after{content:"";position:absolute;bottom:-24px;width:14px;height:24px;background:#BF946A;border:1.5px solid #1d1d1d;border-top:0;border-radius:0 0 5px 5px}
 .sh-plank::before{left:14%}.sh-plank::after{right:14%}
-.sh-names{display:flex;justify-content:space-around;gap:2%;margin-top:40px;padding:0 4%;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-.sh-names span{flex:1;max-width:150px}
-.sh-card{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,56px);align-items:center;max-width:980px;margin:clamp(36px,5vw,56px) auto 0;padding:clamp(18px,3vw,32px);background:var(--bg);border:1.5px solid var(--line);border-radius:var(--r);text-align:start}
-.sh-card[hidden]{display:none}
-.sh-pic{aspect-ratio:1;border-radius:calc(var(--r) - 6px);background:#EFB3A1;display:grid;place-items:center}
-.sh-pic .sh-big{width:52%;height:auto}
 @media (prefers-reduced-motion:no-preference){
-  html.js .sh-item{opacity:0;translate:0 -40px;transition:transform 380ms var(--ease),opacity 300ms ease,translate 520ms var(--ease);transition-delay:0s,calc(var(--i) * 90ms),calc(var(--i) * 90ms)}
+  html.js .sh-item{opacity:0;translate:0 -40px;transition:opacity 300ms ease,translate 520ms var(--ease)}
   html.js .shelf.in .sh-item{opacity:1;translate:0 0}
-  .sh-card:not([hidden]){animation:sh-open 360ms var(--ease)}
-  @keyframes sh-open{from{opacity:0;transform:translateY(10px)}}
 }
-.stage{position:relative;aspect-ratio:1;border-radius:var(--r);overflow:hidden;background:#F1F1EF}
-.stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.03);filter:blur(6px);transition:opacity 240ms ease,filter 240ms ease,transform 420ms var(--ease-out)}
-.stage img.on{opacity:1;transform:none;filter:none}
-.thumbs{display:flex;gap:10px;margin-top:12px}
-.thumbs button{width:76px;height:76px;padding:0;border:2px solid transparent;border-radius:12px;overflow:hidden;background:#F1F1EF;cursor:pointer;transition:border-color 160ms ease,transform 160ms var(--ease-out);-webkit-tap-highlight-color:transparent}
-.thumbs button:active{transform:scale(.96)}
-.thumbs button[aria-pressed=true]{border-color:var(--fg)}
-.thumbs img{width:100%;height:100%;object-fit:cover}
-.shop .by{font-family:var(--mono);font-size:13px;letter-spacing:.12em;color:var(--muted);margin-top:14px;direction:ltr;text-align:right}
-.shop h3{font-size:clamp(26px,3vw,38px);font-weight:900;line-height:1.05;margin-top:28px;direction:ltr;text-align:right;letter-spacing:-.01em}
-.kit-list{list-style:none;margin-top:22px;border-top:1.5px solid var(--line)}
-.kit-list li{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--soft-line);font-size:17px}
-.kit-list li span+span{font-family:var(--mono);font-size:14px;color:var(--muted)}
-.price{display:flex;align-items:baseline;gap:10px;margin-top:24px;font-size:clamp(28px,3vw,36px);font-weight:900;font-variant-numeric:tabular-nums}
-.shop .how{margin-top:14px;font-size:15px;color:var(--muted)}
 
 /* playlist: centered stack, the cassette is the visual */
 .playlist{background:var(--band);color:var(--on-band);text-align:center}
@@ -306,8 +275,9 @@ h2.vibe-title{text-align:center;margin:0 0 clamp(20px,3vw,40px)}
 
 /* visit: the one deliberate color-block switch, it carries into the footer */
 .visit{background:var(--deep);color:var(--on-deep)}
-.visit .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(40px,6vw,96px);align-items:start}
-.visit .addr{font-size:clamp(28px,3.4vw,44px);font-weight:900;line-height:1.1;margin-top:0}
+.visit .v-info{display:flex;flex-direction:column;align-items:center;gap:28px;max-width:440px;text-align:center}
+.visit .v-info>div{width:100%;display:flex;flex-direction:column;align-items:center}
+.visit .addr{font-size:clamp(24px,2.8vw,34px);font-weight:900;line-height:1.1;margin-top:0;text-align:center}
 .visit .v-head{display:flex;justify-content:space-between;align-items:end;gap:16px}
 /* the cups' big 8, used here as a little brand mark beside the title */
 .v-title{display:flex;align-items:center;gap:clamp(14px,2vw,24px)}
@@ -331,21 +301,24 @@ h2.vibe-title{text-align:center;margin:0 0 clamp(20px,3vw,40px)}
 .v-zoom img{max-width:min(92vw,620px);max-height:86svh;border-radius:var(--r);box-shadow:0 30px 60px -20px rgba(0,0,0,.6);transform:scale(.6);transition:transform 500ms var(--ease)}
 .v-zoom.open img{transform:none}
 .visit .addr span{display:block;font-family:var(--mono);font-size:14px;font-weight:400;letter-spacing:.06em;margin-top:10px;color:var(--on-deep-muted)}
-.visit .status{margin-top:28px}
-.hours{border-top:1.5px solid var(--on-deep)}
-.hours div{display:flex;justify-content:space-between;padding:16px 4px}
+.visit .status{margin-top:16px;justify-content:center}
+.visit .btns{margin-top:18px;justify-content:center}
+.hours{width:100%;border-top:1.5px solid var(--on-deep)}
+.hours div{display:flex;justify-content:space-between;padding:10px 4px;border-bottom:1px solid rgba(243,235,221,.14)}
 .hours span:first-child{font-size:17px}
 .hours span:last-child{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:16px}
 .hours div.today{color:var(--accent);font-weight:700}
 .hours div.today span:first-child::after{content:" · היום"}
-.g-rate{display:flex;align-items:center;gap:16px;margin-top:40px;padding:18px 20px;border:1.5px solid rgba(243,235,221,.35);border-radius:var(--r);color:var(--on-deep);text-decoration:none;transition:border-color 200ms ease,background-color 200ms ease}
+.g-rate{width:100%;display:grid;grid-template-columns:auto 1fr auto;grid-template-areas:"g s a" "g t a";align-items:center;column-gap:14px;row-gap:6px;margin-top:22px;padding:14px 16px;border:1.5px solid rgba(243,235,221,.35);border-radius:var(--r);color:var(--on-deep);text-decoration:none;transition:border-color 200ms ease,background-color 200ms ease}
 .g-rate:active{transform:scale(.98)}
-.g-stars{display:flex;gap:3px;flex:none;direction:ltr}
-.g-stars svg{width:22px;height:22px;fill:var(--accent);stroke:none}
-.g-text{display:flex;flex-direction:column;gap:4px;flex:1;line-height:1.25}
+.g-badge{grid-area:g;width:44px;height:44px;border-radius:50%;background:#fff;display:grid;place-items:center}
+.g-logo{width:26px;height:26px}
+.g-stars{grid-area:s;display:flex;gap:3px;direction:ltr;justify-content:flex-end}
+.g-stars svg{width:17px;height:17px;fill:var(--accent);stroke:none}
+.g-text{grid-area:t;display:flex;flex-direction:column;gap:3px;line-height:1.25;text-align:start}
 .g-text b{font-size:17px}
 .g-text .en{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--on-deep-muted)}
-.g-go{flex:none;width:22px;height:22px;transition:transform 200ms var(--ease-out)}
+.g-go{grid-area:a;width:22px;height:22px;transition:transform 200ms var(--ease-out)}
 /* the stars light up one after another, hold, then reset */
 @media (prefers-reduced-motion:no-preference){
   .g-stars svg{animation:star-fill 3.6s var(--ease-out) infinite;animation-delay:calc(var(--i) * 140ms)}
@@ -382,8 +355,7 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
 
 /* below 900px every split collapses to one column */
 @media (max-width:900px){
-  .visit .wrap,.friends .wrap{grid-template-columns:1fr}
-  .sh-card{grid-template-columns:1fr}
+  .friends .wrap{grid-template-columns:1fr}
   .infobar .btn{margin-inline-start:0;width:100%;min-height:44px}
   .infobar .status,.infobar .addr{font-size:14.5px}
 }
@@ -550,68 +522,11 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
   <section class="shop" id="shop">
     <div class="wrap">
       <h2 class="en">Take it home</h2>
-      <p class="lead">מה שאפשר לקחת מהקיוסק הביתה. לחצו על מוצר מהמדף.</p>
-      <!-- the shelf: each product is a button; the pressed one lifts and its card shows below -->
-      <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="wobble"><feTurbulence type="fractalNoise" baseFrequency=".04" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="1.6"/></filter></svg>
+      <p class="lead">מה שאפשר לקחת מהקיוסק הביתה.</p>
       <div class="shelf">
-        <div class="sh-row" role="group" aria-label="המוצרים על המדף"><button type="button" class="sh-item" data-p="kit" style="--i:0" aria-pressed="true" aria-label="Matto matcha kit"><img class="sh-art sh-photo" src="img/shop/kit-drawn.png" alt="" width="520" height="505"></button><button type="button" class="sh-item" data-p="beans" style="--i:1" aria-pressed="false" aria-label="Coffee beans"><svg class="sh-art" viewBox="0 0 120 160" aria-hidden="true"><ellipse cx="60" cy="158" rx="46" ry="3.2" fill="#000" opacity=".1"/><g filter="url(#wobble)"><path d="M22 40h76l6 118H16z" fill="#C9A27A" stroke="#1d1d1d" stroke-width="1.6" stroke-linejoin="round"/><path d="M22 40l6-14h64l6 14" fill="#B38B62" stroke="#1d1d1d" stroke-width="1.6" stroke-linejoin="round"/><path d="M30 33h60" stroke="#1d1d1d" stroke-width="1.4"/><rect x="32" y="74" width="56" height="58" rx="6" fill="#EFB3A1" stroke="#1d1d1d" stroke-width="1.4"/><g transform="translate(51 82) scale(0.0515) translate(-725 -95)"><g fill="#141414"><rect x="745" y="95" width="510" height="400" rx="150"/><rect x="725" y="440" width="550" height="470" rx="165"/></g><g fill="#EFB3A1"><rect x="915" y="210" width="170" height="135" rx="48"/><rect x="905" y="590" width="190" height="175" rx="55"/></g></g></g></svg></button><button type="button" class="sh-item" data-p="cup" style="--i:2" aria-pressed="false" aria-label="The 8 cup"><svg class="sh-art" viewBox="0 0 120 160" aria-hidden="true"><ellipse cx="60" cy="158" rx="46" ry="3.2" fill="#000" opacity=".1"/><g filter="url(#wobble)"><path d="M24 30h72l-8 128H32z" fill="#EFB3A1" stroke="#1d1d1d" stroke-width="1.6" stroke-linejoin="round"/><rect x="20" y="22" width="80" height="10" rx="4" fill="#fff" stroke="#1d1d1d" stroke-width="1.6"/><g transform="translate(42 58) scale(0.0761) translate(-725 -95)"><g fill="#141414"><rect x="745" y="95" width="510" height="400" rx="150"/><rect x="725" y="440" width="550" height="470" rx="165"/></g><g fill="#EFB3A1"><rect x="915" y="210" width="170" height="135" rx="48"/><rect x="905" y="590" width="190" height="175" rx="55"/></g></g></g></svg></button><button type="button" class="sh-item" data-p="tote" style="--i:3" aria-pressed="false" aria-label="Ottoto tote"><svg class="sh-art" viewBox="0 0 120 160" aria-hidden="true"><ellipse cx="60" cy="158" rx="46" ry="3.2" fill="#000" opacity=".1"/><g filter="url(#wobble)"><path d="M38 64c0-30 44-30 44 0" fill="none" stroke="#1d1d1d" stroke-width="2.6"/><path d="M18 62h84l6 96H12z" fill="#F3EBDD" stroke="#1d1d1d" stroke-width="1.6" stroke-linejoin="round"/><text x="60" y="118" text-anchor="middle" font-family="Rubik,sans-serif" font-weight="900" font-size="19" fill="#141414">OTTOTO</text></g></svg></button></div>
+        <div class="sh-row"><div class="sh-item" style="--i:0" role="img" aria-label="ערכת המאצ׳ה של matto"><img class="sh-art sh-photo" src="img/shop/kit-drawn.png" alt="" width="520" height="505"></div></div>
         <div class="sh-plank" aria-hidden="true"></div>
-        <div class="sh-names" aria-hidden="true"><span>Matto matcha kit</span><span>Coffee beans</span><span>The 8 cup</span><span>Ottoto tote</span></div>
       </div>
-        <article class="sh-card" data-p="kit">
-          <div>
-        <div class="stage" id="stage">
-          <img class="on" src="img/shop/kit-2.jpg" alt="ערכת המאצ׳ה של matto פתוחה: קערה, מקצף במבוק, כפית, מסננת ופחית מאצ׳ה" width="1000" height="1000">
-          <img src="img/shop/kit-1.jpg" alt="קופסת ערכת המאצ׳ה של matto סגורה" width="1000" height="1000" loading="lazy">
-          <img src="img/shop/kit-3.jpg" alt="קופסת ערכת המאצ׳ה נפתחת מהצד" width="1000" height="1000" loading="lazy">
-        </div>
-        <div class="thumbs" role="group" aria-label="תמונות הערכה">
-          <button aria-pressed="true" aria-label="תמונה 1"><img src="img/shop/kit-2.jpg" alt="" loading="lazy"></button>
-          <button aria-pressed="false" aria-label="תמונה 2"><img src="img/shop/kit-1.jpg" alt="" loading="lazy"></button>
-          <button aria-pressed="false" aria-label="תמונה 3"><img src="img/shop/kit-3.jpg" alt="" loading="lazy"></button>
-        </div>
-          </div>
-          <div>
-        <p class="by">MATCHA BY MATTO</p>
-        <h3>YOUR MATTO MATCHA KIT</h3>
-        <ul class="kit-list">
-          <li><span>מאצ׳ה <bdi dir="ltr">100% ceremonial grade</bdi></span><span>30g</span></li>
-          <li><span>קערת מאצ׳ה מזכוכית</span></li>
-          <li><span>מקצף במבוק</span></li>
-          <li><span>כפית מאצ׳ה</span></li>
-          <li><span>מסננת</span></li>
-        </ul>
-        <p class="price"><span class="draft">359 ₪</span></p>
-        <p class="how"><span class="draft">[איך קונים באוטוטו: בקיוסק, בוואטסאפ או באתר, מהלקוח]</span></p>
-          </div>
-        </article>
-        <article class="sh-card" data-p="beans" hidden>
-          <div class="sh-pic"><svg class="sh-big" viewBox="0 0 120 160" aria-hidden="true"><ellipse cx="60" cy="158" rx="46" ry="3.2" fill="#000" opacity=".1"/><g filter="url(#wobble)"><path d="M22 40h76l6 118H16z" fill="#C9A27A" stroke="#1d1d1d" stroke-width="1.6" stroke-linejoin="round"/><path d="M22 40l6-14h64l6 14" fill="#B38B62" stroke="#1d1d1d" stroke-width="1.6" stroke-linejoin="round"/><path d="M30 33h60" stroke="#1d1d1d" stroke-width="1.4"/><rect x="32" y="74" width="56" height="58" rx="6" fill="#EFB3A1" stroke="#1d1d1d" stroke-width="1.4"/><g transform="translate(51 82) scale(0.0515) translate(-725 -95)"><g fill="#141414"><rect x="745" y="95" width="510" height="400" rx="150"/><rect x="725" y="440" width="550" height="470" rx="165"/></g><g fill="#EFB3A1"><rect x="915" y="210" width="170" height="135" rx="48"/><rect x="905" y="590" width="190" height="175" rx="55"/></g></g></g></svg></div>
-          <div>
-            <p class="by">OTTOTO ROAST</p>
-            <h3>COFFEE BEANS</h3>
-            <ul class="kit-list"><li><span class="draft">[איזה פולים, מאיזה בית קלייה, מהלקוח]</span></li><li><span class="draft">[משקל: 250g / 1kg, מהלקוח]</span></li></ul>
-            <p class="price"><span class="draft">[מחיר, מהלקוח]</span></p>
-          </div>
-        </article>
-        <article class="sh-card" data-p="cup" hidden>
-          <div class="sh-pic"><svg class="sh-big" viewBox="0 0 120 160" aria-hidden="true"><ellipse cx="60" cy="158" rx="46" ry="3.2" fill="#000" opacity=".1"/><g filter="url(#wobble)"><path d="M24 30h72l-8 128H32z" fill="#EFB3A1" stroke="#1d1d1d" stroke-width="1.6" stroke-linejoin="round"/><rect x="20" y="22" width="80" height="10" rx="4" fill="#fff" stroke="#1d1d1d" stroke-width="1.6"/><g transform="translate(42 58) scale(0.0761) translate(-725 -95)"><g fill="#141414"><rect x="745" y="95" width="510" height="400" rx="150"/><rect x="725" y="440" width="550" height="470" rx="165"/></g><g fill="#EFB3A1"><rect x="915" y="210" width="170" height="135" rx="48"/><rect x="905" y="590" width="190" height="175" rx="55"/></g></g></g></svg></div>
-          <div>
-            <p class="by">TAKE YOUR COFFEE TO GO</p>
-            <h3>THE 8 CUP</h3>
-            <ul class="kit-list"><li><span class="draft">[כוס רב־פעמית עם ה-8? מהלקוח]</span></li><li><span class="draft">[נפח וחומר, מהלקוח]</span></li></ul>
-            <p class="price"><span class="draft">[מחיר, מהלקוח]</span></p>
-          </div>
-        </article>
-        <article class="sh-card" data-p="tote" hidden>
-          <div class="sh-pic"><svg class="sh-big" viewBox="0 0 120 160" aria-hidden="true"><ellipse cx="60" cy="158" rx="46" ry="3.2" fill="#000" opacity=".1"/><g filter="url(#wobble)"><path d="M38 64c0-30 44-30 44 0" fill="none" stroke="#1d1d1d" stroke-width="2.6"/><path d="M18 62h84l6 96H12z" fill="#F3EBDD" stroke="#1d1d1d" stroke-width="1.6" stroke-linejoin="round"/><text x="60" y="118" text-anchor="middle" font-family="Rubik,sans-serif" font-weight="900" font-size="19" fill="#141414">OTTOTO</text></g></svg></div>
-          <div>
-            <p class="by">FOR THE PARK</p>
-            <h3>OTTOTO TOTE</h3>
-            <ul class="kit-list"><li><span class="draft">[תיק בד עם הלוגו? מהלקוח]</span></li><li><span class="draft">[מידות וצבע, מהלקוח]</span></li></ul>
-            <p class="price"><span class="draft">[מחיר, מהלקוח]</span></p>
-          </div>
-        </article>
     </div>
   </section>
 
@@ -634,7 +549,7 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
     </div>
     </div>
     <div class="v-zoom" id="vZoom" role="dialog" aria-modal="true" aria-label="תמונה מוגדלת"><img alt=""></div>
-    <div class="wrap">
+    <div class="wrap v-info">
       <div>
         <p class="addr">גרונמן 8, תל אביב<span class="en">GRONEMANN 8, RAMAT AVIV</span></p>
         <p class="status" data-status><i></i><span>שעות פתיחה</span></p>
@@ -650,6 +565,7 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
         </div>
         <!-- Google rating: stars fill one by one; opens OTTOTO's Google Maps page, where "כתיבת ביקורת" is -->
         <a class="g-rate" href="https://maps.google.com/?cid=13286087321447341267" target="_blank" rel="noopener">
+          <span class="g-badge"><svg class="g-logo" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 8 3l5.7-5.7C34 6.1 29.3 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.7-.4-3.9z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 8 3l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.7-.4-3.9z"/></svg></span>
           <span class="g-stars" aria-hidden="true"><svg viewBox="0 0 24 24" style="--i:0"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z"/></svg><svg viewBox="0 0 24 24" style="--i:1"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z"/></svg><svg viewBox="0 0 24 24" style="--i:2"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z"/></svg><svg viewBox="0 0 24 24" style="--i:3"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z"/></svg><svg viewBox="0 0 24 24" style="--i:4"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z"/></svg></span>
           <span class="g-text"><b>אהבתם? דרגו אותנו בגוגל</b><span class="en">RATE US ON GOOGLE</span></span>
           <svg class="i g-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6l6 6"/></svg>
@@ -787,8 +703,8 @@ navIO.observe(document.querySelector('.hero'));
 /* the home page always lights HOME while the big logo is on screen */
 new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(heroLogo);
 
-/* visit ring: the five photos (shown twice, ten faces) stand around a cylinder. Dragging turns it and letting go
-   keeps it turning with a slow-down; the arrows turn it one photo; tapping a photo (without dragging) opens it big */
+/* visit ring: the five photos (shown twice, ten faces) stand around a cylinder that turns slowly all the time.
+   Dragging turns it and a flick keeps going a little; the arrows push it one photo; tapping a photo opens it big */
 (function(){
   const stage=document.querySelector('.v-stage');if(!stage)return;
   const ring=stage.querySelector('.v-ring'),orig=[...ring.children];
@@ -800,28 +716,34 @@ new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(hero
     faces.forEach((f,i)=>{f.style.width=w+'px';f.style.marginLeft=-w/2+'px';f.style.marginTop=-w/2+'px';f.style.transform=`rotateY(${i*STEP}deg) translateZ(${r}px)`});
   };
   layout();addEventListener('resize',layout);
-  let angle=0,vel=0,raf=0,drag=null,moved=false;
+  let angle=0,vel=0,raf=0,drag=null,moved=false,seen=false,last=0;
   const set=a=>{angle=a;ring.style.setProperty('--r',a.toFixed(2)+'deg')};
-  const glide=()=>{vel*=.95;set(angle+vel);raf=Math.abs(vel)>.02?requestAnimationFrame(glide):0};
-  const turnTo=target=>{cancelAnimationFrame(raf);const from=angle,t0=performance.now(),d=reduce?1:600;
-    const step=t=>{const k=Math.min(1,(t-t0)/d),e=1-Math.pow(1-k,3);set(from+(target-from)*e);raf=k<1?requestAnimationFrame(step):0};raf=requestAnimationFrame(step)};
-  stage.addEventListener('pointerdown',e=>{cancelAnimationFrame(raf);drag={x:e.clientX,a:angle,lx:e.clientX,lt:e.timeStamp};vel=0;moved=false;stage.setPointerCapture(e.pointerId);stage.classList.add('dragging')});
+  /* one loop: a flick slows down, then the slow non-stop turn takes over (none for reduced motion) */
+  const AUTO=reduce?0:-.012;  /* degrees per millisecond */
+  const tick=t=>{const dt=last?Math.min(50,t-last):16;last=t;
+    if(!drag&&!zoomOpen()){vel*=Math.pow(.95,dt/16);set(angle+vel*dt/16+AUTO*dt)}
+    raf=seen?requestAnimationFrame(tick):0};
+  const go=()=>{if(!raf){last=0;raf=requestAnimationFrame(tick)}};
+  new IntersectionObserver(([e])=>{seen=e.isIntersecting;if(seen)go()}).observe(stage);
+  const nudge=dir=>{vel=dir*STEP/12;go()};  /* arrows and keys: a push of about one photo */
+  stage.addEventListener('pointerdown',e=>{drag={x:e.clientX,a:angle,lx:e.clientX,lt:e.timeStamp};vel=0;moved=false;stage.setPointerCapture(e.pointerId);stage.classList.add('dragging')});
   stage.addEventListener('pointermove',e=>{
     if(!drag)return;const dx=e.clientX-drag.x;if(Math.abs(dx)>6)moved=true;
     set(drag.a+dx*.25);const dt=e.timeStamp-drag.lt;if(dt>0)vel=(e.clientX-drag.lx)*.25/dt*16;drag.lx=e.clientX;drag.lt=e.timeStamp;
   });
   const up=e=>{
     if(!drag)return;drag=null;stage.classList.remove('dragging');
-    if(moved){if(!reduce&&Math.abs(vel)>.2)raf=requestAnimationFrame(glide);return}
+    if(moved){if(reduce)vel=0;return}
     /* a tap: open the photo under the finger */
     const hit=document.elementsFromPoint(e.clientX,e.clientY).find(el=>el.tagName==='FIGURE'&&ring.contains(el));
     if(hit)open(hit.querySelector('img'));
   };
   stage.addEventListener('pointerup',up);stage.addEventListener('pointercancel',()=>{drag=null;stage.classList.remove('dragging')});
-  document.querySelectorAll('.v-arrow').forEach(b=>b.addEventListener('click',()=>turnTo(Math.round(angle/STEP)*STEP-(+b.dataset.dir)*STEP)));
-  stage.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();turnTo(Math.round(angle/STEP)*STEP+(e.key==='ArrowRight'?-STEP:STEP))}});
+  document.querySelectorAll('.v-arrow').forEach(b=>b.addEventListener('click',()=>nudge(-(+b.dataset.dir))));
+  stage.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();nudge(e.key==='ArrowRight'?-1:1)}});
   /* the big view */
   const zoom=document.getElementById('vZoom'),zimg=zoom.querySelector('img');
+  function zoomOpen(){return zoom.classList.contains('open')}
   const open=im=>{zimg.src=im.src;zimg.alt=im.alt;zoom.classList.add('open')};
   const close=()=>zoom.classList.remove('open');
   zoom.addEventListener('click',close);addEventListener('keydown',e=>{if(e.key==='Escape')close()});
@@ -913,20 +835,11 @@ new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(hero
   });
 })();
 
-/* shop shelf: products drop onto the shelf when it comes into view; pressing one lifts it and shows its card */
+/* shop shelf: the kit drops onto the shelf when it comes into view */
 (function(){
   const shelf=document.querySelector('.shelf');if(!shelf)return;
-  const items=[...shelf.querySelectorAll('.sh-item')],cards=[...document.querySelectorAll('.sh-card')];
-  items.forEach(b=>b.addEventListener('click',()=>{
-    items.forEach(x=>x.setAttribute('aria-pressed',x===b));
-    cards.forEach(c=>c.hidden=c.dataset.p!==b.dataset.p);
-  }));
   new IntersectionObserver(([e],o)=>{if(e.isIntersecting){shelf.classList.add('in');o.disconnect()}},{threshold:.3}).observe(shelf);
 })();
-
-/* shop: thumbnails swap the big photo */
-const stage=[...document.querySelectorAll('#stage img')],thumbs=[...document.querySelectorAll('.thumbs button')];
-thumbs.forEach((t,i)=>t.addEventListener('click',()=>{thumbs.forEach((x,j)=>x.setAttribute('aria-pressed',i===j));stage.forEach((im,j)=>im.classList.toggle('on',i===j))}));
 
 /* welcome reel: plays only while on screen, never for reduced motion */
 /* it waits for the opening logo to finish, then always starts from its first frame */
