@@ -317,13 +317,19 @@ h2.vibe-title{text-align:center;margin:0 0 clamp(20px,3vw,40px)}
 .v-arrow{width:48px;height:48px;border-radius:50%;border:1.5px solid var(--on-deep);background:none;color:var(--on-deep);display:grid;place-items:center;cursor:pointer;transition:background-color 160ms ease,color 160ms ease,transform 160ms var(--ease-out)}
 .v-arrow:active{transform:scale(.94)}
 .v-arrow:disabled{opacity:.3;cursor:default}
-.v-stage{overflow:hidden;direction:ltr;padding:clamp(28px,4vw,48px) 0 clamp(48px,6vw,80px);touch-action:pan-y;cursor:grab;outline-offset:-4px}
+/* visit: the photos stand around a ring in 3D; drag to turn it (it keeps turning a little), tap a photo to open it big */
+.v-stage{position:relative;height:clamp(250px,34vw,440px);margin:clamp(20px,3vw,36px) 0 clamp(40px,5vw,72px);overflow:hidden;perspective:1000px;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none;outline-offset:-4px;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
 .v-stage.dragging{cursor:grabbing}
-.v-track{display:flex;gap:14px;width:max-content;will-change:transform}
-.v-track figure{flex:none;width:min(72vw,420px);margin:0;border-radius:var(--r);overflow:hidden;transform:scale(.86);opacity:.5;transition:transform 650ms var(--ease),opacity 650ms ease}
-.v-track figure.on{transform:none;opacity:1}
-.v-track.jump figure{transition:none}
-.v-track img{display:block;width:100%;height:auto;aspect-ratio:9/10;object-fit:cover;pointer-events:none;-webkit-user-drag:none}
+.v-ring{position:absolute;left:50%;top:0;height:100%;width:0;transform-style:preserve-3d;transform:rotateY(var(--r,0deg))}
+.v-ring figure{position:absolute;top:50%;left:0;margin:0;padding:6px;transform-style:preserve-3d;cursor:zoom-in}
+.v-ring img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;border-radius:14px;pointer-events:none;-webkit-user-drag:none;filter:blur(4px);transition:filter 300ms ease}
+.v-ring img.ok{filter:none}
+/* the photo opened big */
+.v-zoom{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:20px;background:rgba(20,20,20,.72);opacity:0;pointer-events:none;transition:opacity 300ms ease;cursor:zoom-out}
+.v-zoom.open{opacity:1;pointer-events:auto}
+.v-zoom img{max-width:min(92vw,620px);max-height:86svh;border-radius:var(--r);box-shadow:0 30px 60px -20px rgba(0,0,0,.6);transform:scale(.6);transition:transform 500ms var(--ease)}
+.v-zoom.open img{transform:none}
 .visit .addr span{display:block;font-family:var(--mono);font-size:14px;font-weight:400;letter-spacing:.06em;margin-top:10px;color:var(--on-deep-muted)}
 .visit .status{margin-top:28px}
 .hours{border-top:1.5px solid var(--on-deep)}
@@ -368,7 +374,7 @@ footer .legal button{background:none;border:0;padding:6px 0;color:var(--on-deep)
 /* accessibility modes */
 html.a11y-big{zoom:1.15}
 html.a11y-contrast{--muted:var(--fg);--soft-line:var(--fg);--on-deep-muted:var(--on-deep)}
-html.a11y-contrast .v-track figure,html.a11y-contrast .washline{opacity:1}
+html.a11y-contrast .washline{opacity:1}
 html.a11y-links a,html.a11y-links button{text-decoration:underline!important;text-underline-offset:3px}
 html.a11y-links a:focus,html.a11y-links button:focus{outline:3px solid var(--accent);outline-offset:2px}
 html.a11y-still *,html.a11y-still *::before,html.a11y-still *::after{animation:none!important;transition:none!important}
@@ -617,9 +623,9 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
         <button type="button" class="v-arrow" data-dir="-1" aria-label="התמונה הקודמת"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6l6 6"/></svg></button>
       </div>
     </div>
-    <!-- weekend on film: an endless loop with the current photo in the middle; swipe, arrows or wait -->
-    <div class="v-stage" tabindex="0" aria-label="תמונות מאוטוטו">
-    <div class="v-track">
+    <!-- weekend on film: a 3D ring of photos; drag, use the arrows, or tap a photo to see it big -->
+    <div class="v-stage" tabindex="0" aria-label="תמונות מאוטוטו. גוררים כדי לסובב, לחיצה על תמונה מגדילה אותה">
+    <div class="v-ring">
       <figure><img src="img/visit/1-front.jpg" alt="אנשים מדברים ליד הקיוסק של אוטוטו" width="720" height="800" loading="lazy"></figure>
       <figure><img src="img/visit/2-tray.jpg" alt="מגיש מחייך עם מגש כריכים" width="720" height="800" loading="lazy"></figure>
       <figure><img src="img/visit/3-vitrine.jpg" alt="ויטרינת קרואסונים, עוגות וכריכים" width="720" height="800" loading="lazy"></figure>
@@ -627,6 +633,7 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
       <figure><img src="img/visit/5-baker.jpg" alt="האופה מחזיק פוקאצ׳ה טרייה" width="720" height="800" loading="lazy"></figure>
     </div>
     </div>
+    <div class="v-zoom" id="vZoom" role="dialog" aria-modal="true" aria-label="תמונה מוגדלת"><img alt=""></div>
     <div class="wrap">
       <div>
         <p class="addr">גרונמן 8, תל אביב<span class="en">GRONEMANN 8, RAMAT AVIV</span></p>
@@ -780,39 +787,44 @@ navIO.observe(document.querySelector('.hero'));
 /* the home page always lights HOME while the big logo is on screen */
 new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(heroLogo);
 
-/* visit carousel: an endless loop. The five photos are copied once before and once after; the middle copy is
-   "home", and whenever the loop slides into a copy it quietly jumps back to the same photo in the middle */
+/* visit ring: the five photos (shown twice, ten faces) stand around a cylinder. Dragging turns it and letting go
+   keeps it turning with a slow-down; the arrows turn it one photo; tapping a photo (without dragging) opens it big */
 (function(){
   const stage=document.querySelector('.v-stage');if(!stage)return;
-  const track=stage.querySelector('.v-track'),orig=[...track.children],N=orig.length,GAP=14;
-  /* rebuild in order: copies, originals, copies */
-  track.replaceChildren(...orig.map(f=>{const c=f.cloneNode(true);c.setAttribute('aria-hidden','true');return c}),...orig,...orig.map(f=>{const c=f.cloneNode(true);c.setAttribute('aria-hidden','true');return c}));
-  const figs=[...track.children];
-  let i=N,dx=0,drag=null,seen=false,pausedUntil=0;
-  const hold=()=>{pausedUntil=Date.now()+8000};
-  const place=animate=>{
-    const w=figs[0].offsetWidth,x=stage.clientWidth/2-(i*(w+GAP)+w/2)+dx;
-    track.style.transition=animate&&!reduce?'transform 650ms var(--ease)':'none';
-    track.style.transform=`translate3d(${x}px,0,0)`;
-    figs.forEach((f,k)=>f.classList.toggle('on',k===i));
+  const ring=stage.querySelector('.v-ring'),orig=[...ring.children];
+  orig.forEach(f=>{const c=f.cloneNode(true);c.setAttribute('aria-hidden','true');ring.append(c)});
+  const faces=[...ring.children],N=faces.length,STEP=360/N;
+  faces.forEach(f=>{const im=f.querySelector('img');const ok=()=>im.classList.add('ok');im.complete?ok():im.addEventListener('load',ok)});
+  const layout=()=>{  /* the ring's circumference (bigger than the original's 1100/1800, as we have only ten photos) */
+    const C=innerWidth<=640?1500:2400,w=C/N,r=C/(2*Math.PI);
+    faces.forEach((f,i)=>{f.style.width=w+'px';f.style.marginLeft=-w/2+'px';f.style.marginTop=-w/2+'px';f.style.transform=`rotateY(${i*STEP}deg) translateZ(${r}px)`});
   };
-  const settle=()=>{if(i>=2*N||i<N){i=i>=2*N?i-N:i+N;track.classList.add('jump');place(false);track.offsetWidth;track.classList.remove('jump')}};
-  track.addEventListener('transitionend',e=>{if(e.target===track)settle()});
-  const go=d=>{settle();i+=d;place(true)};
-  document.querySelectorAll('.v-arrow').forEach(b=>b.addEventListener('click',()=>{go(+b.dataset.dir);hold()}));
-  stage.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();go(e.key==='ArrowRight'?1:-1);hold()}});
-  stage.addEventListener('pointerdown',e=>{settle();drag={x:e.clientX};stage.setPointerCapture(e.pointerId);stage.classList.add('dragging');hold()});
-  stage.addEventListener('pointermove',e=>{if(!drag)return;dx=e.clientX-drag.x;place(false)});
-  const up=()=>{if(!drag)return;const w=figs[0].offsetWidth,d=Math.abs(dx)>w*.15?(dx<0?1:-1):0;drag=null;dx=0;stage.classList.remove('dragging');i+=d;place(true)};
-  stage.addEventListener('pointerup',up);stage.addEventListener('pointercancel',up);
-  addEventListener('resize',()=>place(false));
-  place(false);
-  /* moves by itself every few seconds while on screen; touch or click pauses it for a while, a mouse on it stops it */
-  if(reduce)return;
-  stage.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse')pausedUntil=Infinity});
-  stage.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse')pausedUntil=0});
-  new IntersectionObserver(([e])=>{seen=e.isIntersecting},{threshold:.4}).observe(stage);
-  setInterval(()=>{if(seen&&Date.now()>=pausedUntil&&!document.hidden)go(1)},3500);
+  layout();addEventListener('resize',layout);
+  let angle=0,vel=0,raf=0,drag=null,moved=false;
+  const set=a=>{angle=a;ring.style.setProperty('--r',a.toFixed(2)+'deg')};
+  const glide=()=>{vel*=.95;set(angle+vel);raf=Math.abs(vel)>.02?requestAnimationFrame(glide):0};
+  const turnTo=target=>{cancelAnimationFrame(raf);const from=angle,t0=performance.now(),d=reduce?1:600;
+    const step=t=>{const k=Math.min(1,(t-t0)/d),e=1-Math.pow(1-k,3);set(from+(target-from)*e);raf=k<1?requestAnimationFrame(step):0};raf=requestAnimationFrame(step)};
+  stage.addEventListener('pointerdown',e=>{cancelAnimationFrame(raf);drag={x:e.clientX,a:angle,lx:e.clientX,lt:e.timeStamp};vel=0;moved=false;stage.setPointerCapture(e.pointerId);stage.classList.add('dragging')});
+  stage.addEventListener('pointermove',e=>{
+    if(!drag)return;const dx=e.clientX-drag.x;if(Math.abs(dx)>6)moved=true;
+    set(drag.a+dx*.25);const dt=e.timeStamp-drag.lt;if(dt>0)vel=(e.clientX-drag.lx)*.25/dt*16;drag.lx=e.clientX;drag.lt=e.timeStamp;
+  });
+  const up=e=>{
+    if(!drag)return;drag=null;stage.classList.remove('dragging');
+    if(moved){if(!reduce&&Math.abs(vel)>.2)raf=requestAnimationFrame(glide);return}
+    /* a tap: open the photo under the finger */
+    const hit=document.elementsFromPoint(e.clientX,e.clientY).find(el=>el.tagName==='FIGURE'&&ring.contains(el));
+    if(hit)open(hit.querySelector('img'));
+  };
+  stage.addEventListener('pointerup',up);stage.addEventListener('pointercancel',()=>{drag=null;stage.classList.remove('dragging')});
+  document.querySelectorAll('.v-arrow').forEach(b=>b.addEventListener('click',()=>turnTo(Math.round(angle/STEP)*STEP-(+b.dataset.dir)*STEP)));
+  stage.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();turnTo(Math.round(angle/STEP)*STEP+(e.key==='ArrowRight'?-STEP:STEP))}});
+  /* the big view */
+  const zoom=document.getElementById('vZoom'),zimg=zoom.querySelector('img');
+  const open=im=>{zimg.src=im.src;zimg.alt=im.alt;zoom.classList.add('open')};
+  const close=()=>zoom.classList.remove('open');
+  zoom.addEventListener('click',close);addEventListener('keydown',e=>{if(e.key==='Escape')close()});
 })();
 
 /* THE VIBE washing line: the line is a parabola (one quadratic curve); each photo hangs where it sits on it,
