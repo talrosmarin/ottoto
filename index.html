@@ -249,43 +249,52 @@ h2.vibe-title{text-align:center;margin:0 0 clamp(20px,3vw,40px)}
 @keyframes spin{to{transform:rotate(1440deg)}}
 
 
-/* friends club: a member card drawn like the playlist cassette (cream, ink outlines, screws, mono labels).
-   It turns a full 360° every few seconds, can be spun with a finger, and prints the name you type */
+/* friends club: a stiff paper loyalty card, drawn in the same ink-line style as the cassette.
+   Front: the logo with the tagline curving over it. Back: the punch card, with a few stamps already in.
+   It turns all the way round (front, back, front); a finger can spin it; joining stamps a "HI!" on the back */
 .friends .wrap{display:flex;flex-direction:column;align-items:center;text-align:center}
 .friends h2.en,.friends .lead{text-align:center;margin-inline:auto}
-.m-scene{width:min(440px,100%);margin-top:clamp(36px,5vw,60px);perspective:1400px;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none}
-.m-scene.dragging{cursor:grabbing}
-.m-tilt{transform:rotate(-3deg);transform-style:preserve-3d}
-.m-card{position:relative;aspect-ratio:1.586;container-type:inline-size;transform-style:preserve-3d}
-.m-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:#F7F2E8;color:#141414;border:3px solid #141414;border-radius:6cqw;padding:7cqw 7.5cqw;display:flex;flex-direction:column;justify-content:space-between;direction:ltr;text-align:left;font-family:var(--mono);box-shadow:0 2cqw 0 -.5cqw rgba(20,20,20,.12)}
-.m-back{transform:rotateY(180deg);align-items:center;justify-content:center;gap:4cqw;text-align:center}
-/* the four little screws, like on the cassette */
-.scr{position:absolute;width:3.2cqw;height:3.2cqw;border:2px solid #141414;border-radius:50%}
-.scr:nth-of-type(1){top:3cqw;left:3cqw}.scr:nth-of-type(2){top:3cqw;right:3cqw}.scr:nth-of-type(3){bottom:3cqw;left:3cqw}.scr:nth-of-type(4){bottom:3cqw;right:3cqw}
-.m-top{display:flex;justify-content:space-between;align-items:center}
-.m-top img{height:6cqw;width:auto}
-.m-tag{font-size:2.9cqw;font-weight:700;letter-spacing:.14em;border:2px solid #141414;border-radius:999px;padding:.6cqw 2.2cqw}
-.m-label{background:#F3EBDD;border:2px solid #141414;border-radius:2.6cqw;padding:2.6cqw 3.4cqw 3cqw}
-.m-k{display:flex;justify-content:space-between;font-size:2.7cqw;font-weight:700;letter-spacing:.16em;padding-bottom:1.6cqw;margin-bottom:1.8cqw;border-bottom:1.5px solid #141414}
-.m-name{font-family:"Rubik","Rubik Hebrew",var(--sans);font-weight:900;font-size:8.4cqw;line-height:1;text-transform:uppercase;letter-spacing:-.01em;min-height:1em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:start}
-.m-bottom{display:flex;justify-content:space-between;align-items:flex-end;font-size:2.7cqw;letter-spacing:.12em;line-height:1.3}
-.m-bottom b{display:block;font-family:"Rubik",var(--sans);font-weight:900;font-size:5cqw;letter-spacing:.02em}
-/* peach sticker, like the one on the cups */
-.m-sticker{position:absolute;left:50%;bottom:4cqw;margin-left:-7.5cqw;width:15cqw;height:15cqw;border-radius:50%;background:var(--accent);border:2px solid #141414;display:grid;place-items:center;font-size:2.5cqw;font-weight:700;letter-spacing:.08em;transform:rotate(-10deg);line-height:1.15;text-align:center}
-.m-strip{position:absolute;left:0;right:0;top:9cqw;height:10cqw;background:#141414}
-.m-back img{width:52cqw;height:auto;margin-top:12cqw}
-.m-back p{font-size:3cqw;font-weight:700;letter-spacing:.12em;margin:0}
-.m-back .m-addr{font-weight:400;font-size:2.6cqw}
-.m-shadow{width:70%;height:18px;margin:18px auto 0;border-radius:50%;background:radial-gradient(closest-side,rgba(20,20,20,.28),transparent)}
-.m-form{width:min(340px,100%);margin-top:clamp(20px,3vw,28px);display:grid;gap:10px;justify-items:center}
-.m-form label{font-weight:700;font-size:15px}
-.m-form input{width:100%;min-height:52px;padding:0 18px;border-radius:999px;border:1.5px solid var(--fg);background:var(--surface);color:var(--fg);font:inherit;font-size:17px;text-align:center}
-.m-form input:focus{outline:3px solid var(--accent);outline-offset:2px}
-.friends .btns{margin-top:22px;justify-content:center}
-.m-card.manual{animation:none}
+.f-scene{width:min(460px,100%);margin-top:clamp(36px,5vw,60px);perspective:1500px;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none}
+.f-scene.dragging{cursor:grabbing}
+.f-tilt{transform:rotate(-4deg);transform-style:preserve-3d}
+.f-card{position:relative;aspect-ratio:1.62;container-type:inline-size;transform-style:preserve-3d}
+.f-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:5.5cqw;overflow:hidden;direction:ltr;color:#141414;font-family:var(--mono);
+  box-shadow:inset 0 0 0 1px rgba(20,20,20,.12),0 1.2cqw 0 -.2cqw #d8c8ae,0 3cqw 5cqw -2.5cqw rgba(20,20,20,.45)}
+/* the hand-drawn inner frame */
+.f-face::before{content:"";position:absolute;inset:3.2cqw;border:2px solid #141414;border-radius:3.4cqw;pointer-events:none}
+.f-front{background:#F7B984;display:grid;place-items:center}
+.f-front img{width:66cqw;height:auto;margin-top:12cqw;position:relative}
+.f-arc{position:absolute;inset:0;width:100%;height:100%}
+.f-arc text{font-family:var(--mono);font-weight:700;font-size:9.6px;letter-spacing:1.3px;fill:#141414}
+.f-foot{position:absolute;left:0;right:0;bottom:8cqw;display:flex;justify-content:center;gap:3cqw;font-size:2.7cqw;font-weight:700;letter-spacing:.18em}
+.f-back{background:#F7F2E8;transform:rotateY(180deg);padding:8cqw 8.5cqw 7cqw;display:flex;flex-direction:column;justify-content:space-between}
+.f-meta{display:flex;justify-content:space-between;font-size:2.5cqw;font-weight:700;letter-spacing:.1em}
+.f-meta span:nth-child(2){translate:0 1.4cqw}
+.f-stamps{display:grid;grid-template-columns:repeat(5,1fr);gap:2.4cqw 3cqw;padding:0 1cqw}
+.f-stamps i{position:relative;aspect-ratio:1;border:2px solid #141414;border-radius:50%;display:grid;place-items:center}
+.f-stamps i:nth-child(even){translate:0 1.2cqw}
+.f-stamps svg{width:78%;height:78%;fill:none;stroke:#141414;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;rotate:var(--r,0deg)}
+.f-stamps i.on{background:#F7B984}
+.f-stamps i.last{border-style:dashed}
+.f-stamps i.last svg{fill:#F7B984}
+.f-stamps b{font-family:"Rubik",var(--sans);font-weight:900;font-size:4.4cqw;rotate:-12deg;opacity:0;scale:2.2}
+.f-stamps i.hi{background:#141414;border-color:#141414}
+.f-stamps i.hi b{color:#F7B984;opacity:1;scale:1;transition:scale 420ms var(--ease-out),opacity 200ms ease}
+.f-rule{font-size:2.45cqw;font-weight:700;letter-spacing:.08em;line-height:1.45;text-align:center;text-transform:uppercase;margin:0}
+.f-shadow{width:70%;height:18px;margin:20px auto 0;border-radius:50%;background:radial-gradient(closest-side,rgba(20,20,20,.25),transparent)}
+.f-form{width:min(360px,100%);margin-top:clamp(20px,3vw,28px);display:grid;gap:12px;justify-items:center}
+.f-form label[for]{font-weight:700;font-size:15px}
+.f-form input[type=tel]{width:100%;min-height:52px;padding:0 18px;border-radius:999px;border:1.5px solid var(--fg);background:var(--surface);color:var(--fg);font:inherit;font-size:18px;letter-spacing:.06em;text-align:center;direction:ltr}
+.f-form input[type=tel]:focus{outline:3px solid var(--accent);outline-offset:2px}
+.f-form input[aria-invalid=true]{border-color:#c0392b}
+.f-ok{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;line-height:1.45;text-align:start;color:var(--muted);cursor:pointer}
+.f-ok input{width:20px;height:20px;margin:1px 0 0;accent-color:#141414;flex:none}
+.f-msg{min-height:1.4em;font-size:14px;color:var(--muted);margin:0}
+.f-card.manual{animation:none}
+.f-card.show-back{transform:rotateY(180deg);transition:transform 900ms var(--ease)}
 @media (prefers-reduced-motion:no-preference){
-  .m-card:not(.manual):not(.hold){animation:m-spin 7s infinite}
-  @keyframes m-spin{0%,42%{transform:rotateY(0deg);animation-timing-function:cubic-bezier(.65,0,.35,1)}74%,100%{transform:rotateY(360deg)}}
+  .f-card:not(.manual):not(.show-back){animation:f-turn 9s infinite}
+  @keyframes f-turn{0%,26%{transform:rotateY(0deg);animation-timing-function:cubic-bezier(.65,0,.35,1)}40%,72%{transform:rotateY(180deg);animation-timing-function:cubic-bezier(.65,0,.35,1)}86%,100%{transform:rotateY(360deg)}}
 }
 
 /* visit: the one deliberate color-block switch, it carries into the footer */
@@ -498,33 +507,31 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
   <section class="friends" id="friends">
     <div class="wrap">
       <h2 class="en">Ottoto Friends</h2>
-      <p class="lead">מועדון הלקוחות של אוטוטו. כתבו את השם שלכם וקבלו כרטיס.</p>
-      <div class="m-scene" aria-hidden="true">
-        <div class="m-tilt">
-          <div class="m-card">
-            <div class="m-face m-front">
-              <i class="scr"></i><i class="scr"></i><i class="scr"></i><i class="scr"></i>
-              <div class="m-top"><img src="img/logo-black.png" alt="" width="570" height="120"><span class="m-tag">FRIENDS CLUB</span></div>
-              <div class="m-label"><div class="m-k"><span>MEMBER</span><span>SIDE A</span></div><div class="m-name" id="mName" dir="auto">YOUR NAME</div></div>
-              <div class="m-bottom"><span>NO.<b id="mNo">0000</b></span><span>SINCE<b>2026</b></span></div>
-              <span class="m-sticker">GOOD<br>VIBES</span>
-            </div>
-            <div class="m-face m-back">
-              <i class="scr"></i><i class="scr"></i><i class="scr"></i><i class="scr"></i>
-              <span class="m-strip"></span>
+      <p class="lead">מועדון הלקוחות של אוטוטו. כרטיסייה, חותמות, ומה שמגיע אחריהן.</p>
+      <div class="f-scene" aria-hidden="true">
+        <div class="f-tilt">
+          <div class="f-card">
+            <div class="f-face f-front">
+              <svg class="f-arc" viewBox="0 0 320 198"><path id="fArc" d="M60 88 A100 70 0 0 1 260 88" fill="none"/><text text-anchor="middle"><textPath href="#fArc" startOffset="50%">PAUSE IF YOU MUST, BUT DON'T STOP.</textPath></text></svg>
               <img src="img/logo-black.png" alt="" width="570" height="120">
-              <p>PAUSE IF YOU MUST, BUT DON'T STOP.</p>
-              <p class="m-addr">GRONEMANN 8 · RAMAT AVIV</p>
+              <div class="f-foot"><span>FRIENDS CLUB</span><span>·</span><span>RAMAT AVIV</span></div>
+            </div>
+            <div class="f-face f-back">
+              <div class="f-meta"><span>@OTTOTO.TLV</span><span>GRONEMANN 8</span><span>CAFE &amp; WINE</span></div>
+              <div class="f-stamps"><i class="on"><svg style="--r:-12deg" viewBox="0 0 40 40"><path d="M11 16h16v9a7 7 0 0 1 -7 7h-2a7 7 0 0 1 -7 -7z"/><path d="M27 19h2a3 3 0 0 1 0 6h-2"/><path d="M15 7c-1.5 2 1.5 3 0 5.5M20 6c-1.5 2 1.5 3 0 5.5M25 7c-1.5 2 1.5 3 0 5.5"/></svg></i><i class="on"><svg style="--r:9deg" viewBox="0 0 40 40"><path d="M6 27c2-10 8-15 14-15s12 5 14 15c-3-2-6-2-8 .5c-1.5-3.5-3.5-5-6-5s-4.5 1.5-6 5c-2-2.5-5-2.5-8-.5z"/><path d="M15 22.5l1.5-7M25 22.5l-1.5-7M20 21v-8"/></svg></i><i class="on"><svg style="--r:-6deg" viewBox="0 0 40 40"><path d="M12 8h16l-2.2 24h-11.6z"/><path d="M13 16.5h14"/><path d="M15.5 24c3 1.4 6 1.4 9 0"/><path d="M17 11.5h3v3h-3zM22 12h2.6v2.6h-2.6z"/></svg></i><i id="fHi"><b>HI!</b></i><i></i><i></i><i></i><i></i><i></i><i class="last"><svg viewBox="0 0 40 40"><path d="M20 31s-10-6.2-10-13a5.5 5.5 0 0 1 10-3.2a5.5 5.5 0 0 1 10 3.2c0 6.8-10 13-10 13z"/></svg></i></div>
+              <p class="f-rule">Every coffee earns you a stamp.<br>Fill the card, the next one is on us.</p>
             </div>
           </div>
         </div>
-        <div class="m-shadow"></div>
+        <div class="f-shadow"></div>
       </div>
-      <div class="m-form">
-        <label for="mInput">איך קוראים לך?</label>
-        <input id="mInput" type="text" maxlength="18" autocomplete="given-name" placeholder="השם שלך" enterkeyhint="done">
-      </div>
-      <div class="btns"><a class="btn fill" href="https://ig.me/m/ottoto.tlv" target="_blank" rel="noopener">הצטרפו לחברים</a></div>
+      <form class="f-form" id="fForm" novalidate>
+        <label for="fTel">הכניסו מספר טלפון כדי להצטרף</label>
+        <input id="fTel" type="tel" inputmode="tel" autocomplete="tel" placeholder="050-0000000" maxlength="16" required>
+        <label class="f-ok"><input type="checkbox" id="fOk" required><span>אני מאשר/ת לקבל מאוטוטו הודעות על הטבות ועדכונים. אפשר להסיר בכל רגע.</span></label>
+        <button class="btn fill" type="submit">הצטרפו לחברים</button>
+        <p class="f-msg" id="fMsg" role="status" aria-live="polite"></p>
+      </form>
     </div>
   </section>
 
@@ -822,32 +829,42 @@ new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(hero
   sync();
 })();
 
-/* friends: the card prints the name as you type (and faces you while you do); a finger or mouse can spin it */
+/* friends: a finger or mouse spins the card (it lands on whichever side is closer). Joining: check the phone
+   number, turn the card to its back and stamp "HI!". There is no sign-up list on this site yet, so the join
+   message (with the number) is copied and an Instagram DM to @ottoto.tlv opens, ready to paste and send */
 (function(){
-  const card=document.querySelector('.m-card');if(!card)return;
-  const scene=document.querySelector('.m-scene'),nameEl=document.getElementById('mName'),noEl=document.getElementById('mNo'),input=document.getElementById('mInput');
-  input.addEventListener('input',()=>{
-    const v=input.value.trim();nameEl.textContent=v||'YOUR NAME';
-    let h=7;for(const c of v)h=(h*31+c.codePointAt(0))%9973;  /* same name, same playful number */
-    noEl.textContent=v?String(h).padStart(4,'0'):'0000';
+  const card=document.querySelector('.f-card');if(!card)return;
+  const scene=document.querySelector('.f-scene'),form=document.getElementById('fForm'),tel=document.getElementById('fTel'),ok=document.getElementById('fOk'),msg=document.getElementById('fMsg'),hi=document.getElementById('fHi');
+  const clean=v=>{let d=v.replace(/\D/g,'');if(d.startsWith('972'))d='0'+d.slice(3);return d};
+  tel.addEventListener('input',()=>tel.removeAttribute('aria-invalid'));
+  form.addEventListener('submit',async e=>{
+    e.preventDefault();
+    const d=clean(tel.value);
+    if(!/^05\d{8}$/.test(d)){tel.setAttribute('aria-invalid','true');msg.textContent='נראה שמשהו חסר. מספר נייד מתחיל ב-05 ויש בו 10 ספרות.';tel.focus();return}
+    if(!ok.checked){msg.textContent='צריך לסמן את האישור כדי שנוכל לשלוח לכם הטבות.';ok.focus();return}
+    card.classList.add('show-back');hi.classList.add('hi');
+    const text=`היי אוטוטו! אני רוצה להצטרף לחברים של אוטוטו. הטלפון שלי: ${d.slice(0,3)}-${d.slice(3)}`;
+    let copied=false;try{await navigator.clipboard.writeText(text);copied=true}catch(err){}
+    msg.textContent=copied?'ההודעה שלכם הועתקה. נפתח צ׳אט עם אוטוטו באינסטגרם: הדביקו ושלחו.':text;
+    setTimeout(()=>window.open('https://ig.me/m/ottoto.tlv','_blank','noopener'),900);
   });
-  /* while typing, stop spinning and face front */
-  let resume=0;
-  input.addEventListener('focus',()=>{clearTimeout(resume);card.classList.add('hold')});
-  input.addEventListener('blur',()=>{resume=setTimeout(()=>card.classList.remove('hold'),1500)});
   if(reduce)return;
   const angleNow=()=>{const m=new DOMMatrix(getComputedStyle(card).transform);return Math.atan2(-m.m13,m.m11)*180/Math.PI};
-  let drag=null,angle=0;
+  let drag=null,angle=0,back=0;
   scene.addEventListener('pointerdown',e=>{
-    angle=angleNow();card.classList.add('manual');card.style.transition='none';card.style.transform=`rotateY(${angle}deg)`;
+    clearTimeout(back);angle=angleNow();card.classList.remove('show-back');card.classList.add('manual');
+    card.style.transition='none';card.style.transform=`rotateY(${angle}deg)`;
     drag={x:e.clientX,a:angle};scene.setPointerCapture(e.pointerId);scene.classList.add('dragging');
   });
   scene.addEventListener('pointermove',e=>{if(!drag)return;angle=drag.a+(e.clientX-drag.x)*.7;card.style.transform=`rotateY(${angle}deg)`});
   const up=()=>{
     if(!drag)return;drag=null;scene.classList.remove('dragging');
-    const to=Math.round(angle/360)*360;  /* always land on the front */
+    const to=Math.round(angle/180)*180,onBack=Math.abs(to/180)%2===1;
     card.style.transition='transform 900ms cubic-bezier(.16,1,.3,1)';card.style.transform=`rotateY(${to}deg)`;
-    setTimeout(()=>{card.style.transition='';card.style.transform='';card.classList.remove('manual')},950);
+    setTimeout(()=>{
+      card.style.transition='';card.style.transform='';card.classList.remove('manual');
+      if(onBack){card.classList.add('show-back');if(!hi.classList.contains('hi'))back=setTimeout(()=>card.classList.remove('show-back'),4000)}
+    },950);
   };
   scene.addEventListener('pointerup',up);scene.addEventListener('pointercancel',up);
 })();
