@@ -140,7 +140,7 @@ html.splashing .bigmark img{visibility:hidden}
   .bigmark{padding:14px 12px 18px}
   .bigmark picture{width:calc(var(--rw,300px) * 1.1);max-width:calc(100vw - 24px)}
   .home-screen .hero{flex:1;min-height:0;padding-bottom:0}
-  .hero .reel-band{flex:1;min-height:0;background:none}
+  .hero .reel-band{flex:1;min-height:0;background:none;transform-origin:50% 0;will-change:transform}
   .hero .reel-band .bg{display:none}
   .hero .reel-band video{height:auto;width:auto;max-height:100%;max-width:94%;box-shadow:none;border-radius:var(--r);background:none}
   .hero .infobar{display:grid;grid-template-columns:1fr auto;align-items:center;gap:0 12px;margin-top:10px;padding-block:8px 4px}
@@ -811,6 +811,25 @@ new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(hero
   });
 })();
 
+/* home: a simple scroll effect. While the first screen scrolls away, the logo lifts and fades a little faster than
+   the page, the reel sinks back slightly (it shrinks to 92% and dims) and the info line fades. Transforms only,
+   so nothing in the layout changes size; off for reduced motion and the "stop animations" setting */
+(function(){
+  if(reduce)return;
+  const home=document.querySelector('.home-screen'),logo=document.querySelector('.bigmark'),band=document.querySelector('.hero .reel-band'),info=document.querySelector('.hero .infobar');
+  if(!home||!band)return;
+  let ticking=false;
+  const paint=()=>{
+    ticking=false;
+    const p=Math.min(1,Math.max(0,scrollY/home.offsetHeight));
+    logo.style.transform=`translateY(${(-p*60).toFixed(1)}px)`;logo.style.opacity=(1-p*1.3).toFixed(3);
+    band.style.transform=`translateY(${(p*50).toFixed(1)}px) scale(${(1-p*.08).toFixed(4)})`;band.style.opacity=(1-p*.45).toFixed(3);
+    if(info){info.style.transform=`translateY(${(p*30).toFixed(1)}px)`;info.style.opacity=(1-p*1.6).toFixed(3)}
+  };
+  addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(paint)}},{passive:true});
+  paint();
+})();
+
 /* shop shelf: the kit drops onto the shelf when it comes into view */
 (function(){
   const shelf=document.querySelector('.shelf');if(!shelf)return;
@@ -821,7 +840,7 @@ new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(hero
 /* it waits for the opening logo to finish, then always starts from its first frame */
 const reel=document.getElementById('reel');let reelSeen=false;
 /* the big logo is as wide as the video (a hair wider), centered above it */
-new ResizeObserver(()=>{const w=reel.getBoundingClientRect().width;if(w)root.style.setProperty('--rw',w.toFixed(1)+'px')}).observe(reel);
+new ResizeObserver(()=>{const w=reel.offsetWidth;if(w)root.style.setProperty('--rw',w+'px')}).observe(reel);
 const ready=()=>root.classList.contains('navin');
 const startReel=()=>{reel.currentTime=0;if(reelSeen&&!reduce)reel.play().catch(()=>{})};
 if(!reduce){new IntersectionObserver(([e])=>{reelSeen=e.isIntersecting;if(!ready())return;reelSeen?reel.play().catch(()=>{}):reel.pause()},{threshold:.25}).observe(reel)}
