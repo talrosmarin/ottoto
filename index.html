@@ -254,33 +254,30 @@ h2.vibe-title{text-align:center;margin:0 0 clamp(20px,3vw,40px)}
    It turns all the way round (front, back, front); a finger can spin it; joining stamps a "HI!" on the back */
 .friends .wrap{display:flex;flex-direction:column;align-items:center;text-align:center}
 .friends h2.en,.friends .lead{text-align:center;margin-inline:auto}
-.f-scene{width:min(460px,100%);margin-top:clamp(36px,5vw,60px);perspective:1500px;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none}
+.f-scene{width:min(330px,82%);margin-top:clamp(36px,5vw,60px);perspective:1500px;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none}
 .f-scene.dragging{cursor:grabbing}
 .f-tilt{transform:rotate(-4deg);transform-style:preserve-3d}
-.f-card{position:relative;aspect-ratio:1.62;container-type:inline-size;transform-style:preserve-3d}
-.f-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:5.5cqw;overflow:hidden;direction:ltr;color:#141414;font-family:var(--mono);
+.f-card{position:relative;aspect-ratio:2/3;container-type:inline-size;transform-style:preserve-3d}
+.f-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:6cqw;overflow:hidden;direction:ltr;color:#141414;font-family:var(--mono);
   box-shadow:inset 0 0 0 1px rgba(20,20,20,.12),0 1.2cqw 0 -.2cqw #d8c8ae,0 3cqw 5cqw -2.5cqw rgba(20,20,20,.45)}
 /* the hand-drawn inner frame */
-.f-face::before{content:"";position:absolute;inset:3.2cqw;border:2px solid #141414;border-radius:3.4cqw;pointer-events:none}
-.f-front{background:#F7B984;display:grid;place-items:center}
-.f-front img{width:66cqw;height:auto;margin-top:12cqw;position:relative}
-.f-arc{position:absolute;inset:0;width:100%;height:100%}
-.f-arc text{font-family:var(--mono);font-weight:700;font-size:9.6px;letter-spacing:1.3px;fill:#141414}
-.f-foot{position:absolute;left:0;right:0;bottom:8cqw;display:flex;justify-content:center;gap:3cqw;font-size:2.7cqw;font-weight:700;letter-spacing:.18em}
-.f-back{background:#F7F2E8;transform:rotateY(180deg);padding:8cqw 8.5cqw 7cqw;display:flex;flex-direction:column;justify-content:space-between}
-.f-meta{display:flex;justify-content:space-between;font-size:2.5cqw;font-weight:700;letter-spacing:.1em}
-.f-meta span:nth-child(2){translate:0 1.4cqw}
-.f-stamps{display:grid;grid-template-columns:repeat(5,1fr);gap:2.4cqw 3cqw;padding:0 1cqw}
+.f-back::before{content:"";position:absolute;inset:3.5cqw;border:2px solid #141414;border-radius:4cqw;pointer-events:none}
+.f-front{background:#F7B984}
+.f-front img{display:block;width:100%;height:100%;object-fit:cover}
+.f-back{background:#F7F2E8;transform:rotateY(180deg);padding:12cqw 11cqw 11cqw;display:flex;flex-direction:column;justify-content:space-between;align-items:center;text-align:center}
+.f-meta{display:flex;flex-direction:column;align-items:center;gap:1.5cqw;font-size:3.6cqw;font-weight:700;letter-spacing:.14em}
+.f-meta img{width:46cqw;height:auto;margin-bottom:2cqw}
+.f-stamps{display:grid;grid-template-columns:repeat(3,1fr);gap:5cqw 6cqw;width:100%;padding:0 3cqw}
 .f-stamps i{position:relative;aspect-ratio:1;border:2px solid #141414;border-radius:50%;display:grid;place-items:center}
-.f-stamps i:nth-child(even){translate:0 1.2cqw}
+.f-stamps i:nth-child(3n+2){translate:0 2.4cqw}
 .f-stamps svg{width:78%;height:78%;fill:none;stroke:#141414;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;rotate:var(--r,0deg)}
 .f-stamps i.on{background:#F7B984}
 .f-stamps i.last{border-style:dashed}
 .f-stamps i.last svg{fill:#F7B984}
-.f-stamps b{font-family:"Rubik",var(--sans);font-weight:900;font-size:4.4cqw;rotate:-12deg;opacity:0;scale:2.2}
+.f-stamps b{font-family:"Rubik",var(--sans);font-weight:900;font-size:6.4cqw;rotate:-12deg;opacity:0;scale:2.2}
 .f-stamps i.hi{background:#141414;border-color:#141414}
 .f-stamps i.hi b{color:#F7B984;opacity:1;scale:1;transition:scale 420ms var(--ease-out),opacity 200ms ease}
-.f-rule{font-size:2.45cqw;font-weight:700;letter-spacing:.08em;line-height:1.45;text-align:center;text-transform:uppercase;margin:0}
+.f-rule{font-size:3.5cqw;font-weight:700;letter-spacing:.08em;line-height:1.45;text-align:center;text-transform:uppercase;margin:0}
 .f-shadow{width:70%;height:18px;margin:20px auto 0;border-radius:50%;background:radial-gradient(closest-side,rgba(20,20,20,.25),transparent)}
 .f-form{width:min(360px,100%);margin-top:clamp(20px,3vw,28px);display:grid;gap:12px;justify-items:center}
 .f-form label[for]{font-weight:700;font-size:15px}
@@ -511,14 +508,10 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
       <div class="f-scene" aria-hidden="true">
         <div class="f-tilt">
           <div class="f-card">
-            <div class="f-face f-front">
-              <svg class="f-arc" viewBox="0 0 320 198"><path id="fArc" d="M60 88 A100 70 0 0 1 260 88" fill="none"/><text text-anchor="middle"><textPath href="#fArc" startOffset="50%">PAUSE IF YOU MUST, BUT DON'T STOP.</textPath></text></svg>
-              <img src="img/logo-black.png" alt="" width="570" height="120">
-              <div class="f-foot"><span>FRIENDS CLUB</span><span>·</span><span>RAMAT AVIV</span></div>
-            </div>
+            <div class="f-face f-front"><img src="img/friends-card-front.jpg" alt="" width="900" height="1355"></div>
             <div class="f-face f-back">
-              <div class="f-meta"><span>@OTTOTO.TLV</span><span>GRONEMANN 8</span><span>CAFE &amp; WINE</span></div>
-              <div class="f-stamps"><i class="on"><svg style="--r:-12deg" viewBox="0 0 40 40"><path d="M11 16h16v9a7 7 0 0 1 -7 7h-2a7 7 0 0 1 -7 -7z"/><path d="M27 19h2a3 3 0 0 1 0 6h-2"/><path d="M15 7c-1.5 2 1.5 3 0 5.5M20 6c-1.5 2 1.5 3 0 5.5M25 7c-1.5 2 1.5 3 0 5.5"/></svg></i><i class="on"><svg style="--r:9deg" viewBox="0 0 40 40"><path d="M6 27c2-10 8-15 14-15s12 5 14 15c-3-2-6-2-8 .5c-1.5-3.5-3.5-5-6-5s-4.5 1.5-6 5c-2-2.5-5-2.5-8-.5z"/><path d="M15 22.5l1.5-7M25 22.5l-1.5-7M20 21v-8"/></svg></i><i class="on"><svg style="--r:-6deg" viewBox="0 0 40 40"><path d="M12 8h16l-2.2 24h-11.6z"/><path d="M13 16.5h14"/><path d="M15.5 24c3 1.4 6 1.4 9 0"/><path d="M17 11.5h3v3h-3zM22 12h2.6v2.6h-2.6z"/></svg></i><i id="fHi"><b>HI!</b></i><i></i><i></i><i></i><i></i><i></i><i class="last"><svg viewBox="0 0 40 40"><path d="M20 31s-10-6.2-10-13a5.5 5.5 0 0 1 10-3.2a5.5 5.5 0 0 1 10 3.2c0 6.8-10 13-10 13z"/></svg></i></div>
+              <div class="f-meta"><img src="img/logo-black.png" alt="" width="570" height="120"><span>@OTTOTO.TLV · GRONEMANN 8</span></div>
+              <div class="f-stamps"><i class="on"><svg style="--r:-12deg" viewBox="0 0 40 40"><path d="M11 16h16v9a7 7 0 0 1 -7 7h-2a7 7 0 0 1 -7 -7z"/><path d="M27 19h2a3 3 0 0 1 0 6h-2"/><path d="M15 7c-1.5 2 1.5 3 0 5.5M20 6c-1.5 2 1.5 3 0 5.5M25 7c-1.5 2 1.5 3 0 5.5"/></svg></i><i class="on"><svg style="--r:9deg" viewBox="0 0 40 40"><path d="M6 27c2-10 8-15 14-15s12 5 14 15c-3-2-6-2-8 .5c-1.5-3.5-3.5-5-6-5s-4.5 1.5-6 5c-2-2.5-5-2.5-8-.5z"/><path d="M15 22.5l1.5-7M25 22.5l-1.5-7M20 21v-8"/></svg></i><i class="on"><svg style="--r:-6deg" viewBox="0 0 40 40"><path d="M12 8h16l-2.2 24h-11.6z"/><path d="M13 16.5h14"/><path d="M15.5 24c3 1.4 6 1.4 9 0"/><path d="M17 11.5h3v3h-3zM22 12h2.6v2.6h-2.6z"/></svg></i><i id="fHi"><b>HI!</b></i><i></i><i></i><i></i><i></i><i class="last"><svg viewBox="0 0 40 40"><path d="M20 31s-10-6.2-10-13a5.5 5.5 0 0 1 10-3.2a5.5 5.5 0 0 1 10 3.2c0 6.8-10 13-10 13z"/></svg></i></div>
               <p class="f-rule">Every coffee earns you a stamp.<br>Fill the card, the next one is on us.</p>
             </div>
           </div>
