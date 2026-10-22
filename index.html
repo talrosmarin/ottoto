@@ -275,10 +275,13 @@ h2.vibe-title{text-align:center;margin:0 0 clamp(20px,3vw,40px)}
 .v-arrow{width:48px;height:48px;border-radius:50%;border:1.5px solid var(--on-deep);background:none;color:var(--on-deep);display:grid;place-items:center;cursor:pointer;transition:background-color 160ms ease,color 160ms ease,transform 160ms var(--ease-out)}
 .v-arrow:active{transform:scale(.94)}
 .v-arrow:disabled{opacity:.3;cursor:default}
-.v-track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:max(16px,(100% - 1200px)/2);padding:clamp(28px,4vw,48px) max(16px,(100% - 1200px)/2) clamp(48px,6vw,80px);scrollbar-width:none;overscroll-behavior-x:contain}
-.v-track::-webkit-scrollbar{display:none}
-.v-track figure{flex:none;width:min(78vw,420px);margin:0;border-radius:var(--r);overflow:hidden;scroll-snap-align:start}
-.v-track img{display:block;width:100%;height:auto;aspect-ratio:9/10;object-fit:cover}
+.v-stage{overflow:hidden;direction:ltr;padding:clamp(28px,4vw,48px) 0 clamp(48px,6vw,80px);touch-action:pan-y;cursor:grab;outline-offset:-4px}
+.v-stage.dragging{cursor:grabbing}
+.v-track{display:flex;gap:14px;width:max-content;will-change:transform}
+.v-track figure{flex:none;width:min(72vw,420px);margin:0;border-radius:var(--r);overflow:hidden;transform:scale(.86);opacity:.5;transition:transform 650ms var(--ease),opacity 650ms ease}
+.v-track figure.on{transform:none;opacity:1}
+.v-track.jump figure{transition:none}
+.v-track img{display:block;width:100%;height:auto;aspect-ratio:9/10;object-fit:cover;pointer-events:none;-webkit-user-drag:none}
 .visit .addr span{display:block;font-family:var(--mono);font-size:14px;font-weight:400;letter-spacing:.06em;margin-top:10px;color:var(--on-deep-muted)}
 .visit .status{margin-top:28px}
 .hours{border-top:1.5px solid var(--on-deep)}
@@ -287,7 +290,19 @@ h2.vibe-title{text-align:center;margin:0 0 clamp(20px,3vw,40px)}
 .hours span:last-child{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:16px}
 .hours div.today{color:var(--accent);font-weight:700}
 .hours div.today span:first-child::after{content:" · היום"}
-.walker{width:clamp(150px,16vw,220px);margin-top:48px;transform:scaleX(-1)}
+.g-rate{display:flex;align-items:center;gap:16px;margin-top:40px;padding:18px 20px;border:1.5px solid rgba(243,235,221,.35);border-radius:var(--r);color:var(--on-deep);text-decoration:none;transition:border-color 200ms ease,background-color 200ms ease}
+.g-rate:active{transform:scale(.98)}
+.g-stars{display:flex;gap:3px;flex:none;direction:ltr}
+.g-stars svg{width:22px;height:22px;fill:var(--accent);stroke:none}
+.g-text{display:flex;flex-direction:column;gap:4px;flex:1;line-height:1.25}
+.g-text b{font-size:17px}
+.g-text .en{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--on-deep-muted)}
+.g-go{flex:none;width:22px;height:22px;transition:transform 200ms var(--ease-out)}
+/* the stars light up one after another, hold, then reset */
+@media (prefers-reduced-motion:no-preference){
+  .g-stars svg{animation:star-fill 3.6s var(--ease-out) infinite;animation-delay:calc(var(--i) * 140ms)}
+  @keyframes star-fill{0%,6%{fill:rgba(243,235,221,.18);transform:scale(.8)}13%{fill:var(--accent);transform:scale(1.22)}20%,78%{fill:var(--accent);transform:scale(1)}90%,100%{fill:rgba(243,235,221,.18);transform:scale(.8)}}
+}
 
 footer{background:var(--deep);color:var(--on-deep);padding:36px 0 44px;border-top:1.5px solid rgba(243,235,221,.3)}
 footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;font-family:var(--mono);font-size:13px}
@@ -301,7 +316,6 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
   .shop .wrap>div:last-child{order:-1}
   .infobar .btn{margin-inline-start:0;width:100%;min-height:44px}
   .infobar .status,.infobar .addr{font-size:14.5px}
-  .walker{width:120px;margin:40px 0 0;margin-inline-start:auto}
 }
 @media (max-width:520px){
 }
@@ -311,6 +325,8 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
   .btn.fill:hover{background:var(--fg);border-color:var(--fg);color:var(--bg)}
   .visit .btn.fill:hover{background:var(--on-deep);border-color:var(--on-deep);color:var(--deep)}
   .v-arrow:not(:disabled):hover{background:var(--on-deep);color:var(--deep)}
+  .g-rate:hover{border-color:var(--accent);background:rgba(247,185,132,.08)}
+  .g-rate:hover .g-go{transform:translateX(-4px)}
   header nav a:not([aria-current=true]):hover{scale:1.06}
   .tlink:hover{text-underline-offset:.2em}
   .tlink:hover svg{transform:translateX(-3px)}
@@ -489,17 +505,19 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
     <div class="wrap v-head">
       <h2 class="en">Come visit us</h2>
       <div class="v-arrows">
-        <button type="button" class="v-arrow" data-dir="-1" aria-label="התמונה הקודמת"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6l-6 6"/></svg></button>
-        <button type="button" class="v-arrow" data-dir="1" aria-label="התמונה הבאה"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6l6 6"/></svg></button>
+        <button type="button" class="v-arrow" data-dir="1" aria-label="התמונה הבאה"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6l-6 6"/></svg></button>
+        <button type="button" class="v-arrow" data-dir="-1" aria-label="התמונה הקודמת"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6l6 6"/></svg></button>
       </div>
     </div>
-    <!-- weekend on film: swipe or use the arrows -->
-    <div class="v-track" tabindex="0" aria-label="תמונות מאוטוטו">
+    <!-- weekend on film: an endless loop with the current photo in the middle; swipe, arrows or wait -->
+    <div class="v-stage" tabindex="0" aria-label="תמונות מאוטוטו">
+    <div class="v-track">
       <figure><img src="img/visit/1-front.jpg" alt="אנשים מדברים ליד הקיוסק של אוטוטו" width="720" height="800" loading="lazy"></figure>
       <figure><img src="img/visit/2-tray.jpg" alt="מגיש מחייך עם מגש כריכים" width="720" height="800" loading="lazy"></figure>
       <figure><img src="img/visit/3-vitrine.jpg" alt="ויטרינת קרואסונים, עוגות וכריכים" width="720" height="800" loading="lazy"></figure>
       <figure><img src="img/visit/4-barista.jpg" alt="בריסטה מוזג חלב ליד מכונת האספרסו" width="720" height="800" loading="lazy"></figure>
       <figure><img src="img/visit/5-baker.jpg" alt="האופה מחזיק פוקאצ׳ה טרייה" width="720" height="800" loading="lazy"></figure>
+    </div>
     </div>
     <div class="wrap">
       <div>
@@ -515,7 +533,12 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
           <div data-days="5"><span>שישי</span><span class="en">07:30 - 15:30</span></div>
           <div data-days="6"><span>שבת</span><span class="en">08:30 - 20:00</span></div>
         </div>
-        <img class="walker" src="img/walker-cream.png" alt="" aria-hidden="true">
+        <!-- Google rating: stars fill one by one; opens OTTOTO's Google Maps page, where "כתיבת ביקורת" is -->
+        <a class="g-rate" href="https://maps.google.com/?cid=13286087321447341267" target="_blank" rel="noopener">
+          <span class="g-stars" aria-hidden="true"><svg viewBox="0 0 24 24" style="--i:0"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z"/></svg><svg viewBox="0 0 24 24" style="--i:1"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z"/></svg><svg viewBox="0 0 24 24" style="--i:2"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z"/></svg><svg viewBox="0 0 24 24" style="--i:3"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z"/></svg><svg viewBox="0 0 24 24" style="--i:4"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z"/></svg></span>
+          <span class="g-text"><b>אהבתם? דרגו אותנו בגוגל</b><span class="en">RATE US ON GOOGLE</span></span>
+          <svg class="i g-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6l6 6"/></svg>
+        </a>
       </div>
     </div>
   </section>
@@ -604,28 +627,39 @@ navIO.observe(document.querySelector('.hero'));
 /* the home page always lights HOME while the big logo is on screen */
 new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(heroLogo);
 
-/* visit carousel: arrows move one photo; they fade out at either end */
+/* visit carousel: an endless loop. The five photos are copied once before and once after; the middle copy is
+   "home", and whenever the loop slides into a copy it quietly jumps back to the same photo in the middle */
 (function(){
-  const track=document.querySelector('.v-track');if(!track)return;
-  const [prev,next]=document.querySelectorAll('.v-arrow');
-  const step=()=>track.firstElementChild.offsetWidth+12;
-  const rtl=getComputedStyle(track).direction==='rtl'?-1:1;
-  const sync=()=>{const x=Math.abs(track.scrollLeft),max=track.scrollWidth-track.clientWidth;prev.disabled=x<4;next.disabled=x>max-4};
-  const go=d=>track.scrollBy({left:rtl*d*step(),behavior:reduce?'auto':'smooth'});
-  [prev,next].forEach(b=>b.addEventListener('click',()=>{go(+b.dataset.dir);hold()}));
-  track.addEventListener('scroll',sync,{passive:true});addEventListener('resize',sync);sync();
-  /* moves by itself every few seconds while on screen; any touch, hover or click pauses it for a while */
-  if(reduce)return;
-  let seen=false,pausedUntil=0;
+  const stage=document.querySelector('.v-stage');if(!stage)return;
+  const track=stage.querySelector('.v-track'),orig=[...track.children],N=orig.length,GAP=14;
+  /* rebuild in order: copies, originals, copies */
+  track.replaceChildren(...orig.map(f=>{const c=f.cloneNode(true);c.setAttribute('aria-hidden','true');return c}),...orig,...orig.map(f=>{const c=f.cloneNode(true);c.setAttribute('aria-hidden','true');return c}));
+  const figs=[...track.children];
+  let i=N,dx=0,drag=null,seen=false,pausedUntil=0;
   const hold=()=>{pausedUntil=Date.now()+8000};
-  ['pointerdown','wheel','focusin'].forEach(e=>track.addEventListener(e,hold,{passive:true}));
-  track.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse')pausedUntil=Infinity});
-  track.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse')pausedUntil=0});
-  new IntersectionObserver(([e])=>{seen=e.isIntersecting},{threshold:.4}).observe(track);
-  setInterval(()=>{
-    if(!seen||Date.now()<pausedUntil||document.hidden)return;
-    if(next.disabled)track.scrollTo({left:0,behavior:'smooth'});else go(1);
-  },3500);
+  const place=animate=>{
+    const w=figs[0].offsetWidth,x=stage.clientWidth/2-(i*(w+GAP)+w/2)+dx;
+    track.style.transition=animate&&!reduce?'transform 650ms var(--ease)':'none';
+    track.style.transform=`translate3d(${x}px,0,0)`;
+    figs.forEach((f,k)=>f.classList.toggle('on',k===i));
+  };
+  const settle=()=>{if(i>=2*N||i<N){i=i>=2*N?i-N:i+N;track.classList.add('jump');place(false);track.offsetWidth;track.classList.remove('jump')}};
+  track.addEventListener('transitionend',e=>{if(e.target===track)settle()});
+  const go=d=>{settle();i+=d;place(true)};
+  document.querySelectorAll('.v-arrow').forEach(b=>b.addEventListener('click',()=>{go(+b.dataset.dir);hold()}));
+  stage.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();go(e.key==='ArrowRight'?1:-1);hold()}});
+  stage.addEventListener('pointerdown',e=>{settle();drag={x:e.clientX};stage.setPointerCapture(e.pointerId);stage.classList.add('dragging');hold()});
+  stage.addEventListener('pointermove',e=>{if(!drag)return;dx=e.clientX-drag.x;place(false)});
+  const up=()=>{if(!drag)return;const w=figs[0].offsetWidth,d=Math.abs(dx)>w*.15?(dx<0?1:-1):0;drag=null;dx=0;stage.classList.remove('dragging');i+=d;place(true)};
+  stage.addEventListener('pointerup',up);stage.addEventListener('pointercancel',up);
+  addEventListener('resize',()=>place(false));
+  place(false);
+  /* moves by itself every few seconds while on screen; touch or click pauses it for a while, a mouse on it stops it */
+  if(reduce)return;
+  stage.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse')pausedUntil=Infinity});
+  stage.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse')pausedUntil=0});
+  new IntersectionObserver(([e])=>{seen=e.isIntersecting},{threshold:.4}).observe(stage);
+  setInterval(()=>{if(seen&&Date.now()>=pausedUntil&&!document.hidden)go(1)},3500);
 })();
 
 /* THE VIBE washing line: the line is a parabola (one quadratic curve); each photo hangs where it sits on it,
