@@ -102,13 +102,16 @@ body::after{content:"";position:fixed;inset:0;z-index:30;pointer-events:none;opa
 .js figure[data-reveal].in img{transform:none}
 
 /* header: one horizontal menu row, centered. the big logo sits centered under it on the first screen;
-   once it scrolls away a small logo appears at the start of the row */
+   as you scroll it shrinks and flies into the logo slot of the header (start of the row; on phones a thin bar under it) */
 header{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1.5px solid transparent;transition:border-color 200ms ease}
 header.lined{border-bottom-color:var(--line)}
 header .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;padding-block:14px}
-header .logo{justify-self:start;opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity 300ms var(--ease-out),transform 300ms var(--ease-out)}
-html.scrolled header .logo{opacity:1;transform:none;pointer-events:auto}
+header .logo{justify-self:start;opacity:0;pointer-events:none;transition:opacity 300ms var(--ease-out)}
+html.scrolled header .logo{opacity:1;pointer-events:auto}
 header .logo img{height:22px;width:auto}
+/* while the big logo is flying into this slot (or sitting in it), the slot's own copy stays invisible */
+html.docking header .logo img{visibility:hidden}
+.bigmark img{position:relative;z-index:21;transform-origin:50% 50%;will-change:transform}
 
 /* menu: one row of caps, the current section gets a hand-drawn marker in the cup color */
 header nav{grid-column:2;direction:ltr;display:flex;flex-wrap:wrap;justify-content:center;gap:4px clamp(14px,2.4vw,30px)}
@@ -128,7 +131,8 @@ html.splashing .bigmark img{visibility:hidden}
 .sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 @media (max-width:600px){
   header .wrap{grid-template-columns:1fr;padding-block:4px 2px}
-  header .logo{display:none}
+  header .logo{position:absolute;left:0;right:0;justify-self:stretch;top:100%;height:34px;display:grid;place-items:center;background:var(--bg);border-bottom:1.5px solid var(--line)}
+  header .logo img{height:18px}
   header nav{grid-column:1;gap:2px 9px;flex-wrap:nowrap}
   header nav a{font-size:11.5px;letter-spacing:.04em}
 }
@@ -140,7 +144,7 @@ html.splashing .bigmark img{visibility:hidden}
   .bigmark{padding:14px 12px 18px}
   .bigmark picture{width:calc(var(--rw,300px) * 1.1);max-width:calc(100vw - 24px)}
   .home-screen .hero{flex:1;min-height:0;padding-bottom:0}
-  .hero .reel-band{flex:1;min-height:0;background:none;transform-origin:50% 0;will-change:transform}
+  .hero .reel-band{flex:1;min-height:0;background:none}
   .hero .reel-band .bg{display:none}
   .hero .reel-band video{height:auto;width:auto;max-height:100%;max-width:94%;box-shadow:none;border-radius:var(--r);background:none}
   .hero .infobar{display:grid;grid-template-columns:1fr auto;align-items:center;gap:0 12px;margin-top:10px;padding-block:8px 4px}
@@ -631,8 +635,6 @@ const heroLogo=document.querySelector('.bigmark img');
 const setHdr=()=>root.style.setProperty('--hdr',hdr.offsetHeight+'px');
 new ResizeObserver(setHdr).observe(hdr);setHdr();
 
-/* once the big logo leaves the screen: header rule + small logo in the row */
-new IntersectionObserver(([e])=>{root.classList.toggle('scrolled',!e.isIntersecting);hdr.classList.toggle('lined',!e.isIntersecting)}).observe(heroLogo);
 
 /* splash: logo fades in and sways, then flies into the big logo's place */
 (function(){
@@ -811,23 +813,33 @@ new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(hero
   });
 })();
 
-/* home: a simple scroll effect. While the first screen scrolls away, the logo lifts and fades a little faster than
-   the page, the reel sinks back slightly (it shrinks to 92% and dims) and the info line fades. Transforms only,
-   so nothing in the layout changes size; off for reduced motion and the "stop animations" setting */
+/* home: as the first screen scrolls away, the big logo shrinks and flies up into the header's logo slot and stays
+   there. Scroll back and it flies back out. Transforms only. With reduced motion the small header logo just fades in */
 (function(){
-  if(reduce)return;
-  const home=document.querySelector('.home-screen'),logo=document.querySelector('.bigmark'),band=document.querySelector('.hero .reel-band'),info=document.querySelector('.hero .infobar');
-  if(!home||!band)return;
-  let ticking=false;
+  const big=document.querySelector('.bigmark img'),slot=document.querySelector('header .logo'),slotImg=slot&&slot.querySelector('img');
+  if(!big||!slotImg)return;
+  const io=()=>new IntersectionObserver(([e])=>{root.classList.toggle('scrolled',!e.isIntersecting);hdr.classList.toggle('lined',!e.isIntersecting)}).observe(big);
+  if(reduce){io();return}
+  root.classList.add('docking');
+  let home=null,ticking=false;
+  const measure=()=>{  /* where the big logo sits with the page at the top, in page coordinates */
+    big.style.transform='';const r=big.getBoundingClientRect();
+    home={x:r.left+r.width/2,y:r.top+scrollY+r.height/2,w:r.width};paint();
+  };
   const paint=()=>{
-    ticking=false;
-    const p=Math.min(1,Math.max(0,scrollY/home.offsetHeight));
-    logo.style.transform=`translateY(${(-p*60).toFixed(1)}px)`;logo.style.opacity=(1-p*1.3).toFixed(3);
-    band.style.transform=`translateY(${(p*50).toFixed(1)}px) scale(${(1-p*.08).toFixed(4)})`;band.style.opacity=(1-p*.45).toFixed(3);
-    if(info){info.style.transform=`translateY(${(p*30).toFixed(1)}px)`;info.style.opacity=(1-p*1.6).toFixed(3)}
+    ticking=false;if(!home)return;
+    const t=slotImg.getBoundingClientRect(),tx=t.left+t.width/2,ty=t.top+t.height/2;
+    const dist=Math.max(1,home.y-ty),p=Math.min(1,Math.max(0,scrollY/dist)),e=p*p*(3-2*p);  /* smoothstep */
+    const cx=home.x+(tx-home.x)*e,cy=(home.y-scrollY)+(ty-(home.y-scrollY))*e,sc=1+(t.width/home.w-1)*e;
+    big.style.transform=`translate(${(cx-home.x).toFixed(1)}px,${(cy-(home.y-scrollY)).toFixed(1)}px) scale(${sc.toFixed(4)})`;
+    root.classList.toggle('scrolled',p>=1);hdr.classList.toggle('lined',p>=1);
   };
   addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(paint)}},{passive:true});
-  paint();
+  addEventListener('resize',measure);
+  /* wait for the opening logo to land before measuring */
+  if(root.classList.contains('navin'))measure();
+  else new MutationObserver((m,o)=>{if(root.classList.contains('navin')){o.disconnect();measure()}}).observe(root,{attributes:true,attributeFilter:['class']});
+  new ResizeObserver(measure).observe(big);
 })();
 
 /* shop shelf: the kit drops onto the shelf when it comes into view */
