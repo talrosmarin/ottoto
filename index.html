@@ -23,6 +23,7 @@
 @font-face{font-family:"Lunasima";font-weight:400 500;font-display:swap;src:url(fonts/lunasima-400-hebrew.woff2) format("woff2");unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
 @font-face{font-family:"Lunasima";font-weight:600 900;font-display:swap;src:url(fonts/lunasima-700-hebrew.woff2) format("woff2");unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
 @font-face{font-family:"Rubik";font-weight:400 900;font-display:swap;src:url(fonts/rubik-400-900-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Rubik Hebrew";font-weight:400 900;font-display:swap;src:url(fonts/rubik-400-900-hebrew.woff2) format("woff2");unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
 @font-face{font-family:"Cousine";font-weight:400;font-display:swap;src:url(fonts/cousine-400-hebrew.woff2) format("woff2");unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
 @font-face{font-family:"Cousine";font-weight:400;font-display:swap;src:url(fonts/cousine-400-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 @font-face{font-family:"Cousine";font-weight:700;font-display:swap;src:url(fonts/cousine-700-hebrew.woff2) format("woff2");unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
@@ -248,38 +249,43 @@ h2.vibe-title{text-align:center;margin:0 0 clamp(20px,3vw,40px)}
 @keyframes spin{to{transform:rotate(1440deg)}}
 
 
-/* friends club: a peach member card that tilts under your finger; type your name and it is printed on it */
-.friends .wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,96px);align-items:center}
-.friends h2{margin:0}
-.friends .lead{margin-top:14px}
-.m-scene{perspective:1100px;display:grid;place-items:center;padding:clamp(8px,2vw,24px) 0}
-.m-card{--rx:0deg;--ry:0deg;--mx:50%;--my:50%;position:relative;width:min(420px,100%);aspect-ratio:1.586;border-radius:clamp(14px,2vw,22px);padding:clamp(16px,2.6vw,26px);color:#141414;overflow:hidden;
-  background:radial-gradient(120% 90% at 0% 0%,#FBD2AE 0%,transparent 55%),linear-gradient(135deg,#F7B984 0%,#F2C3A2 55%,#EFA97A 100%);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 2px 4px rgba(20,20,20,.12),0 28px 50px -22px rgba(20,20,20,.55);
-  transform:rotateX(var(--rx)) rotateY(var(--ry));transform-style:preserve-3d;transition:transform 500ms var(--ease);display:flex;flex-direction:column;justify-content:space-between;direction:ltr;touch-action:pan-y}
-.m-card.live{transition:none}
-/* light that follows the tilt */
-.m-card::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:radial-gradient(circle at var(--mx) var(--my),rgba(255,255,255,.55),transparent 45%);mix-blend-mode:soft-light}
-/* fine paper grain */
-.m-card::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;background:repeating-linear-gradient(115deg,rgba(255,255,255,.18) 0 2px,transparent 2px 7px)}
-.m-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
-.m-top img{height:clamp(20px,3vw,28px);width:auto}
-.m-tag{font-family:var(--mono);font-size:clamp(10px,1.2vw,12px);letter-spacing:.14em;border:1.5px solid #141414;border-radius:999px;padding:3px 9px;white-space:nowrap}
-.m-name{font-size:clamp(24px,3.6vw,38px);font-weight:900;line-height:1.05;letter-spacing:-.01em;min-height:1.1em;overflow-wrap:anywhere;text-align:start}
-.m-bottom{display:flex;justify-content:space-between;align-items:flex-end;font-family:var(--mono);font-size:clamp(10px,1.2vw,12px);letter-spacing:.1em;line-height:1.5}
-.m-bottom b{display:block;font-size:clamp(13px,1.6vw,16px);letter-spacing:.12em}
-.m-form{margin-top:clamp(24px,3vw,32px);display:grid;gap:10px}
+/* friends club: a member card drawn like the playlist cassette (cream, ink outlines, screws, mono labels).
+   It turns a full 360° every few seconds, can be spun with a finger, and prints the name you type */
+.friends .wrap{display:flex;flex-direction:column;align-items:center;text-align:center}
+.friends h2.en,.friends .lead{text-align:center;margin-inline:auto}
+.m-scene{width:min(440px,100%);margin-top:clamp(36px,5vw,60px);perspective:1400px;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none}
+.m-scene.dragging{cursor:grabbing}
+.m-tilt{transform:rotate(-3deg);transform-style:preserve-3d}
+.m-card{position:relative;aspect-ratio:1.586;container-type:inline-size;transform-style:preserve-3d}
+.m-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:#F7F2E8;color:#141414;border:3px solid #141414;border-radius:6cqw;padding:7cqw 7.5cqw;display:flex;flex-direction:column;justify-content:space-between;direction:ltr;text-align:left;font-family:var(--mono);box-shadow:0 2cqw 0 -.5cqw rgba(20,20,20,.12)}
+.m-back{transform:rotateY(180deg);align-items:center;justify-content:center;gap:4cqw;text-align:center}
+/* the four little screws, like on the cassette */
+.scr{position:absolute;width:3.2cqw;height:3.2cqw;border:2px solid #141414;border-radius:50%}
+.scr:nth-of-type(1){top:3cqw;left:3cqw}.scr:nth-of-type(2){top:3cqw;right:3cqw}.scr:nth-of-type(3){bottom:3cqw;left:3cqw}.scr:nth-of-type(4){bottom:3cqw;right:3cqw}
+.m-top{display:flex;justify-content:space-between;align-items:center}
+.m-top img{height:6cqw;width:auto}
+.m-tag{font-size:2.9cqw;font-weight:700;letter-spacing:.14em;border:2px solid #141414;border-radius:999px;padding:.6cqw 2.2cqw}
+.m-label{background:#F3EBDD;border:2px solid #141414;border-radius:2.6cqw;padding:2.6cqw 3.4cqw 3cqw}
+.m-k{display:flex;justify-content:space-between;font-size:2.7cqw;font-weight:700;letter-spacing:.16em;padding-bottom:1.6cqw;margin-bottom:1.8cqw;border-bottom:1.5px solid #141414}
+.m-name{font-family:"Rubik","Rubik Hebrew",var(--sans);font-weight:900;font-size:8.4cqw;line-height:1;text-transform:uppercase;letter-spacing:-.01em;min-height:1em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:start}
+.m-bottom{display:flex;justify-content:space-between;align-items:flex-end;font-size:2.7cqw;letter-spacing:.12em;line-height:1.3}
+.m-bottom b{display:block;font-family:"Rubik",var(--sans);font-weight:900;font-size:5cqw;letter-spacing:.02em}
+/* peach sticker, like the one on the cups */
+.m-sticker{position:absolute;left:50%;bottom:4cqw;margin-left:-7.5cqw;width:15cqw;height:15cqw;border-radius:50%;background:var(--accent);border:2px solid #141414;display:grid;place-items:center;font-size:2.5cqw;font-weight:700;letter-spacing:.08em;transform:rotate(-10deg);line-height:1.15;text-align:center}
+.m-strip{position:absolute;left:0;right:0;top:9cqw;height:10cqw;background:#141414}
+.m-back img{width:52cqw;height:auto;margin-top:12cqw}
+.m-back p{font-size:3cqw;font-weight:700;letter-spacing:.12em;margin:0}
+.m-back .m-addr{font-weight:400;font-size:2.6cqw}
+.m-shadow{width:70%;height:18px;margin:18px auto 0;border-radius:50%;background:radial-gradient(closest-side,rgba(20,20,20,.28),transparent)}
+.m-form{width:min(340px,100%);margin-top:clamp(20px,3vw,28px);display:grid;gap:10px;justify-items:center}
 .m-form label{font-weight:700;font-size:15px}
-.m-form input{min-height:52px;padding:0 18px;border-radius:999px;border:1.5px solid var(--fg);background:var(--surface);color:var(--fg);font:inherit;font-size:17px}
+.m-form input{width:100%;min-height:52px;padding:0 18px;border-radius:999px;border:1.5px solid var(--fg);background:var(--surface);color:var(--fg);font:inherit;font-size:17px;text-align:center}
 .m-form input:focus{outline:3px solid var(--accent);outline-offset:2px}
-.friends .perks{list-style:none;margin:clamp(24px,3vw,32px) 0 0;padding:0;display:grid;gap:12px;font-size:17px}
-.friends .perks li{display:flex;gap:12px;align-items:baseline}
-.friends .perks li::before{content:"";flex:none;width:9px;height:9px;border-radius:50%;background:var(--accent);border:1.5px solid var(--fg);translate:0 -1px}
-.friends .btns{margin-top:clamp(24px,3vw,32px)}
-.friends .join{margin-top:14px;font-size:14px;color:var(--muted)}
+.friends .btns{margin-top:22px;justify-content:center}
+.m-card.manual{animation:none}
 @media (prefers-reduced-motion:no-preference){
-  .m-card:not(.live):not(.touched){animation:m-float 7s ease-in-out infinite}
-  @keyframes m-float{0%,100%{transform:rotateX(6deg) rotateY(-10deg)}50%{transform:rotateX(-4deg) rotateY(9deg)}}
+  .m-card:not(.manual):not(.hold){animation:m-spin 7s infinite}
+  @keyframes m-spin{0%,42%{transform:rotateY(0deg);animation-timing-function:cubic-bezier(.65,0,.35,1)}74%,100%{transform:rotateY(360deg)}}
 }
 
 /* visit: the one deliberate color-block switch, it carries into the footer */
@@ -491,28 +497,34 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
 
   <section class="friends" id="friends">
     <div class="wrap">
-      <div class="m-scene">
-        <div class="m-card" aria-hidden="true">
-          <div class="m-top"><img src="img/logo-black.png" alt="" width="570" height="120"><span class="m-tag">FRIENDS CLUB</span></div>
-          <div class="m-name" id="mName" dir="auto">YOUR NAME</div>
-          <div class="m-bottom"><span>MEMBER NO.<b id="mNo">0000</b></span><span>SINCE<b>2026</b></span></div>
+      <h2 class="en">Ottoto Friends</h2>
+      <p class="lead">מועדון הלקוחות של אוטוטו. כתבו את השם שלכם וקבלו כרטיס.</p>
+      <div class="m-scene" aria-hidden="true">
+        <div class="m-tilt">
+          <div class="m-card">
+            <div class="m-face m-front">
+              <i class="scr"></i><i class="scr"></i><i class="scr"></i><i class="scr"></i>
+              <div class="m-top"><img src="img/logo-black.png" alt="" width="570" height="120"><span class="m-tag">FRIENDS CLUB</span></div>
+              <div class="m-label"><div class="m-k"><span>MEMBER</span><span>SIDE A</span></div><div class="m-name" id="mName" dir="auto">YOUR NAME</div></div>
+              <div class="m-bottom"><span>NO.<b id="mNo">0000</b></span><span>SINCE<b>2026</b></span></div>
+              <span class="m-sticker">GOOD<br>VIBES</span>
+            </div>
+            <div class="m-face m-back">
+              <i class="scr"></i><i class="scr"></i><i class="scr"></i><i class="scr"></i>
+              <span class="m-strip"></span>
+              <img src="img/logo-black.png" alt="" width="570" height="120">
+              <p>PAUSE IF YOU MUST, BUT DON'T STOP.</p>
+              <p class="m-addr">GRONEMANN 8 · RAMAT AVIV</p>
+            </div>
+          </div>
         </div>
+        <div class="m-shadow"></div>
       </div>
-      <div>
-        <h2 class="en">Ottoto Friends</h2>
-        <p class="lead">מועדון הלקוחות של אוטוטו. נסו את הכרטיס שלכם:</p>
-        <div class="m-form">
-          <label for="mInput">איך קוראים לך?</label>
-          <input id="mInput" type="text" maxlength="22" autocomplete="given-name" placeholder="השם שלך" enterkeyhint="done">
-        </div>
-        <ul class="perks">
-          <li><span class="draft">[הטבה ראשונה, מהלקוח]</span></li>
-          <li><span class="draft">[הטבה שנייה, מהלקוח]</span></li>
-          <li><span class="draft">[הטבה שלישית, מהלקוח]</span></li>
-        </ul>
-        <div class="btns"><a class="btn fill" id="mJoin" href="https://ig.me/m/ottoto.tlv" target="_blank" rel="noopener">הצטרפו לחברים</a></div>
-        <p class="join"><span class="draft">[איך מצטרפים בפועל: וואטסאפ, טופס או בקופה, מהלקוח]</span></p>
+      <div class="m-form">
+        <label for="mInput">איך קוראים לך?</label>
+        <input id="mInput" type="text" maxlength="18" autocomplete="given-name" placeholder="השם שלך" enterkeyhint="done">
       </div>
+      <div class="btns"><a class="btn fill" href="https://ig.me/m/ottoto.tlv" target="_blank" rel="noopener">הצטרפו לחברים</a></div>
     </div>
   </section>
 
@@ -810,27 +822,34 @@ new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(hero
   sync();
 })();
 
-/* friends: the member card follows the finger or mouse, and prints the name as you type it */
+/* friends: the card prints the name as you type (and faces you while you do); a finger or mouse can spin it */
 (function(){
   const card=document.querySelector('.m-card');if(!card)return;
-  const nameEl=document.getElementById('mName'),noEl=document.getElementById('mNo'),input=document.getElementById('mInput');
+  const scene=document.querySelector('.m-scene'),nameEl=document.getElementById('mName'),noEl=document.getElementById('mNo'),input=document.getElementById('mInput');
   input.addEventListener('input',()=>{
     const v=input.value.trim();nameEl.textContent=v||'YOUR NAME';
     let h=7;for(const c of v)h=(h*31+c.codePointAt(0))%9973;  /* same name, same playful number */
     noEl.textContent=v?String(h).padStart(4,'0'):'0000';
   });
+  /* while typing, stop spinning and face front */
+  let resume=0;
+  input.addEventListener('focus',()=>{clearTimeout(resume);card.classList.add('hold')});
+  input.addEventListener('blur',()=>{resume=setTimeout(()=>card.classList.remove('hold'),1500)});
   if(reduce)return;
-  const tilt=e=>{
-    const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
-    if(x<-.2||x>1.2||y<-.4||y>1.4)return;
-    card.classList.add('live','touched');
-    card.style.setProperty('--ry',((x-.5)*24).toFixed(1)+'deg');card.style.setProperty('--rx',((.5-y)*18).toFixed(1)+'deg');
-    card.style.setProperty('--mx',(x*100).toFixed(0)+'%');card.style.setProperty('--my',(y*100).toFixed(0)+'%');
+  const angleNow=()=>{const m=new DOMMatrix(getComputedStyle(card).transform);return Math.atan2(-m.m13,m.m11)*180/Math.PI};
+  let drag=null,angle=0;
+  scene.addEventListener('pointerdown',e=>{
+    angle=angleNow();card.classList.add('manual');card.style.transition='none';card.style.transform=`rotateY(${angle}deg)`;
+    drag={x:e.clientX,a:angle};scene.setPointerCapture(e.pointerId);scene.classList.add('dragging');
+  });
+  scene.addEventListener('pointermove',e=>{if(!drag)return;angle=drag.a+(e.clientX-drag.x)*.7;card.style.transform=`rotateY(${angle}deg)`});
+  const up=()=>{
+    if(!drag)return;drag=null;scene.classList.remove('dragging');
+    const to=Math.round(angle/360)*360;  /* always land on the front */
+    card.style.transition='transform 900ms cubic-bezier(.16,1,.3,1)';card.style.transform=`rotateY(${to}deg)`;
+    setTimeout(()=>{card.style.transition='';card.style.transform='';card.classList.remove('manual')},950);
   };
-  const rest=()=>{card.classList.remove('live');card.style.setProperty('--rx','0deg');card.style.setProperty('--ry','0deg')};
-  const scene=card.parentElement;
-  scene.addEventListener('pointermove',tilt);scene.addEventListener('pointerdown',tilt);
-  scene.addEventListener('pointerleave',rest);scene.addEventListener('pointerup',e=>{if(e.pointerType!=='mouse')rest()});scene.addEventListener('pointercancel',rest);
+  scene.addEventListener('pointerup',up);scene.addEventListener('pointercancel',up);
 })();
 
 /* shop: thumbnails swap the big photo */
