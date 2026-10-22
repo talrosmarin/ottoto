@@ -260,7 +260,7 @@ h2.vibe-title{text-align:center;margin:0 0 clamp(20px,3vw,40px)}
 .playlist{background:var(--band);color:var(--on-band);text-align:center}
 .playlist h2.en,.playlist .lead{text-align:center;margin-inline:auto}
 .playlist .btns{justify-content:center}
-.cassette{width:min(620px,100%);margin:clamp(40px,6vw,72px) auto 0;transform:rotate(-3deg);filter:drop-shadow(0 28px 34px rgba(30,36,24,.35));view-timeline-name:--cas}
+.cassette{width:min(500px,86%);margin:clamp(40px,6vw,72px) auto 0;transform:rotate(-3deg);filter:drop-shadow(0 28px 34px rgba(30,36,24,.35));view-timeline-name:--cas}
 .cassette svg{width:100%;height:auto;display:block;overflow:visible;direction:ltr}
 .cassette text{font-family:var(--mono)}
 .spin,.pack{transform-box:fill-box;transform-origin:center}
@@ -277,12 +277,12 @@ h2.vibe-title{text-align:center;margin:0 0 clamp(20px,3vw,40px)}
 
 
 /* friends club: the printed loyalty card (front: the tray-liner 8, back: the punch card).
-   It only turns when you turn it: drag with a finger or the mouse, all the way round, and it keeps spinning a little */
+   Every tap flips it over to its other side, always turning the same way */
 .friends .wrap{display:flex;flex-direction:column;align-items:center;text-align:center}
 .friends h2.en,.friends .lead{text-align:center;margin-inline:auto}
-.f-scene{width:min(250px,62%);margin-top:clamp(36px,5vw,60px);perspective:1400px;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none;outline-offset:8px;border-radius:18px}
-.f-scene.dragging{cursor:grabbing}
-.f-card{position:relative;aspect-ratio:5/8;transform-style:preserve-3d;transform:rotateY(var(--a,0deg))}
+.f-scene{width:min(250px,62%);margin-top:clamp(36px,5vw,60px);perspective:1400px;cursor:pointer;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;outline-offset:8px;border-radius:18px}
+.f-card{position:relative;aspect-ratio:5/8;transform-style:preserve-3d;transform:rotateY(var(--a,0deg));transition:transform 800ms var(--ease)}
+.f-scene:active .f-card{scale:.97}
 .f-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:6%/3.75%;overflow:hidden;
   box-shadow:0 1px 2px rgba(20,20,20,.15),0 18px 34px -16px rgba(20,20,20,.45)}
 .f-face img{display:block;width:100%;height:100%;object-fit:cover;-webkit-user-drag:none;pointer-events:none}
@@ -522,14 +522,14 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
     <div class="wrap">
       <h2 class="en">Friends Club</h2>
       <p class="lead">מועדון הלקוחות של אוטוטו. כרטיסייה, חותמות, ומה שמגיע אחריהן.</p>
-      <div class="f-scene" tabindex="0" role="img" aria-label="כרטיסיית החברים של אוטוטו. אפשר לסובב אותה עם האצבע או עם החצים">
+      <div class="f-scene" tabindex="0" aria-label="כרטיסיית החברים של אוטוטו. לחיצה הופכת אותה לצד השני" role="button">
         <div class="f-card">
           <div class="f-face f-front"><img src="img/friends-card-a-front.jpg" alt="" width="800" height="1280"></div>
           <div class="f-face f-back"><img src="img/friends-card-a-back.jpg" alt="" width="800" height="1280"><b class="f-hi" id="fHi">HI!</b></div>
         </div>
         <div class="f-shadow"></div>
       </div>
-      <p class="f-hint" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"/><path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"/></svg>DRAG TO SPIN</p>
+      <p class="f-hint" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"/><path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"/></svg>TAP TO FLIP</p>
       <form class="f-form" id="fForm" novalidate>
         <label for="fTel">הכניסו מספר טלפון כדי להצטרף</label>
         <input id="fTel" type="tel" inputmode="tel" autocomplete="tel" placeholder="050-0000000" maxlength="16" required>
@@ -870,34 +870,18 @@ new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(hero
   sync();
 })();
 
-/* friends: the card turns only by hand. Dragging sideways turns it (any angle, all the way round); letting go
-   keeps it turning a little and slowing down. Joining checks the phone number, turns the card to its punch side
+/* friends: every tap (or Enter / Space) turns the card half a turn, always the same way, so it keeps going round.
+   Joining checks the phone number, turns the card to its punch side
    and stamps "HI!". There is no sign-up list on this site yet, so the join message (with the number) is copied
    and an Instagram DM to @ottoto.tlv opens */
 (function(){
   const scene=document.querySelector('.f-scene');if(!scene)return;
   const card=scene.querySelector('.f-card'),form=document.getElementById('fForm'),tel=document.getElementById('fTel'),ok=document.getElementById('fOk'),msg=document.getElementById('fMsg'),hi=document.getElementById('fHi');
-  let angle=0,vel=0,raf=0,drag=null;
-  const set=a=>{angle=a;card.style.setProperty('--a',a.toFixed(2)+'deg')};
-  const glide=()=>{  /* after letting go: keep the spin going, slowing down */
-    vel*=.94;set(angle+vel);
-    raf=Math.abs(vel)>.05?requestAnimationFrame(glide):0;
-  };
-  const turnTo=target=>{  /* eased turn to an angle, used by joining and the arrow keys */
-    cancelAnimationFrame(raf);const from=angle,t0=performance.now(),d=reduce?1:700;
-    const step=t=>{const k=Math.min(1,(t-t0)/d),e=1-Math.pow(1-k,3);set(from+(target-from)*e);raf=k<1?requestAnimationFrame(step):0};
-    raf=requestAnimationFrame(step);
-  };
-  scene.addEventListener('pointerdown',e=>{cancelAnimationFrame(raf);drag={x:e.clientX,a:angle,lx:e.clientX,lt:e.timeStamp};vel=0;scene.setPointerCapture(e.pointerId);scene.classList.add('dragging')});
-  scene.addEventListener('pointermove',e=>{
-    if(!drag)return;
-    set(drag.a+(e.clientX-drag.x)*.6);
-    const dt=e.timeStamp-drag.lt;if(dt>0)vel=(e.clientX-drag.lx)*.6/dt*16;  /* degrees per frame */
-    drag.lx=e.clientX;drag.lt=e.timeStamp;
-  });
-  const up=()=>{if(!drag)return;drag=null;scene.classList.remove('dragging');if(!reduce&&Math.abs(vel)>.3)raf=requestAnimationFrame(glide)};
-  scene.addEventListener('pointerup',up);scene.addEventListener('pointercancel',up);
-  scene.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();turnTo(angle+(e.key==='ArrowRight'?45:-45))}});
+  let angle=0;
+  const set=a=>{angle=a;card.style.setProperty('--a',a+'deg')};
+  const flip=()=>set(angle+180);
+  scene.addEventListener('click',flip);
+  scene.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();flip()}});
 
   const clean=v=>{let d=v.replace(/\D/g,'');if(d.startsWith('972'))d='0'+d.slice(3);return d};
   tel.addEventListener('input',()=>tel.removeAttribute('aria-invalid'));
@@ -906,7 +890,7 @@ new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(hero
     const d=clean(tel.value);
     if(!/^05\d{8}$/.test(d)){tel.setAttribute('aria-invalid','true');msg.textContent='נראה שמשהו חסר. מספר נייד מתחיל ב-05 ויש בו 10 ספרות.';tel.focus();return}
     if(!ok.checked){msg.textContent='צריך לסמן את האישור כדי שנוכל לשלוח לכם הטבות.';ok.focus();return}
-    turnTo(Math.round((angle-180)/360)*360+180);  /* the nearest turn that shows the punch side */
+    if(Math.round(angle/180)%2===0)flip();  /* turn on to the punch side if the front is showing */
     setTimeout(()=>hi.classList.add('on'),reduce?0:650);
     const text=`היי אוטוטו! אני רוצה להצטרף לחברים של אוטוטו. הטלפון שלי: ${d.slice(0,3)}-${d.slice(3)}`;
     let copied=false;try{await navigator.clipboard.writeText(text);copied=true}catch(err){}
