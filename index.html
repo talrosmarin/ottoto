@@ -49,7 +49,7 @@
   --mono:"Cousine",ui-monospace,monospace;
   --sans:"Rubik","Lunasima",system-ui,sans-serif;
   --r:20px;
-  /* faint graph-paper squares, behind the first screen and THE VIBE */
+  /* faint graph-paper squares, behind the first screen */
   --grid-lines:linear-gradient(to right,color-mix(in srgb,var(--fg) 9%,transparent) 1px,transparent 1px),linear-gradient(to bottom,color-mix(in srgb,var(--fg) 9%,transparent) 1px,transparent 1px);
   --ease:cubic-bezier(.16,1,.3,1);
   --ease-out:cubic-bezier(.23,1,.32,1);
@@ -102,12 +102,18 @@ body::after{content:"";position:fixed;inset:0;z-index:30;pointer-events:none;opa
 .js figure[data-reveal].in img{transform:none}
 
 /* header: one horizontal menu row, centered. the big logo sits centered under it on the first screen;
-   once it scrolls away a small logo fades in (start of the row; on phones above the menu, which glides down a row) */
+   as you scroll it shrinks and flies up into the header (start of the row; on phones above the menu, which moves
+   down a row to make room) and then rides along with the header */
 header{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1.5px solid transparent;transition:border-color 200ms ease}
 header.lined{border-bottom-color:var(--line)}
 header .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;padding-block:14px}
-header .logo{justify-self:start;opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity 420ms var(--ease-out),transform 420ms var(--ease-out)}
-html.scrolled header .logo{opacity:1;transform:none;pointer-events:auto}
+header .logo{justify-self:start;opacity:0;pointer-events:none;transition:opacity 300ms var(--ease-out)}
+html.scrolled header .logo{opacity:1;pointer-events:auto}
+/* while the big logo is flying into the slot (or sitting in it) a fixed copy shows it; the slot's own img and the
+   original big one stay invisible */
+html.docking header .logo img,html.docking .bigmark img{visibility:hidden}
+.logo-fly{position:fixed;left:0;top:0;z-index:22;display:block;transform-origin:0 0;pointer-events:none;will-change:transform}
+.logo-fly img{display:block;width:100%;height:auto}
 header .logo img{height:22px;width:auto}
 /* while the big logo is flying into this slot (or sitting in it), the slot's own copy stays invisible */
 
@@ -132,10 +138,8 @@ html.splashing .bigmark img{visibility:hidden}
   header .wrap{grid-template-columns:1fr;padding-block:4px 2px}
   header .logo{position:absolute;left:0;right:0;justify-self:stretch;top:0;height:100%;display:grid;place-items:center}
   header .logo img{height:18px}
-  header nav{position:relative;z-index:1;transition:transform 420ms var(--ease)}
-  html.scrolled header nav{transform:translateY(var(--hdr,31px))}
-  header::after{content:"";position:absolute;left:0;right:0;top:100%;height:var(--hdr,31px);background:var(--bg);border-bottom:1.5px solid var(--line);opacity:0;pointer-events:none;transition:opacity 300ms ease}
-  html.scrolled header::after{opacity:1}
+  header nav{position:relative;z-index:1;transform:translateY(calc(var(--e,0) * var(--hdr,31px)))}
+  header::after{content:"";position:absolute;left:0;right:0;top:100%;height:var(--hdr,31px);background:var(--bg);border-bottom:1.5px solid var(--line);opacity:var(--e,0);pointer-events:none}
   header.lined{border-bottom-color:transparent}
   header nav{grid-column:1;gap:2px 9px;flex-wrap:nowrap}
   header nav a{font-size:11.5px;letter-spacing:.04em}
@@ -197,7 +201,7 @@ h2:not(.en),.visit .addr{letter-spacing:0}
 
 /* THE VIBE: a row of photo cards gliding sideways non-stop; a finger or mouse can drag it, holding it pauses it
    (after the 21st.dev "specials linear carousel") */
-.vibes{overflow-x:clip;background-image:var(--grid-lines);background-size:54px 54px;background-position:center top}
+.vibes{overflow-x:clip}
 h2.vibe-title{text-align:center;margin:0 0 clamp(20px,3vw,40px)}
 .lc{position:relative;direction:ltr;overflow:hidden;padding:clamp(16px,3vw,40px) 0;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none;
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
@@ -436,10 +440,10 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
     </div>
     <div class="wrap">
       <h1 class="sr-only">OTTOTO, קפה ויין ברמת אביב</h1>
-      <div class="infobar">
-        <span class="status" data-status><i></i><span>שעות פתיחה</span></span>
-        <span class="addr"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z"/></svg>גרונמן 8, תל אביב</span>
-        <a class="btn fill" href="https://maps.google.com/?q=Gronemann+8+Tel+Aviv" target="_blank" rel="noopener">נווטו אלינו</a>
+      <div class="infobar en" dir="ltr">
+        <span class="status" data-status="en"><i></i><span>Opening hours</span></span>
+        <span class="addr"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z"/></svg>Gronemann 8, Tel Aviv</span>
+        <a class="btn fill" href="https://maps.google.com/?q=Gronemann+8+Tel+Aviv" target="_blank" rel="noopener">Get directions</a>
       </div>
     </div>
   </div>
@@ -685,7 +689,8 @@ function status(){
   const day=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].indexOf(p.weekday),now=+p.hour*60+ +p.minute;
   const [o,c]=HOURS[day],open=now>=toMin(o)&&now<toMin(c);
   const txt=open?`פתוח עכשיו · עד ${c}`:now<toMin(o)?`סגור עכשיו, נפתח היום ב־${o}`:`סגור עכשיו, נפתח מחר ב־${HOURS[(day+1)%7][0]}`;
-  document.querySelectorAll('[data-status]').forEach(s=>{s.classList.toggle('open',open);s.lastElementChild.textContent=txt});
+  const en=open?`Open now · until ${c}`:now<toMin(o)?`Closed now · opens today at ${o}`:`Closed now · opens tomorrow at ${HOURS[(day+1)%7][0]}`;  /* the info line under the reel is in English */
+  document.querySelectorAll('[data-status]').forEach(s=>{s.classList.toggle('open',open);s.lastElementChild.textContent=s.dataset.status==='en'?en:txt});
   document.querySelectorAll('#hours [data-days]').forEach(r=>r.classList.toggle('today',r.dataset.days.split(',').includes(String(day))));
 }
 status();setInterval(status,60000);
@@ -817,8 +822,34 @@ new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(hero
   });
 })();
 
-/* once the big logo leaves the screen: the small header logo fades in (and on phones the menu glides down under it) */
-new IntersectionObserver(([e])=>{root.classList.toggle('scrolled',!e.isIntersecting);hdr.classList.toggle('lined',!e.isIntersecting)}).observe(heroLogo);
+/* home: as you scroll, the big logo shrinks and flies up into the header's logo slot, then rides along with the header
+   (scroll back and it flies back down). A fixed copy does the flying so it is always on top. On phones the slot is the
+   menu's row and the menu moves down a row just ahead of the logo. Reduced motion: no flight, the slot just shows */
+(function(){
+  const pic=document.querySelector('.bigmark picture'),slot=document.querySelector('header .logo'),slotImg=slot&&slot.querySelector('img');
+  if(!pic||!slotImg)return;
+  const dock=e=>{hdr.style.setProperty('--e',e.toFixed(3));root.classList.toggle('scrolled',e>=1);hdr.classList.toggle('lined',e>=1)};
+  if(reduce){new IntersectionObserver(([x])=>dock(x.isIntersecting?0:1)).observe(pic);return}
+  const ss=v=>{v=Math.min(1,Math.max(0,v));return v*v*(3-2*v)};  /* smoothstep */
+  let fly=null,ticking=false;
+  const paint=()=>{
+    ticking=false;if(!fly)return;
+    const p=scrollY/240;
+    dock(ss(p*1.8));  /* the menu makes room a little before the logo gets there */
+    const e=ss(p),n=pic.getBoundingClientRect(),t=slotImg.getBoundingClientRect();
+    fly.style.width=n.width+'px';
+    const x=n.left+(t.left-n.left)*e,y=n.top+(t.top-n.top)*e,k=1+(t.width/n.width-1)*e;
+    fly.style.transform=`translate(${x.toFixed(1)}px,${y.toFixed(1)}px) scale(${k.toFixed(4)})`;
+  };
+  const start=()=>{
+    fly=pic.cloneNode(true);fly.className='logo-fly';fly.setAttribute('aria-hidden','true');document.body.append(fly);
+    root.classList.add('docking');paint();
+  };
+  addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(paint)}},{passive:true});
+  addEventListener('resize',paint);
+  if(root.classList.contains('navin'))start();
+  else new MutationObserver((m,o)=>{if(root.classList.contains('navin')){o.disconnect();start()}}).observe(root,{attributes:true,attributeFilter:['class']});
+})();
 
 /* shop shelf: the kit drops onto the shelf when it comes into view */
 (function(){
