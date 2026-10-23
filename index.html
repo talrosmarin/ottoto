@@ -804,24 +804,30 @@ new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(hero
   if(!pic||!slotImg)return;
   if(reduce){hdr.style.transition='none';new IntersectionObserver(([x])=>{const on=!x.isIntersecting;hdr.classList.toggle('docked',on);root.classList.toggle('scrolled',on);hdr.classList.toggle('lined',on)}).observe(pic);return}
   const DOCK=50,UNDOCK=20,MS=720,EASE='cubic-bezier(.65,0,.35,1)';
+  /* going up the copy flies in screen coordinates (fixed) to the header slot, which never moves on screen.
+     Going home it flies in page coordinates (absolute), so it scrolls together with the page and lands exactly on the
+     big logo even while the finger is still scrolling. Interrupted halfway, it turns around from where it is */
   let fly=null,anim=null,on=false;
-  const tf=(x,y,k)=>`translate(${x.toFixed(1)}px,${y.toFixed(1)}px) scale(${k.toFixed(4)})`;
+  const tf=(x,y,k)=>`translate(${x.toFixed(2)}px,${y.toFixed(2)}px) scale(${k.toFixed(4)})`;
   const at=r=>[r.left,r.top,r.width/fly.offsetWidth];
+  const page=v=>[v[0]+scrollX,v[1]+scrollY,v[2]];
   const go=dock=>{
     on=dock;
-    const from=anim?(()=>{const m=new DOMMatrix(getComputedStyle(fly).transform);return[m.e,m.f,m.a]})():null;
+    const from=anim?at(fly.getBoundingClientRect()):at((dock?pic:slotImg).getBoundingClientRect());  /* on screen */
     if(anim){anim.cancel();anim=null}
-    if(!from){fly.style.width=pic.getBoundingClientRect().width+'px'}
-    const a=from||at((dock?pic:slotImg).getBoundingClientRect());
-    const b=at((dock?slotImg:pic).getBoundingClientRect());
+    fly.style.position=dock?'fixed':'absolute';
+    const a=dock?from:page(from);
+    const b=dock?at(slotImg.getBoundingClientRect()):page(at(pic.getBoundingClientRect()));
     const mid=[(a[0]+b[0])/2,(a[1]+b[1])/2,Math.sqrt(a[2]*b[2])];  /* the size shrinks evenly */
+    fly.style.transform=tf(...b);  /* where it rests once the animation ends (no flash back) */
     root.classList.add('docking');fly.style.visibility='visible';
     hdr.classList.toggle('docked',dock);root.classList.toggle('scrolled',dock);
     if(!dock)hdr.classList.remove('lined');
-    anim=fly.animate([{transform:tf(...a)},{transform:tf(...mid)},{transform:tf(...b)}],{duration:MS,easing:EASE,fill:'forwards'});
-    anim.onfinish=()=>{
-      fly.style.transform=tf(...b);anim.cancel();anim=null;
-      if(on)hdr.classList.add('lined');
+    const me=anim=fly.animate([{transform:tf(...a)},{transform:tf(...mid)},{transform:tf(...b)}],{duration:MS,easing:EASE});
+    me.onfinish=()=>{
+      if(anim!==me)return;
+      anim=null;
+      if(on){fly.style.transform=tf(...at(slotImg.getBoundingClientRect()));hdr.classList.add('lined')}
       else{root.classList.remove('docking');fly.style.visibility='hidden'}
     };
   };
