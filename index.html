@@ -86,8 +86,6 @@ svg.i{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-widt
 body::after{content:"";position:fixed;inset:0;z-index:30;pointer-events:none;opacity:.07;mix-blend-mode:multiply;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 @media (prefers-color-scheme:dark){body::after{mix-blend-mode:screen;opacity:.05}}
 
-.skip{position:absolute;top:-60px;right:16px;z-index:40;background:var(--fg);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:700;text-decoration:none;transform:translateY(0);transition:transform 200ms var(--ease-out)}
-.skip:focus{transform:translateY(72px)}
 
 /* quiet text link, for the secondary action */
 .tlink{display:inline-flex;align-items:center;gap:6px;min-height:50px;padding:0 6px;font-weight:700;font-size:16px;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:.35em;transition:text-underline-offset 200ms ease,color 200ms ease}
@@ -105,7 +103,7 @@ body::after{content:"";position:fixed;inset:0;z-index:30;pointer-events:none;opa
    as you scroll it shrinks and flies up into the header (start of the row; on phones above the menu, which moves
    down a row to make room) and then rides along with the header */
 @property --e{syntax:"<number>";inherits:true;initial-value:0}
-header{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1.5px solid transparent;--e:0;transition:border-color 200ms ease,--e 700ms cubic-bezier(.65,0,.35,1)}
+header{position:sticky;top:0;z-index:20;overflow-x:clip;background:var(--bg);border-bottom:1.5px solid transparent;--e:0;transition:border-color 200ms ease}
 header.docked{--e:1}
 header.lined{border-bottom-color:var(--line)}
 header .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;padding-block:14px;direction:ltr}
@@ -122,6 +120,13 @@ html.scrolled header .logo{opacity:1;pointer-events:auto}
 html.docking header .logo img,html.docking .bigmark img{visibility:hidden}
 .logo-fly{position:fixed;left:0;top:0;z-index:22;display:block;transform-origin:0 0;pointer-events:none;will-change:transform}
 .logo-fly img{display:block;width:100%;height:auto}
+/* the menu fades out while the logo passes over it, and back in on its new row */
+@keyframes nav-drop{0%{transform:translate(-32px,0);opacity:1}25%{opacity:0}70%{opacity:0}100%{transform:translate(0,calc(var(--hdr,31px) + 12px));opacity:1}}
+@keyframes bar-in{0%{opacity:0}100%{opacity:1}}
+@keyframes lang-drop{0%{translate:0 -50%}100%{translate:0 calc(-50% + 6px)}}
+@supports (animation-timeline:scroll()){
+  html.sdt .logo-fly{animation:logo-fly linear both;animation-timeline:scroll(root);animation-range:0px 240px}
+}
 header .logo img{height:26px;width:auto}
 
 /* menu: one row of caps, the current section gets a hand-drawn marker in the cup color */
@@ -149,12 +154,18 @@ html.splashing .bigmark img{visibility:hidden}
   header .wrap{grid-template-columns:1fr;padding-block:4px 2px}
   header .logo{position:absolute;left:0;right:0;justify-self:stretch;top:0;height:calc(var(--hdr,31px) + 12px);display:grid;place-items:center;padding-top:4px}
   header .logo img{height:24px}
-  header nav{position:relative;z-index:1;transform:translateY(calc(var(--e,0) * (var(--hdr,31px) + 12px)))}
+  header nav{position:relative;z-index:1;transform:translate(calc(-32px * (1 - var(--e,0))),calc(var(--e,0) * (var(--hdr,31px) + 12px)))}  /* left of EN/HE, then down a row */
   header::after{content:"";position:absolute;left:0;right:0;top:100%;height:calc(var(--hdr,31px) + 12px);background:var(--bg);border-bottom:1.5px solid var(--line);opacity:var(--e,0);pointer-events:none}
-  .lang{position:absolute;right:10px;top:calc((var(--hdr,31px) + 12px * var(--e,0)) / 2);translate:0 -50%;z-index:2;font-size:10.5px;padding:2px}
+  .lang{position:absolute;right:10px;top:calc(var(--hdr,31px) / 2);translate:0 calc(-50% + 6px * var(--e,0));z-index:2;font-size:10.5px;padding:2px}
+  /* scroll-linked: the menu, its bar and EN/HE move with the scroll itself (the browser runs it with the scroll) */
+  @supports (animation-timeline:scroll()){
+    html.sdt header nav{animation:nav-drop linear both;animation-timeline:scroll(root);animation-range:0px 140px}
+    html.sdt header::after{animation:bar-in linear both;animation-timeline:scroll(root);animation-range:0px 140px}
+    html.sdt .lang{animation:lang-drop linear both;animation-timeline:scroll(root);animation-range:0px 140px}
+  }
   .lang span{padding:2px 5px}
   header.lined{border-bottom-color:transparent}
-  header nav{grid-column:1;gap:2px 9px;flex-wrap:nowrap;padding-inline:0 calc(64px * (1 - var(--e,0)))}  /* room for EN/HE until the menu drops to its own row */
+  header nav{grid-column:1;gap:2px 9px;flex-wrap:nowrap}
   header nav a{font-size:11.5px;letter-spacing:.04em}
 }
 /* phones: the first screen is exactly the visible screen (Safari bars included).
@@ -394,7 +405,6 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
 <script>try{if(localStorage.getItem('ottoto-lang')==='en'){document.documentElement.lang='en';document.documentElement.dir='ltr'}}catch(e){}try{(JSON.parse(localStorage.getItem('ottoto-a11y'))||[]).forEach(c=>document.documentElement.classList.add('a11y-'+c))}catch(e){}document.documentElement.classList.add('js','splashing');history.scrollRestoration='manual';if(location.hash)history.replaceState(null,'',location.pathname+location.search);scrollTo(0,0)</script>
 </head>
 <body>
-<a class="skip" href="#main">דלגו לתוכן</a>
 <div class="splash" id="splash" aria-hidden="true">
   <div class="sp-fly" id="spFly"><picture><source srcset="img/logo-cream.png" media="(prefers-color-scheme: dark)"><img class="sp-logo" id="spLogo" src="img/logo-black.png" alt="" width="570" height="120"></picture></div>
 </div>
@@ -411,7 +421,7 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
       <a href="#friends" style="--n:3">FRIENDS</a>
       <a href="#visit" style="--n:4">VISIT</a>
     </nav>
-    <button class="lang" id="lang" type="button" aria-label="English / עברית"><span data-l="en">EN</span><span data-l="he">HE</span></button>
+    <button class="lang" id="lang" type="button" aria-label="English / עברית"><span data-l="he">HE</span><span data-l="en">EN</span></button>
   </div>
 </header>
 
@@ -432,10 +442,10 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
     </div>
     <div class="wrap">
       <h1 class="sr-only">OTTOTO, קפה ויין ברמת אביב</h1>
-      <div class="infobar en" dir="ltr">
-        <span class="status" data-status="en"><i></i><span>Opening hours</span></span>
-        <span class="addr"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z"/></svg>Gronemann 8, Tel Aviv</span>
-        <a class="btn fill" href="https://maps.google.com/?q=Gronemann+8+Tel+Aviv" target="_blank" rel="noopener">Get directions</a>
+      <div class="infobar">
+        <span class="status" data-status><i></i><span>שעות פתיחה</span></span>
+        <span class="addr"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z"/></svg>גרונמן 8, תל אביב</span>
+        <a class="btn fill" href="https://maps.google.com/?q=Gronemann+8+Tel+Aviv" target="_blank" rel="noopener">נווטו אלינו</a>
       </div>
     </div>
   </div>
@@ -665,7 +675,7 @@ function status(){
   const [o,c]=HOURS[day],open=now>=toMin(o)&&now<toMin(c);
   const txt=open?`פתוח עכשיו · עד ${c}`:now<toMin(o)?`סגור עכשיו, נפתח היום ב־${o}`:`סגור עכשיו, נפתח מחר ב־${HOURS[(day+1)%7][0]}`;
   const en=open?`Open now · until ${c}`:now<toMin(o)?`Closed now · opens today at ${o}`:`Closed now · opens tomorrow at ${HOURS[(day+1)%7][0]}`;  /* the info line under the reel is in English */
-  document.querySelectorAll('[data-status]').forEach(s=>{s.classList.toggle('open',open);s.lastElementChild.textContent=s.dataset.status==='en'||root.lang==='en'?en:txt});
+  document.querySelectorAll('[data-status]').forEach(s=>{s.classList.toggle('open',open);s.lastElementChild.textContent=root.lang==='en'?en:txt});
 }
 status();setInterval(status,60000);
 
@@ -796,51 +806,52 @@ new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(hero
   });
 })();
 
-/* home: a little scroll and the big logo glides up into the header's logo slot in one smooth move (a timed animation,
-   so it never stutters with the finger); back at the top it glides home. A fixed copy does the flying, so it is always
-   on top. On phones the menu slides down a row at the same time. Reduced motion: no flight, the slot just shows */
+/* home: the big logo follows the scroll, frame by frame: as the finger moves the page up, the logo rises, shrinks and
+   settles into the header's slot over the first 240px (and comes back the same way). The path is worked out once
+   from where the logo and the slot are, written as keyframes, and the browser's scroll timeline plays them with the
+   scroll itself (no lag behind the finger). Browsers without scroll timelines get the same path from JS each frame.
+   A fixed copy does the flying, so it is always on top. Reduced motion: no flight, the slot just shows */
 (function(){
   const pic=document.querySelector('.bigmark picture'),slot=document.querySelector('header .logo'),slotImg=slot&&slot.querySelector('img');
   if(!pic||!slotImg)return;
-  if(reduce){hdr.style.transition='none';new IntersectionObserver(([x])=>{const on=!x.isIntersecting;hdr.classList.toggle('docked',on);root.classList.toggle('scrolled',on);hdr.classList.toggle('lined',on)}).observe(pic);return}
-  const DOCK=50,UNDOCK=20,MS=720,EASE='cubic-bezier(.65,0,.35,1)';
-  /* going up the copy flies in screen coordinates (fixed) to the header slot, which never moves on screen.
-     Going home it flies in page coordinates (absolute), so it scrolls together with the page and lands exactly on the
-     big logo even while the finger is still scrolling. Interrupted halfway, it turns around from where it is */
-  let fly=null,anim=null,on=false;
+  const mark=on=>{root.classList.toggle('scrolled',on);hdr.classList.toggle('lined',on)};
+  if(reduce){new IntersectionObserver(([x])=>{const on=!x.isIntersecting;hdr.classList.toggle('docked',on);mark(on)}).observe(pic);return}
+  const D=240,N=40,sdt=CSS.supports('animation-timeline','scroll()');
+  const cl=v=>Math.min(1,Math.max(0,v)),ss=v=>{v=cl(v);return v*v*(3-2*v)};
   const tf=(x,y,k)=>`translate(${x.toFixed(2)}px,${y.toFixed(2)}px) scale(${k.toFixed(4)})`;
-  const at=r=>[r.left,r.top,r.width/fly.offsetWidth];
-  const page=v=>[v[0]+scrollX,v[1]+scrollY,v[2]];
-  const go=dock=>{
-    on=dock;
-    const from=anim?at(fly.getBoundingClientRect()):at((dock?pic:slotImg).getBoundingClientRect());  /* on screen */
-    if(anim){anim.cancel();anim=null}
-    fly.style.position=dock?'fixed':'absolute';
-    const a=dock?from:page(from);
-    const b=dock?at(slotImg.getBoundingClientRect()):page(at(pic.getBoundingClientRect()));
-    const mid=[(a[0]+b[0])/2,(a[1]+b[1])/2,Math.sqrt(a[2]*b[2])];  /* the size shrinks evenly */
-    fly.style.transform=tf(...b);  /* where it rests once the animation ends (no flash back) */
-    root.classList.add('docking');fly.style.visibility='visible';
-    hdr.classList.toggle('docked',dock);root.classList.toggle('scrolled',dock);
-    if(!dock)hdr.classList.remove('lined');
-    const me=anim=fly.animate([{transform:tf(...a)},{transform:tf(...mid)},{transform:tf(...b)}],{duration:MS,easing:EASE});
-    me.onfinish=()=>{
-      if(anim!==me)return;
-      anim=null;
-      if(on){fly.style.transform=tf(...at(slotImg.getBoundingClientRect()));hdr.classList.add('lined')}
-      else{root.classList.remove('docking');fly.style.visibility='hidden'}
-    };
+  const sheet=document.createElement('style');document.head.append(sheet);
+  let fly=null,path=null,ticking=false;
+  /* where the copy sits after s px of scroll, from the logo's spot to the slot */
+  const at=s=>{const p=cl(s/D),e=1-(1-p)*(1-p);return[path.x+(path.tx-path.x)*e,path.y+(path.ty-path.y)*e,Math.pow(path.k,e)]};  /* eases out: moves from the first touch, settles softly, never past the slot */
+  const build=()=>{
+    const n=pic.getBoundingClientRect(),t=slotImg.getBoundingClientRect();
+    if(!n.width||!t.width)return;
+    fly.style.width=n.width+'px';
+    path={x:n.left,y:n.top+scrollY,tx:t.left,ty:t.top,k:t.width/n.width};
+    if(sdt){
+      let k='';for(let i=0;i<=N;i++)k+=`${(i/N*100).toFixed(3)}%{transform:${tf(...at(D*i/N))}}`;
+      sheet.textContent='@keyframes logo-fly{'+k+'}';
+    }
+    paint();
   };
-  const check=()=>{const y=scrollY;if(!on&&y>DOCK)go(true);else if(on&&y<UNDOCK)go(false)};
-  const settle=()=>{if(anim||!on)return;fly.style.transform=tf(...at(slotImg.getBoundingClientRect()))};
+  const paint=()=>{
+    ticking=false;if(!path)return;
+    const y=Math.max(0,scrollY);
+    mark(y>=D);
+    if(sdt)return;
+    const e=ss(y/140);hdr.style.setProperty('--e',e.toFixed(3));
+    if(innerWidth<=600)nav.style.opacity=e<.25?1-e/.25:e>.7?(e-.7)/.3:0;
+    fly.style.transform=tf(...at(Math.min(y,D)));
+  };
   const start=()=>{
-    fly=pic.cloneNode(true);fly.className='logo-fly';fly.setAttribute('aria-hidden','true');fly.style.visibility='hidden';
-    fly.style.width=pic.getBoundingClientRect().width+'px';document.body.append(fly);
-    check();
+    fly=pic.cloneNode(true);fly.className='logo-fly';fly.setAttribute('aria-hidden','true');document.body.append(fly);
+    if(sdt)root.classList.add('sdt');
+    root.classList.add('docking');build();
+    new ResizeObserver(build).observe(pic);
   };
-  addEventListener('scroll',()=>{if(fly)check()},{passive:true});
-  addEventListener('resize',()=>{if(fly)settle()});
-  window.ottotoFly=()=>{if(fly)settle()};
+  addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(paint)}},{passive:true});
+  addEventListener('resize',()=>{if(fly)build()});
+  window.ottotoFly=()=>{if(fly)build()};
   if(root.classList.contains('navin'))start();
   else new MutationObserver((m,o)=>{if(root.classList.contains('navin')){o.disconnect();start()}}).observe(root,{attributes:true,attributeFilter:['class']});
 })();
@@ -880,6 +891,7 @@ document.getElementById('yr').textContent=new Date().getFullYear();
     const next=root.lang==='en'?'he':'en';
     try{localStorage.setItem('ottoto-lang',next)}catch(e){}
     set(next);
+    scrollTo({top:0,behavior:'instant'});
   });
 })();
 </script>
