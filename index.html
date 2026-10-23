@@ -104,7 +104,9 @@ body::after{content:"";position:fixed;inset:0;z-index:30;pointer-events:none;opa
 /* header: one horizontal menu row, centered. the big logo sits centered under it on the first screen;
    as you scroll it shrinks and flies up into the header (start of the row; on phones above the menu, which moves
    down a row to make room) and then rides along with the header */
-header{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1.5px solid transparent;transition:border-color 200ms ease}
+@property --e{syntax:"<number>";inherits:true;initial-value:0}
+header{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1.5px solid transparent;--e:0;transition:border-color 200ms ease,--e 700ms cubic-bezier(.65,0,.35,1)}
+header.docked{--e:1}
 header.lined{border-bottom-color:var(--line)}
 header .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;padding-block:14px;direction:ltr}
 /* language switch, end of the row: EN / HE, the current one sits on the accent marker */
@@ -133,8 +135,8 @@ html:not(.navin) header nav a{opacity:0;visibility:hidden;transform:translateY(-
 
 /* English mode: the page turns left-to-right; doubled caps lines under translated text are hidden */
 html[lang=en] .doc{direction:ltr}
-html[lang=en] .v-info .addr .en,html[lang=en] .g-text .en{display:none}
-html[lang=en] .g-go{scale:-1 1}
+html[lang=en] .g-text .en{display:none}
+html[lang=en] .g-text{direction:ltr;text-align:left}
 
 /* the big centered logo on the first screen */
 .home-screen{height:calc(100svh - var(--hdr,56px));min-height:460px;display:flex;flex-direction:column;background-image:var(--grid-lines);background-size:54px 54px;background-position:center top}
@@ -221,11 +223,7 @@ h2.vibe-title{text-align:center;margin:0 0 clamp(20px,3vw,40px)}
 .lc-card{position:relative;flex:none;width:224px;height:240px;border-radius:24px;overflow:hidden;background:#e9e3d8;margin:0}
 .lc-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-user-drag:none;filter:blur(6px);transition:filter 300ms ease}
 .lc-card img.ok{filter:none}
-.lc-card::after{content:"";position:absolute;inset:auto 0 0;height:66%;background:linear-gradient(to top,rgba(0,0,0,.8),rgba(0,0,0,.4) 45%,transparent)}
-.lc-card figcaption{position:absolute;z-index:1;left:0;right:0;bottom:0;padding:22px 24px;text-align:left;color:#fff;font-family:var(--mono)}
-.lc-card figcaption span{display:block;font-size:13px;letter-spacing:.06em}
-.lc-card figcaption b{display:block;margin-top:6px;font-size:20px;line-height:1.1}
-@media (min-width:768px){.lc-card{width:320px;height:384px}.lc-card figcaption{padding:30px 32px}.lc-card figcaption b{font-size:28px}}
+@media (min-width:768px){.lc-card{width:320px;height:384px}}
 @media (prefers-reduced-motion:no-preference){
   html.js .lc-card{opacity:0;translate:0 20px;transition:opacity 500ms ease-out,translate 500ms ease-out;transition-delay:calc(var(--k) * 200ms)}
   html.js .lc.in .lc-card{opacity:1;translate:0 0}
@@ -308,23 +306,20 @@ h2.vibe-title{text-align:center;margin:0 0 clamp(20px,3vw,40px)}
 .visit .status{margin-top:16px;justify-content:center}
 .visit .btns{margin-top:18px;justify-content:center}
 .hours{width:100%;border-top:1.5px solid var(--on-deep)}
+.h-addr{margin:0;padding:16px 4px 12px;font-family:var(--mono);font-size:15px;font-weight:700;letter-spacing:.08em;text-align:center;color:var(--accent);border-bottom:1px solid rgba(243,235,221,.14)}
 .hours div{display:flex;justify-content:space-between;padding:10px 4px;border-bottom:1px solid rgba(243,235,221,.14)}
 .hours span:first-child{font-size:17px}
 .hours span:last-child{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:16px}
-.hours div.today{color:var(--accent);font-weight:700}
-.hours div.today span:first-child::after{content:" · היום"}
-html[lang=en] .hours div.today span:first-child::after{content:" · today"}
 html[lang=en] .g-stars{justify-content:flex-start}
-.g-rate{width:100%;display:grid;grid-template-columns:auto 1fr auto;grid-template-areas:"g s a" "g t a";align-items:center;column-gap:14px;row-gap:6px;margin-top:22px;padding:14px 16px;border:1.5px solid rgba(243,235,221,.35);border-radius:var(--r);color:var(--on-deep);text-decoration:none;transition:border-color 200ms ease,background-color 200ms ease}
+.g-rate{width:100%;display:grid;direction:ltr;grid-template-columns:auto 1fr;grid-template-areas:"g s" "g t";align-items:center;column-gap:14px;row-gap:6px;margin-top:22px;padding:14px 16px;border:1.5px solid rgba(243,235,221,.35);border-radius:var(--r);color:var(--on-deep);text-decoration:none;transition:border-color 200ms ease,background-color 200ms ease}
 .g-rate:active{transform:scale(.98)}
 .g-badge{grid-area:g;width:46px;height:46px;border-radius:50%;border:1.5px solid var(--accent);color:var(--accent);display:grid;place-items:center}
 .g-logo{width:22px;height:22px}
 .g-stars{grid-area:s;display:flex;gap:3px;direction:ltr;justify-content:flex-end}
 .g-stars svg{width:17px;height:17px;fill:var(--accent);stroke:none}
-.g-text{grid-area:t;display:flex;flex-direction:column;gap:3px;line-height:1.25;text-align:start}
+.g-text{grid-area:t;display:flex;flex-direction:column;gap:3px;line-height:1.25;direction:rtl;text-align:right}
 .g-text b{font-size:17px}
 .g-text .en{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--on-deep-muted)}
-.g-go{grid-area:a;width:22px;height:22px;transition:transform 200ms var(--ease-out)}
 /* the stars light up one after another, hold, then reset */
 @media (prefers-reduced-motion:no-preference){
   .g-stars svg{animation:star-fill 3.6s var(--ease-out) infinite;animation-delay:calc(var(--i) * 140ms)}
@@ -372,7 +367,6 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
   .btn.fill:hover{background:var(--fg);border-color:var(--fg);color:var(--bg)}
   .visit .btn.fill:hover{background:var(--on-deep);border-color:var(--on-deep);color:var(--deep)}
   .g-rate:hover{border-color:var(--accent);background:rgba(251,208,179,.08)}
-  .g-rate:hover .g-go{transform:translateX(-4px)}
   header nav a:not([aria-current=true]):hover{scale:1.06}
   .tlink:hover{text-underline-offset:.2em}
   .tlink:hover svg{transform:translateX(-3px)}
@@ -450,15 +444,15 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
     <div class="wrap"><h2 class="en vibe-title">The Vibe</h2></div>
     <div class="lc" aria-label="תמונות מאוטוטו">
       <div class="lc-track">
-        <figure class="lc-card" style="--k:0"><img src="img/vibe/awning.jpg" alt="הסוכך של אוטוטו ואנשים יושבים בחוץ" width="640" height="800" loading="lazy" draggable="false"><figcaption><span>NO. 01</span><b>THE KIOSK</b></figcaption></figure>
-        <figure class="lc-card" style="--k:1"><img src="img/vibe/matcha-heart.jpg" alt="מאצ׳ה לאטה עם לב" width="640" height="800" loading="lazy" draggable="false"><figcaption><span>NO. 02</span><b>MATCHA</b></figcaption></figure>
-        <figure class="lc-card" style="--k:2"><img src="img/vibe/pastries.jpg" alt="מאפי פירות יער ועוגיות" width="640" height="800" loading="lazy" draggable="false"><figcaption><span>NO. 03</span><b>PASTRIES</b></figcaption></figure>
-        <figure class="lc-card" style="--k:3"><img src="img/vibe/latte-pour.jpg" alt="שפיכת לאטה ארט" width="640" height="800" loading="lazy" draggable="false"><figcaption><span>NO. 04</span><b>LATTE ART</b></figcaption></figure>
-        <figure class="lc-card" style="--k:4"><img src="img/vibe/focaccia-heart.jpg" alt="פוקאצ׳ה בצורת לב על מגש" width="640" height="800" loading="lazy" draggable="false"><figcaption><span>NO. 05</span><b>FOCACCIA</b></figcaption></figure>
-        <figure class="lc-card" style="--k:5"><img src="img/vibe/drinks-chair.jpg" alt="ארבעה משקאות קרים על כיסא עץ" width="640" height="800" loading="lazy" draggable="false"><figcaption><span>NO. 06</span><b>ICED</b></figcaption></figure>
-        <figure class="lc-card" style="--k:6"><img src="img/vibe/sandwich.jpg" alt="כריך טונה על מגש ליד תיק ירוק" width="640" height="800" loading="lazy" draggable="false"><figcaption><span>NO. 07</span><b>SANDWICH</b></figcaption></figure>
-        <figure class="lc-card" style="--k:7"><img src="img/vibe/latte-matcha.jpg" alt="לאטה, מאצ׳ה קרה ומאפה פירות יער" width="640" height="800" loading="lazy" draggable="false"><figcaption><span>NO. 08</span><b>MORNING</b></figcaption></figure>
-        <figure class="lc-card" style="--k:8"><img src="img/vibe/focaccia-tray.jpg" alt="מגש פוקאצ׳ה טרייה" width="640" height="800" loading="lazy" draggable="false"><figcaption><span>NO. 09</span><b>FRESH BAKE</b></figcaption></figure>
+        <figure class="lc-card" style="--k:0"><img src="img/vibe/awning.jpg" alt="הסוכך של אוטוטו ואנשים יושבים בחוץ" width="640" height="800" loading="lazy" draggable="false"></figure>
+        <figure class="lc-card" style="--k:1"><img src="img/vibe/matcha-heart.jpg" alt="מאצ׳ה לאטה עם לב" width="640" height="800" loading="lazy" draggable="false"></figure>
+        <figure class="lc-card" style="--k:2"><img src="img/vibe/pastries.jpg" alt="מאפי פירות יער ועוגיות" width="640" height="800" loading="lazy" draggable="false"></figure>
+        <figure class="lc-card" style="--k:3"><img src="img/vibe/latte-pour.jpg" alt="שפיכת לאטה ארט" width="640" height="800" loading="lazy" draggable="false"></figure>
+        <figure class="lc-card" style="--k:4"><img src="img/vibe/focaccia-heart.jpg" alt="פוקאצ׳ה בצורת לב על מגש" width="640" height="800" loading="lazy" draggable="false"></figure>
+        <figure class="lc-card" style="--k:5"><img src="img/vibe/drinks-chair.jpg" alt="ארבעה משקאות קרים על כיסא עץ" width="640" height="800" loading="lazy" draggable="false"></figure>
+        <figure class="lc-card" style="--k:6"><img src="img/vibe/sandwich.jpg" alt="כריך טונה על מגש ליד תיק ירוק" width="640" height="800" loading="lazy" draggable="false"></figure>
+        <figure class="lc-card" style="--k:7"><img src="img/vibe/latte-matcha.jpg" alt="לאטה, מאצ׳ה קרה ומאפה פירות יער" width="640" height="800" loading="lazy" draggable="false"></figure>
+        <figure class="lc-card" style="--k:8"><img src="img/vibe/focaccia-tray.jpg" alt="מגש פוקאצ׳ה טרייה" width="640" height="800" loading="lazy" draggable="false"></figure>
       </div>
     </div>
   </section>
@@ -539,14 +533,8 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
     <div class="v-zoom" id="vZoom" role="dialog" aria-modal="true" aria-label="תמונה מוגדלת"><img alt=""></div>
     <div class="wrap v-info">
       <div>
-        <p class="addr">גרונמן 8, תל אביב<span class="en">GRONEMANN 8, RAMAT AVIV</span></p>
-        <p class="status" data-status><i></i><span>שעות פתיחה</span></p>
-        <div class="btns">
-          <a class="btn fill" href="https://maps.google.com/?q=Gronemann+8+Tel+Aviv" target="_blank" rel="noopener">נווטו אלינו</a>
-        </div>
-      </div>
-      <div>
         <div class="hours" id="hours">
+          <p class="h-addr en">GRONEMANN 8, TEL AVIV</p>
           <div data-days="0,1,2,3,4"><span>א׳-ה׳</span><span class="en">07:30 - 20:00</span></div>
           <div data-days="5"><span>שישי</span><span class="en">07:30 - 15:30</span></div>
           <div data-days="6"><span>שבת</span><span class="en">08:30 - 20:00</span></div>
@@ -556,7 +544,6 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
           <span class="g-badge"><svg class="i g-logo" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.945 11a9 9 0 1 1 -3.284 -5.997l-2.655 2.392a5.5 5.5 0 1 0 2.119 6.605h-4.125v-3h7.945z"/></svg></span>
           <span class="g-stars" aria-hidden="true"><svg viewBox="0 0 24 24" style="--i:0"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z"/></svg><svg viewBox="0 0 24 24" style="--i:1"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z"/></svg><svg viewBox="0 0 24 24" style="--i:2"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z"/></svg><svg viewBox="0 0 24 24" style="--i:3"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z"/></svg><svg viewBox="0 0 24 24" style="--i:4"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z"/></svg></span>
           <span class="g-text"><b>אהבתם? דרגו אותנו בגוגל</b><span class="en">RATE US ON GOOGLE</span></span>
-          <svg class="i g-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6l6 6"/></svg>
         </a>
       </div>
     </div>
@@ -677,7 +664,6 @@ function status(){
   const txt=open?`פתוח עכשיו · עד ${c}`:now<toMin(o)?`סגור עכשיו, נפתח היום ב־${o}`:`סגור עכשיו, נפתח מחר ב־${HOURS[(day+1)%7][0]}`;
   const en=open?`Open now · until ${c}`:now<toMin(o)?`Closed now · opens today at ${o}`:`Closed now · opens tomorrow at ${HOURS[(day+1)%7][0]}`;  /* the info line under the reel is in English */
   document.querySelectorAll('[data-status]').forEach(s=>{s.classList.toggle('open',open);s.lastElementChild.textContent=s.dataset.status==='en'||root.lang==='en'?en:txt});
-  document.querySelectorAll('#hours [data-days]').forEach(r=>r.classList.toggle('today',r.dataset.days.split(',').includes(String(day))));
 }
 status();setInterval(status,60000);
 
@@ -808,37 +794,45 @@ new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(hero
   });
 })();
 
-/* home: as you scroll, the big logo shrinks and flies up into the header's logo slot, then rides along with the header
-   (scroll back and it flies back down). A fixed copy does the flying so it is always on top. On phones the slot is the
-   menu's row and the menu moves down a row just ahead of the logo. Reduced motion: no flight, the slot just shows */
+/* home: a little scroll and the big logo glides up into the header's logo slot in one smooth move (a timed animation,
+   so it never stutters with the finger); back at the top it glides home. A fixed copy does the flying, so it is always
+   on top. On phones the menu slides down a row at the same time. Reduced motion: no flight, the slot just shows */
 (function(){
   const pic=document.querySelector('.bigmark picture'),slot=document.querySelector('header .logo'),slotImg=slot&&slot.querySelector('img');
   if(!pic||!slotImg)return;
-  const dock=e=>{hdr.style.setProperty('--e',e.toFixed(3));root.classList.toggle('scrolled',e>=1);hdr.classList.toggle('lined',e>=1)};
-  if(reduce){new IntersectionObserver(([x])=>dock(x.isIntersecting?0:1)).observe(pic);return}
-  const cl=v=>Math.min(1,Math.max(0,v));
-  const io3=v=>{v=cl(v);return v<.5?4*v*v*v:1-Math.pow(-2*v+2,3)/2};  /* ease in-out */
-  /* the shown progress q follows the scroll progress softly (no jumps with a fast flick), and the size shrinks
-     evenly (geometric), so the logo lifts off, glides and settles into the slot */
-  let fly=null,q=0,raf=0;
-  const paint=()=>{
-    raf=0;if(!fly)return;
-    const p=cl(scrollY/300);q+=(p-q)*.2;if(Math.abs(p-q)<.0015)q=p;
-    dock(io3(q*1.5));  /* the menu makes room a little before the logo gets there */
-    const e=io3(q),n=pic.getBoundingClientRect(),t=slotImg.getBoundingClientRect();
-    fly.style.width=n.width+'px';
-    const x=n.left+(t.left-n.left)*e,y=n.top+(t.top-n.top)*e,k=Math.pow(t.width/n.width,e);
-    fly.style.transform=`translate(${x.toFixed(1)}px,${y.toFixed(1)}px) scale(${k.toFixed(4)})`;
-    if(q!==p)raf=requestAnimationFrame(paint);
+  if(reduce){hdr.style.transition='none';new IntersectionObserver(([x])=>{const on=!x.isIntersecting;hdr.classList.toggle('docked',on);root.classList.toggle('scrolled',on);hdr.classList.toggle('lined',on)}).observe(pic);return}
+  const DOCK=50,UNDOCK=20,MS=720,EASE='cubic-bezier(.65,0,.35,1)';
+  let fly=null,anim=null,on=false;
+  const tf=(x,y,k)=>`translate(${x.toFixed(1)}px,${y.toFixed(1)}px) scale(${k.toFixed(4)})`;
+  const at=r=>[r.left,r.top,r.width/fly.offsetWidth];
+  const go=dock=>{
+    on=dock;
+    const from=anim?(()=>{const m=new DOMMatrix(getComputedStyle(fly).transform);return[m.e,m.f,m.a]})():null;
+    if(anim){anim.cancel();anim=null}
+    if(!from){fly.style.width=pic.getBoundingClientRect().width+'px'}
+    const a=from||at((dock?pic:slotImg).getBoundingClientRect());
+    const b=at((dock?slotImg:pic).getBoundingClientRect());
+    const mid=[(a[0]+b[0])/2,(a[1]+b[1])/2,Math.sqrt(a[2]*b[2])];  /* the size shrinks evenly */
+    root.classList.add('docking');fly.style.visibility='visible';
+    hdr.classList.toggle('docked',dock);root.classList.toggle('scrolled',dock);
+    if(!dock)hdr.classList.remove('lined');
+    anim=fly.animate([{transform:tf(...a)},{transform:tf(...mid)},{transform:tf(...b)}],{duration:MS,easing:EASE,fill:'forwards'});
+    anim.onfinish=()=>{
+      fly.style.transform=tf(...b);anim.cancel();anim=null;
+      if(on)hdr.classList.add('lined');
+      else{root.classList.remove('docking');fly.style.visibility='hidden'}
+    };
   };
-  const kick=()=>{if(!raf)raf=requestAnimationFrame(paint)};
+  const check=()=>{const y=scrollY;if(!on&&y>DOCK)go(true);else if(on&&y<UNDOCK)go(false)};
+  const settle=()=>{if(anim||!on)return;fly.style.transform=tf(...at(slotImg.getBoundingClientRect()))};
   const start=()=>{
-    fly=pic.cloneNode(true);fly.className='logo-fly';fly.setAttribute('aria-hidden','true');document.body.append(fly);
-    root.classList.add('docking');q=cl(scrollY/300);paint();
+    fly=pic.cloneNode(true);fly.className='logo-fly';fly.setAttribute('aria-hidden','true');fly.style.visibility='hidden';
+    fly.style.width=pic.getBoundingClientRect().width+'px';document.body.append(fly);
+    check();
   };
-  addEventListener('scroll',kick,{passive:true});
-  addEventListener('resize',kick);
-  window.ottotoFly=kick;
+  addEventListener('scroll',()=>{if(fly)check()},{passive:true});
+  addEventListener('resize',()=>{if(fly)settle()});
+  window.ottotoFly=()=>{if(fly)settle()};
   if(root.classList.contains('navin'))start();
   else new MutationObserver((m,o)=>{if(root.classList.contains('navin')){o.disconnect();start()}}).observe(root,{attributes:true,attributeFilter:['class']});
 })();
