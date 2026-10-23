@@ -122,18 +122,14 @@ html.scrolled header .logo{opacity:1;pointer-events:auto}
 html.docking header .logo img,html.docking .bigmark img{visibility:hidden}
 .logo-fly{position:fixed;left:0;top:0;z-index:22;display:block;transform-origin:0 0;pointer-events:none;will-change:transform}
 .logo-fly img{display:block;width:100%;height:auto}
-/* phones: the menu fades away as the logo rises (0-40px), drops a row unseen, and at 80px is back on (its words are
-   hidden by then, see word-in) */
-@keyframes nav-drop{0%{transform:translate(-32px,0);opacity:1}28%{opacity:0}57%{transform:translate(0,calc(var(--hdr,31px) + 12px));opacity:0}57.2%{opacity:1}100%{transform:translate(0,calc(var(--hdr,31px) + 12px));opacity:1}}
-@keyframes word-in-0{0%{opacity:0;translate:0 14px;filter:blur(3px)}0%{opacity:0;translate:0 14px;filter:blur(3px)}40%{opacity:1;translate:0 0;filter:blur(0)}100%{opacity:1;translate:0 0;filter:blur(0)}}
-@keyframes word-in-1{0%{opacity:0;translate:0 14px;filter:blur(3px)}12%{opacity:0;translate:0 14px;filter:blur(3px)}52%{opacity:1;translate:0 0;filter:blur(0)}100%{opacity:1;translate:0 0;filter:blur(0)}}
-@keyframes word-in-2{0%{opacity:0;translate:0 14px;filter:blur(3px)}24%{opacity:0;translate:0 14px;filter:blur(3px)}64%{opacity:1;translate:0 0;filter:blur(0)}100%{opacity:1;translate:0 0;filter:blur(0)}}
-@keyframes word-in-3{0%{opacity:0;translate:0 14px;filter:blur(3px)}36%{opacity:0;translate:0 14px;filter:blur(3px)}76%{opacity:1;translate:0 0;filter:blur(0)}100%{opacity:1;translate:0 0;filter:blur(0)}}
-@keyframes word-in-4{0%{opacity:0;translate:0 14px;filter:blur(3px)}48%{opacity:0;translate:0 14px;filter:blur(3px)}88%{opacity:1;translate:0 0;filter:blur(0)}100%{opacity:1;translate:0 0;filter:blur(0)}}
+/* phones: the menu stays a moment, fades away in place (15-45px) before the rising logo reaches its row, moves to its
+   new row unseen (no slide), and its words fade in there together once the logo is small enough to clear them (92-150px) */
+@keyframes nav-drop{0%{transform:translate(-32px,0);opacity:1}15%{transform:translate(-32px,0);opacity:1}45%{transform:translate(-32px,0);opacity:0}45.1%{transform:translate(0,calc(var(--hdr,31px) + 12px));opacity:1}100%{transform:translate(0,calc(var(--hdr,31px) + 12px));opacity:1}}
+@keyframes word-in{0%{opacity:0;translate:0 8px}45%{opacity:0;translate:0 8px}100%{opacity:1;translate:0 0}}
 @keyframes bar-in{0%{opacity:0}100%{opacity:1}}
 @keyframes lang-drop{0%{translate:0 -50%}100%{translate:0 calc(-50% + 6px)}}
 @supports (animation-timeline:scroll()){
-  html.sdt .logo-fly{animation:logo-fly linear both;animation-timeline:scroll(root);animation-range:0px 240px}
+  html.sdt .logo-fly{animation:logo-fly linear both;animation-timeline:scroll(root);animation-range:0px 180px}
 }
 header .logo img{height:26px;width:auto}
 
@@ -167,13 +163,8 @@ html.splashing .bigmark img{visibility:hidden}
   .lang{position:absolute;right:10px;top:calc(var(--hdr,31px) / 2);translate:0 calc(-50% + 6px * var(--e,0));z-index:2;height:26px;font-size:10.5px}
   /* scroll-linked: the menu, its bar and EN/HE move with the scroll itself (the browser runs it with the scroll) */
   @supports (animation-timeline:scroll()){
-    html.sdt header nav{animation:nav-drop linear both;animation-timeline:scroll(root);animation-range:0px 140px}
-    /* the words come in under the logo one by one; before 79px they are left alone (fill forwards only) */
-    html.sdt header nav a:nth-child(1){animation:word-in-0 linear forwards;animation-timeline:scroll(root);animation-range:79px 230px}
-    html.sdt header nav a:nth-child(2){animation:word-in-1 linear forwards;animation-timeline:scroll(root);animation-range:79px 230px}
-    html.sdt header nav a:nth-child(3){animation:word-in-2 linear forwards;animation-timeline:scroll(root);animation-range:79px 230px}
-    html.sdt header nav a:nth-child(4){animation:word-in-3 linear forwards;animation-timeline:scroll(root);animation-range:79px 230px}
-    html.sdt header nav a:nth-child(5){animation:word-in-4 linear forwards;animation-timeline:scroll(root);animation-range:79px 230px}
+    html.sdt header nav{animation:nav-drop linear both;animation-timeline:scroll(root);animation-range:0px 100px}
+    html.sdt header nav a{animation:word-in linear forwards;animation-timeline:scroll(root);animation-range:44px 150px}  /* hidden from 44px (the menu is back on at 45px), in from 92px; before 44px left alone */
     html.sdt header::after{animation:bar-in linear both;animation-timeline:scroll(root);animation-range:0px 140px}
     html.sdt .lang{animation:lang-drop linear both;animation-timeline:scroll(root);animation-range:0px 140px}
   }
@@ -240,7 +231,8 @@ h2:not(.en),.visit .addr{letter-spacing:0}
 /* THE VIBE: a row of photo cards gliding sideways non-stop; a finger or mouse can drag it, holding it pauses it
    (after the 21st.dev "specials linear carousel") */
 .vibes{overflow-x:clip}
-h2.vibe-title{text-align:center;margin:0 0 clamp(20px,3vw,40px)}
+h2.vibe-title{text-align:center;margin:0}
+.vibe-lead{text-align:center;margin:18px auto clamp(20px,3vw,40px)}
 .lc{position:relative;direction:ltr;overflow:hidden;padding:clamp(16px,3vw,40px) 0;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none;
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
 .lc.dragging{cursor:grabbing}
@@ -279,6 +271,7 @@ h2.vibe-title{text-align:center;margin:0 0 clamp(20px,3vw,40px)}
 
 /* friends club: the printed loyalty card (front: the tray-liner 8, back: the punch card).
    Every tap flips it over to its other side, always turning the same way */
+.friends{padding-bottom:clamp(40px,6vw,72px)}
 .friends .wrap{display:flex;flex-direction:column;align-items:center;text-align:center}
 .friends h2.en,.friends .lead{text-align:center;margin-inline:auto}
 .f-scene{width:min(250px,62%);margin-top:clamp(36px,5vw,60px);perspective:1400px;cursor:pointer;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;outline-offset:8px;border-radius:18px}
@@ -354,14 +347,14 @@ html[lang=en] .g-stars{justify-content:flex-start}
   @keyframes star-fill{0%,6%{fill:rgba(243,235,221,.18);transform:scale(.8)}13%{fill:var(--accent);transform:scale(1.22)}20%,78%{fill:var(--accent);transform:scale(1)}90%,100%{fill:rgba(243,235,221,.18);transform:scale(.8)}}
 }
 
-footer{background:var(--deep);color:var(--on-deep);padding:36px 0 44px;border-top:1.5px solid rgba(243,235,221,.3)}
+footer{background:var(--accent);color:#141414;padding:36px 0 44px}  /* peach, so the page does not end in one big black block */
 footer .wrap{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:20px;text-align:center;font-family:var(--mono);font-size:13px}
 footer img{height:22px;width:auto}
 /* the cups' 8 beside the logo, as the brand's second mark */
 .foot-brand{display:flex;justify-content:center}
 footer .soc{display:flex;gap:2px;flex-wrap:wrap;justify-content:center}
-footer .legal{align-self:stretch;justify-content:center;display:flex;gap:6px 22px;flex-wrap:wrap;padding-top:18px;border-top:1px solid rgba(243,235,221,.18)}
-footer .legal button{background:none;border:0;padding:6px 0;color:var(--on-deep);font:inherit;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;text-decoration:underline;text-decoration-color:transparent;text-underline-offset:4px;transition:text-decoration-color 200ms ease}
+footer .legal{align-self:stretch;justify-content:center;display:flex;gap:6px 22px;flex-wrap:wrap;padding-top:18px;border-top:1px solid rgba(20,20,20,.2)}
+footer .legal button{background:none;border:0;padding:6px 0;color:#141414;font:inherit;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;text-decoration:underline;text-decoration-color:transparent;text-underline-offset:4px;transition:text-decoration-color 200ms ease}
 .doc{width:min(560px,100% - 32px);max-height:min(80svh,720px);margin:auto;padding:28px 24px 26px;border:0;border-radius:var(--r);background:var(--bg);color:var(--fg);direction:rtl;overflow:auto;box-shadow:0 30px 60px -20px rgba(0,0,0,.5)}
 .doc::backdrop{background:rgba(20,20,20,.6)}
 .doc h3{font-size:26px;font-weight:900;line-height:1.1;margin:0 0 18px;padding-inline-end:44px}
@@ -396,7 +389,7 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
   header nav a:not([aria-current=true]):hover{scale:1.06}
   .tlink:hover{text-underline-offset:.2em}
   .tlink:hover svg{transform:translateX(-3px)}
-  footer .soc a:hover{background:rgba(243,235,221,.12)}
+  footer .soc a:hover{background:rgba(20,20,20,.08)}
   footer .legal button:hover{text-decoration-color:currentColor}
   .doc-x:hover{background:var(--soft-line)}
   .a11y-tools button:not([aria-pressed="true"]):hover{background:var(--soft-line)}
@@ -466,7 +459,7 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
   </div>
 
   <section class="vibes" id="vibes">
-    <div class="wrap"><h2 class="en vibe-title">The Vibe</h2></div>
+    <div class="wrap"><h2 class="en vibe-title">The Vibe</h2><p class="lead vibe-lead">מאצ׳ה, קפה, כריכים ומאפים טריים. בואו לשבת, להישאר, לחזור מחר.</p></div>
     <div class="lc" aria-label="תמונות מאוטוטו">
       <div class="lc-track">
         <figure class="lc-card" style="--k:0"><img src="img/vibe/awning.jpg" alt="הסוכך של אוטוטו ואנשים יושבים בחוץ" width="640" height="800" loading="lazy" draggable="false"></figure>
@@ -579,7 +572,7 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
 
 <footer>
   <div class="wrap">
-    <span class="foot-brand"><img src="img/logo-cream.png" alt="OTTOTO" width="570" height="120"></span>
+    <span class="foot-brand"><img src="img/logo-black.png" alt="OTTOTO" width="570" height="120"></span>
     <div class="soc">
       <a href="https://www.instagram.com/ottoto.tlv/" target="_blank" rel="noopener" aria-label="אינסטגרם"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4m0 4a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z"/><path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M16.5 7.5l0 .01"/></svg></a>
       <a href="https://open.spotify.com/playlist/4zsaFyuyAfIeqs3lRRJgPa" target="_blank" rel="noopener" aria-label="ספוטיפיי"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M8 11.973c2.5 -1.473 5.5 -.973 7.5 .527"/><path d="M9 15c1.5 -1 4 -1 5 .5"/><path d="M7 9c2 -1 6 -2 10 .5"/></svg></a>
@@ -830,7 +823,7 @@ new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(hero
   if(!pic||!slotImg)return;
   const mark=on=>{root.classList.toggle('scrolled',on);hdr.classList.toggle('lined',on)};
   if(reduce){new IntersectionObserver(([x])=>{const on=!x.isIntersecting;hdr.classList.toggle('docked',on);mark(on)}).observe(pic);return}
-  const D=240,N=40,sdt=CSS.supports('animation-timeline','scroll()');
+  const D=180,N=40,sdt=CSS.supports('animation-timeline','scroll()');
   const cl=v=>Math.min(1,Math.max(0,v)),ss=v=>{v=cl(v);return v*v*(3-2*v)};
   const tf=(x,y,k)=>`translate(${x.toFixed(2)}px,${y.toFixed(2)}px) scale(${k.toFixed(4)})`;
   const sheet=document.createElement('style');document.head.append(sheet);
@@ -853,8 +846,8 @@ new IntersectionObserver(([e])=>{if(e.isIntersecting)mark('home')}).observe(hero
     const y=Math.max(0,scrollY);
     mark(y>=D);
     if(sdt)return;
-    const e=ss(y/140);hdr.style.setProperty('--e',e.toFixed(3));
-    if(innerWidth<=600)nav.style.opacity=e<.25?1-e/.25:e>.7?(e-.7)/.3:0;
+    hdr.style.setProperty('--e',y<45?'0':'1');
+    if(innerWidth<=600)nav.style.opacity=y<15?1:y<45?1-(y-15)/30:y<92?0:Math.min(1,(y-92)/58);
     fly.style.transform=tf(...at(Math.min(y,D)));
   };
   const start=()=>{
@@ -885,7 +878,7 @@ document.getElementById('yr').textContent=new Date().getFullYear();
 /* language: Hebrew is written in the page; English swaps every Hebrew text, label and alt from this list,
    turns the page left-to-right and is remembered for the next visit */
 (function(){
-  const EN={"דלגו לתוכן": "Skip to content", "OTTOTO, קפה ויין ברמת אביב": "OTTOTO, coffee and wine in Ramat Aviv", "מה שמתנגן אצלנו בקופה, עכשיו גם אצלכם.": "What's playing at our counter, now at yours too.", "להאזנה בספוטיפיי": "Listen on Spotify", "מועדון הלקוחות של אוטוטו. כרטיסייה, חותמות, ומה שמגיע אחריהן.": "OTTOTO's friends club. A card, stamps, and what comes after them.", "הכניסו מספר טלפון כדי להצטרף": "Enter your phone number to join", "אני מאשר/ת לקבל מאוטוטו הודעות על הטבות ועדכונים. אפשר להסיר בכל רגע.": "I agree to get perks and updates from OTTOTO. You can opt out at any time.", "הצטרפו לחברים": "Join the club", "גרונמן 8, תל אביב": "Gronemann 8, Tel Aviv", "שעות פתיחה": "Opening hours", "נווטו אלינו": "Get directions", "א׳-ה׳": "Sun-Thu", "שישי": "Fri", "שבת": "Sat", "אהבתם? דרגו אותנו בגוגל": "Loved it? Rate us on Google", "· נגישות": "", "· עוגיות": "", "· תקנון": "", "הגדלת טקסט": "Bigger text", "ניגודיות גבוהה": "High contrast", "הדגשת קישורים": "Underline links", "עצירת אנימציות": "Stop animations", "איפוס": "Reset", "חשוב לנו שכל אחד ואחת יוכלו להשתמש באתר של אוטוטו בנוחות. האתר נבנה כך שאפשר לנווט בו עם מקלדת ועם קורא מסך, הטקסט ניתן להגדלה, ולכל תמונה יש תיאור.": "We want everyone to be able to use OTTOTO's site with ease. It can be used with a keyboard and a screen reader, the text can be enlarged, and every image has a description.", "אם נתקלתם במשהו שלא עובד כמו שצריך, נשמח לשמוע ולתקן: [שם איש קשר לנגישות, טלפון ומייל, מהלקוח].": "If something doesn't work as it should, we'd love to hear and fix it: [accessibility contact name, phone and email, from the client].", "הקיוסק נמצא בגרונמן 8, תל אביב. [פרטי נגישות המקום: גישה לכיסא גלגלים, ישיבה בחוץ, מהלקוח].": "The kiosk is at Gronemann 8, Tel Aviv. [Venue accessibility: wheelchair access, outdoor seating, from the client].", "עודכן לאחרונה: אוקטובר 2026.": "Last updated: October 2026.", "האתר של אוטוטו לא משתמש בעוגיות של פרסום או מעקב, ולא אוסף פרטים אישיים.": "OTTOTO's site uses no advertising or tracking cookies and collects no personal details.", "הדבר היחיד שנשמר בדפדפן שלכם הוא הגדרות הנגישות שבחרתם, כדי שיישארו גם בביקור הבא. אפשר למחוק אותן בכפתור \"איפוס\" בחלון הנגישות.": "The only things saved in your browser are your accessibility settings and language, so they stay for your next visit. Clear them with \"Reset\" in the accessibility window.", "הקישורים לאינסטגרם, ספוטיפיי, וויז וגוגל מפות מובילים לאתרים שלהם, ושם חלה מדיניות העוגיות שלהם.": "Links to Instagram, Spotify, Waze and Google Maps lead to their own sites, where their cookie policies apply.", "האתר מציג מידע על בית הקפה אוטוטו: שעות פתיחה, כתובת, תמונות ומוצרים. אנחנו משתדלים שהמידע יהיה מדויק, אבל שעות, מחירים ומוצרים יכולים להשתנות.": "This site shows information about OTTOTO cafe: opening hours, address, photos and products. We try to keep it accurate, but hours, prices and products may change.", "כל התמונות, הלוגו והאיורים באתר שייכים לאוטוטו או לצלמים שלהם, ואין להשתמש בהם בלי אישור.": "All photos, the logo and the illustrations on this site belong to OTTOTO or its photographers and may not be used without permission.", "[תנאי רכישה, משלוחים והחזרות של ערכת המאצ׳ה, ותנאי מועדון החברים, מהלקוח].": "[Friends club terms, from the client].", "לשאלות: [פרטי יצירת קשר, מהלקוח].": "Questions: [contact details, from the client].", "OTTOTO, לראש העמוד": "OTTOTO, back to top", "ניווט ראשי": "Main menu", "Welcome to OTTOTO: איורי קו של אנשים בקיוסק, עם קפה, מאצ׳ה ועוגיות": "Welcome to OTTOTO: line drawings of people at the kiosk, with coffee, matcha and cookies", "תמונות מאוטוטו": "Photos from OTTOTO", "כרטיסיית החברים של אוטוטו. לחיצה הופכת אותה לצד השני": "OTTOTO's friends card. Tap to flip it", "תמונות מאוטוטו. גוררים כדי לסובב, לחיצה על תמונה מגדילה אותה": "Photos from OTTOTO. Drag to turn, tap a photo to enlarge it", "תמונה מוגדלת": "Enlarged photo", "אינסטגרם": "Instagram", "ספוטיפיי": "Spotify", "ניווט עם וויז": "Navigate with Waze", "אוטוטו בגוגל מפות": "OTTOTO on Google Maps", "מידע משפטי ונגישות": "Legal and accessibility", "סגירה": "Close", "OTTOTO קפה רמת אביב": "OTTOTO Cafe Ramat Aviv", "הסוכך של אוטוטו ואנשים יושבים בחוץ": "OTTOTO's awning with people sitting outside", "מאצ׳ה לאטה עם לב": "Matcha latte with a heart", "מאפי פירות יער ועוגיות": "Berry pastries and cookies", "שפיכת לאטה ארט": "Pouring latte art", "פוקאצ׳ה בצורת לב על מגש": "Heart-shaped focaccia on a tray", "ארבעה משקאות קרים על כיסא עץ": "Four iced drinks on a wooden chair", "כריך טונה על מגש ליד תיק ירוק": "Tuna sandwich on a tray by a green bag", "לאטה, מאצ׳ה קרה ומאפה פירות יער": "Latte, iced matcha and a berry pastry", "מגש פוקאצ׳ה טרייה": "A tray of fresh focaccia", "אנשים מדברים ליד הקיוסק של אוטוטו": "People chatting by the OTTOTO kiosk", "מגיש מחייך עם מגש כריכים": "A smiling server with a tray of sandwiches", "ויטרינת קרואסונים, עוגות וכריכים": "A display of croissants, cakes and sandwiches", "בריסטה מוזג חלב ליד מכונת האספרסו": "A barista pouring milk by the espresso machine", "האופה מחזיק פוקאצ׳ה טרייה": "The baker holding fresh focaccia", "OTTOTO · קפה רמת אביב": "OTTOTO · Cafe Ramat Aviv"};
+  const EN={"דלגו לתוכן": "Skip to content", "OTTOTO, קפה ויין ברמת אביב": "OTTOTO, coffee and wine in Ramat Aviv", "מה שמתנגן אצלנו בקופה, עכשיו גם אצלכם.": "What's playing at our counter, now at yours too.", "להאזנה בספוטיפיי": "Listen on Spotify", "מועדון הלקוחות של אוטוטו. כרטיסייה, חותמות, ומה שמגיע אחריהן.": "OTTOTO's friends club. A card, stamps, and what comes after them.", "הכניסו מספר טלפון כדי להצטרף": "Enter your phone number to join", "אני מאשר/ת לקבל מאוטוטו הודעות על הטבות ועדכונים. אפשר להסיר בכל רגע.": "I agree to get perks and updates from OTTOTO. You can opt out at any time.", "הצטרפו לחברים": "Join the club", "מאצ׳ה, קפה, כריכים ומאפים טריים. בואו לשבת, להישאר, לחזור מחר.": "Matcha, coffee, sandwiches and fresh pastries. Come sit, stay, come back tomorrow.", "גרונמן 8, תל אביב": "Gronemann 8, Tel Aviv", "שעות פתיחה": "Opening hours", "נווטו אלינו": "Get directions", "א׳-ה׳": "Sun-Thu", "שישי": "Fri", "שבת": "Sat", "אהבתם? דרגו אותנו בגוגל": "Loved it? Rate us on Google", "· נגישות": "", "· עוגיות": "", "· תקנון": "", "הגדלת טקסט": "Bigger text", "ניגודיות גבוהה": "High contrast", "הדגשת קישורים": "Underline links", "עצירת אנימציות": "Stop animations", "איפוס": "Reset", "חשוב לנו שכל אחד ואחת יוכלו להשתמש באתר של אוטוטו בנוחות. האתר נבנה כך שאפשר לנווט בו עם מקלדת ועם קורא מסך, הטקסט ניתן להגדלה, ולכל תמונה יש תיאור.": "We want everyone to be able to use OTTOTO's site with ease. It can be used with a keyboard and a screen reader, the text can be enlarged, and every image has a description.", "אם נתקלתם במשהו שלא עובד כמו שצריך, נשמח לשמוע ולתקן: [שם איש קשר לנגישות, טלפון ומייל, מהלקוח].": "If something doesn't work as it should, we'd love to hear and fix it: [accessibility contact name, phone and email, from the client].", "הקיוסק נמצא בגרונמן 8, תל אביב. [פרטי נגישות המקום: גישה לכיסא גלגלים, ישיבה בחוץ, מהלקוח].": "The kiosk is at Gronemann 8, Tel Aviv. [Venue accessibility: wheelchair access, outdoor seating, from the client].", "עודכן לאחרונה: אוקטובר 2026.": "Last updated: October 2026.", "האתר של אוטוטו לא משתמש בעוגיות של פרסום או מעקב, ולא אוסף פרטים אישיים.": "OTTOTO's site uses no advertising or tracking cookies and collects no personal details.", "הדבר היחיד שנשמר בדפדפן שלכם הוא הגדרות הנגישות שבחרתם, כדי שיישארו גם בביקור הבא. אפשר למחוק אותן בכפתור \"איפוס\" בחלון הנגישות.": "The only things saved in your browser are your accessibility settings and language, so they stay for your next visit. Clear them with \"Reset\" in the accessibility window.", "הקישורים לאינסטגרם, ספוטיפיי, וויז וגוגל מפות מובילים לאתרים שלהם, ושם חלה מדיניות העוגיות שלהם.": "Links to Instagram, Spotify, Waze and Google Maps lead to their own sites, where their cookie policies apply.", "האתר מציג מידע על בית הקפה אוטוטו: שעות פתיחה, כתובת, תמונות ומוצרים. אנחנו משתדלים שהמידע יהיה מדויק, אבל שעות, מחירים ומוצרים יכולים להשתנות.": "This site shows information about OTTOTO cafe: opening hours, address, photos and products. We try to keep it accurate, but hours, prices and products may change.", "כל התמונות, הלוגו והאיורים באתר שייכים לאוטוטו או לצלמים שלהם, ואין להשתמש בהם בלי אישור.": "All photos, the logo and the illustrations on this site belong to OTTOTO or its photographers and may not be used without permission.", "[תנאי רכישה, משלוחים והחזרות של ערכת המאצ׳ה, ותנאי מועדון החברים, מהלקוח].": "[Friends club terms, from the client].", "לשאלות: [פרטי יצירת קשר, מהלקוח].": "Questions: [contact details, from the client].", "OTTOTO, לראש העמוד": "OTTOTO, back to top", "ניווט ראשי": "Main menu", "Welcome to OTTOTO: איורי קו של אנשים בקיוסק, עם קפה, מאצ׳ה ועוגיות": "Welcome to OTTOTO: line drawings of people at the kiosk, with coffee, matcha and cookies", "תמונות מאוטוטו": "Photos from OTTOTO", "כרטיסיית החברים של אוטוטו. לחיצה הופכת אותה לצד השני": "OTTOTO's friends card. Tap to flip it", "תמונות מאוטוטו. גוררים כדי לסובב, לחיצה על תמונה מגדילה אותה": "Photos from OTTOTO. Drag to turn, tap a photo to enlarge it", "תמונה מוגדלת": "Enlarged photo", "אינסטגרם": "Instagram", "ספוטיפיי": "Spotify", "ניווט עם וויז": "Navigate with Waze", "אוטוטו בגוגל מפות": "OTTOTO on Google Maps", "מידע משפטי ונגישות": "Legal and accessibility", "סגירה": "Close", "OTTOTO קפה רמת אביב": "OTTOTO Cafe Ramat Aviv", "הסוכך של אוטוטו ואנשים יושבים בחוץ": "OTTOTO's awning with people sitting outside", "מאצ׳ה לאטה עם לב": "Matcha latte with a heart", "מאפי פירות יער ועוגיות": "Berry pastries and cookies", "שפיכת לאטה ארט": "Pouring latte art", "פוקאצ׳ה בצורת לב על מגש": "Heart-shaped focaccia on a tray", "ארבעה משקאות קרים על כיסא עץ": "Four iced drinks on a wooden chair", "כריך טונה על מגש ליד תיק ירוק": "Tuna sandwich on a tray by a green bag", "לאטה, מאצ׳ה קרה ומאפה פירות יער": "Latte, iced matcha and a berry pastry", "מגש פוקאצ׳ה טרייה": "A tray of fresh focaccia", "אנשים מדברים ליד הקיוסק של אוטוטו": "People chatting by the OTTOTO kiosk", "מגיש מחייך עם מגש כריכים": "A smiling server with a tray of sandwiches", "ויטרינת קרואסונים, עוגות וכריכים": "A display of croissants, cakes and sandwiches", "בריסטה מוזג חלב ליד מכונת האספרסו": "A barista pouring milk by the espresso machine", "האופה מחזיק פוקאצ׳ה טרייה": "The baker holding fresh focaccia", "OTTOTO · קפה רמת אביב": "OTTOTO · Cafe Ramat Aviv"};
   const ATTRS=['aria-label','alt','placeholder'],texts=[],attrs=[];
   const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
   for(let n;(n=w.nextNode());){const k=n.nodeValue.trim();if(k in EN)texts.push([n,n.nodeValue,n.nodeValue.replace(k,EN[k])])}
