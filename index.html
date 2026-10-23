@@ -280,15 +280,13 @@ h2.vibe-title{text-align:center;margin:0 0 clamp(20px,3vw,40px)}
 .f-msg{min-height:1.4em;font-size:14px;color:var(--muted);margin:0}
 
 /* visit: the one deliberate color-block switch, it carries into the footer */
-.visit{background:var(--deep);color:var(--on-deep)}
+.visit{background:var(--deep);color:var(--on-deep);padding-bottom:40px}
 .visit .v-info{display:flex;flex-direction:column;align-items:center;gap:28px;max-width:440px;text-align:center}
 .visit .v-info>div{width:100%;display:flex;flex-direction:column;align-items:center}
 .visit .addr{font-size:clamp(24px,2.8vw,34px);font-weight:900;line-height:1.1;margin-top:0;text-align:center}
 .visit .v-head{display:flex;justify-content:center;align-items:end;gap:16px}
 /* the cups' big 8, used here as a little brand mark beside the title */
 .v-title{display:flex;align-items:center;gap:clamp(14px,2vw,24px)}
-.v-eight{flex:none;height:clamp(64px,8vw,110px);width:auto;fill:#EFB3A1}
-.v-eight .h{fill:var(--deep)}
 /* visit: the photos stand around a ring in 3D; drag to turn it (it keeps turning a little), tap a photo to open it big */
 .v-stage{position:relative;height:clamp(250px,34vw,440px);margin:clamp(20px,3vw,36px) 0 clamp(40px,5vw,72px);overflow:hidden;perspective:1000px;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none;outline-offset:-4px;
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
@@ -307,7 +305,12 @@ h2.vibe-title{text-align:center;margin:0 0 clamp(20px,3vw,40px)}
 .visit .btns{margin-top:18px;justify-content:center}
 .hours{width:100%;border-top:1.5px solid var(--on-deep)}
 .h-addr{margin:0;padding:16px 4px 12px;font-family:var(--mono);font-size:15px;font-weight:700;letter-spacing:.08em;text-align:center;color:var(--accent);border-bottom:1px solid rgba(243,235,221,.14)}
-.hours div{display:flex;justify-content:space-between;padding:10px 4px;border-bottom:1px solid rgba(243,235,221,.14)}
+.hours{display:grid;grid-template-columns:1fr auto;column-gap:18px}
+.hours .h-addr{grid-column:1/-1}
+.hours div{grid-column:1;display:flex;justify-content:flex-start;gap:22px;padding:10px 4px;border-bottom:1px solid rgba(243,235,221,.14)}
+.hours div span:first-child{min-width:3.6em;text-align:start}
+.h-eight{grid-column:2;grid-row:2/5;align-self:center;height:calc(100% - 16px);width:auto;fill:#EFB3A1}
+.h-eight .h{fill:var(--deep)}
 .hours span:first-child{font-size:17px}
 .hours span:last-child{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:16px}
 html[lang=en] .g-stars{justify-content:flex-start}
@@ -327,14 +330,12 @@ html[lang=en] .g-stars{justify-content:flex-start}
 }
 
 footer{background:var(--deep);color:var(--on-deep);padding:36px 0 44px;border-top:1.5px solid rgba(243,235,221,.3)}
-footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;font-family:var(--mono);font-size:13px}
+footer .wrap{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:20px;text-align:center;font-family:var(--mono);font-size:13px}
 footer img{height:22px;width:auto}
 /* the cups' 8 beside the logo, as the brand's second mark */
-.foot-brand{display:flex;align-items:center;gap:14px;direction:ltr}  /* the 8 follows the "קפה רמת אביב" end of the logo */
-.foot-eight{height:30px;width:auto;fill:#EFB3A1}  /* the 8 keeps the tray/cup pink */
-.foot-eight .h{fill:var(--deep)}
-footer .soc{display:flex;gap:2px;flex-wrap:wrap}
-footer .legal{flex-basis:100%;display:flex;gap:6px 22px;flex-wrap:wrap;padding-top:18px;border-top:1px solid rgba(243,235,221,.18)}
+.foot-brand{display:flex;justify-content:center}
+footer .soc{display:flex;gap:2px;flex-wrap:wrap;justify-content:center}
+footer .legal{align-self:stretch;justify-content:center;display:flex;gap:6px 22px;flex-wrap:wrap;padding-top:18px;border-top:1px solid rgba(243,235,221,.18)}
 footer .legal button{background:none;border:0;padding:6px 0;color:var(--on-deep);font:inherit;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;text-decoration:underline;text-decoration-color:transparent;text-underline-offset:4px;transition:text-decoration-color 200ms ease}
 .doc{width:min(560px,100% - 32px);max-height:min(80svh,720px);margin:auto;padding:28px 24px 26px;border:0;border-radius:var(--r);background:var(--bg);color:var(--fg);direction:rtl;overflow:auto;box-shadow:0 30px 60px -20px rgba(0,0,0,.5)}
 .doc::backdrop{background:rgba(20,20,20,.6)}
@@ -518,7 +519,7 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
 
   <section class="visit" id="visit">
     <div class="wrap v-head">
-      <div class="v-title"><svg class="v-eight" viewBox="725 95 550 815" aria-hidden="true"><rect x="745" y="95" width="510" height="400" rx="150"/><rect x="725" y="440" width="550" height="470" rx="165"/><rect class="h" x="915" y="210" width="170" height="135" rx="48"/><rect class="h" x="905" y="590" width="190" height="175" rx="55"/></svg><h2 class="en">Come visit us</h2></div>
+      <div class="v-title"><h2 class="en">Come visit us</h2></div>
     </div>
     <!-- weekend on film: a 3D ring of photos; drag, use the arrows, or tap a photo to see it big -->
     <div class="v-stage" tabindex="0" aria-label="תמונות מאוטוטו. גוררים כדי לסובב, לחיצה על תמונה מגדילה אותה">
@@ -538,6 +539,7 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
           <div data-days="0,1,2,3,4"><span>א׳-ה׳</span><span class="en">07:30 - 20:00</span></div>
           <div data-days="5"><span>שישי</span><span class="en">07:30 - 15:30</span></div>
           <div data-days="6"><span>שבת</span><span class="en">08:30 - 20:00</span></div>
+          <svg class="h-eight" viewBox="725 95 550 815" aria-hidden="true"><rect x="745" y="95" width="510" height="400" rx="150"/><rect x="725" y="440" width="550" height="470" rx="165"/><rect class="h" x="915" y="210" width="170" height="135" rx="48"/><rect class="h" x="905" y="590" width="190" height="175" rx="55"/></svg>
         </div>
         <!-- Google rating: stars fill one by one; opens OTTOTO's Google Maps page, where "כתיבת ביקורת" is -->
         <a class="g-rate" href="https://maps.google.com/?cid=13286087321447341267" target="_blank" rel="noopener">
@@ -553,7 +555,7 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
 
 <footer>
   <div class="wrap">
-    <span class="foot-brand"><img src="img/logo-cream.png" alt="OTTOTO" width="570" height="120"><svg class="foot-eight" viewBox="725 95 550 815" aria-hidden="true"><rect x="745" y="95" width="510" height="400" rx="150"/><rect x="725" y="440" width="550" height="470" rx="165"/><rect class="h" x="915" y="210" width="170" height="135" rx="48"/><rect class="h" x="905" y="590" width="190" height="175" rx="55"/></svg></span>
+    <span class="foot-brand"><img src="img/logo-cream.png" alt="OTTOTO" width="570" height="120"></span>
     <div class="soc">
       <a href="https://www.instagram.com/ottoto.tlv/" target="_blank" rel="noopener" aria-label="אינסטגרם"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4m0 4a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z"/><path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M16.5 7.5l0 .01"/></svg></a>
       <a href="https://open.spotify.com/playlist/4zsaFyuyAfIeqs3lRRJgPa" target="_blank" rel="noopener" aria-label="ספוטיפיי"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M8 11.973c2.5 -1.473 5.5 -.973 7.5 .527"/><path d="M9 15c1.5 -1 4 -1 5 .5"/><path d="M7 9c2 -1 6 -2 10 .5"/></svg></a>
