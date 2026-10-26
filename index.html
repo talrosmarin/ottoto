@@ -110,7 +110,7 @@ header .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
 /* language switch, end of the row: EN / HE, the current one sits on the accent marker */
 /* HE/EN: a pill with two equal fixed-size cells and a peach thumb that slides between them. No grid inside the button
    and no native button look (Safari drew it clipped), every size exact */
-.lang{--seg:32px;--pad:3px;grid-column:3;justify-self:end;position:relative;-webkit-appearance:none;appearance:none;box-sizing:border-box;display:inline-flex;align-items:center;margin:0;padding:0 var(--pad);height:30px;border:1.5px solid var(--line);border-radius:999px;background:none;color:var(--fg);font-family:var(--mono);font-weight:700;font-size:11px;line-height:1;letter-spacing:.06em;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:opacity 400ms ease 500ms}
+.lang{--seg:32px;--pad:3px;grid-column:3;justify-self:end;position:relative;-webkit-appearance:none;appearance:none;box-sizing:border-box;display:inline-flex;align-items:center;margin:0;padding:0 var(--pad);height:30px;border:0;border-radius:999px;background:color-mix(in srgb,var(--fg) 11%,transparent);color:var(--fg);font-family:var(--mono);font-weight:700;font-size:11px;line-height:1;letter-spacing:.06em;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:opacity 400ms ease 500ms}
 .lang::before{content:"";position:absolute;top:var(--pad);bottom:var(--pad);left:var(--pad);width:var(--seg);border-radius:999px;background:var(--accent);transition:transform 320ms var(--ease)}
 html[lang=en] .lang::before{transform:translateX(var(--seg))}
 .lang span{position:relative;z-index:1;display:block;width:var(--seg);text-align:center;padding-left:.06em;transition:color 250ms ease}
@@ -157,6 +157,7 @@ html[lang=en] .g-text{direction:ltr;text-align:left}
 .bigmark picture{display:block;flex:none;width:calc(var(--rw,300px) * 1.04);max-width:92%}
 .bigmark img{display:block;width:100%;height:auto}
 html.splashing .bigmark img{visibility:hidden}
+html.splashing,html.splashing body{overflow:hidden;overscroll-behavior:none}
 .sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 @media (max-width:600px){
   header .wrap{grid-template-columns:1fr;padding-block:4px 2px}
@@ -164,7 +165,7 @@ html.splashing .bigmark img{visibility:hidden}
   header .logo img{height:24px}
   header nav{position:relative;z-index:1;transform:translate(calc(-32px * (1 - var(--e,0))),calc(var(--e,0) * (var(--hdr,31px) + 12px)))}  /* left of EN/HE, then down a row */
   header::after{content:"";position:absolute;left:0;right:0;top:100%;height:calc(var(--hdr,31px) + 12px);background:var(--bg);border-bottom:1.5px solid var(--line);opacity:var(--e,0);pointer-events:none}
-  .lang{position:absolute;right:10px;top:3px;translate:0 calc(6px * var(--e,0));z-index:2;--seg:28px;--pad:2px;height:26px;border-width:2px;font-size:10px}  /* whole pixels: 1.5px lines split unevenly on 3x iPhones */
+  .lang{position:absolute;right:10px;top:3px;translate:0 calc(6px * var(--e,0));z-index:2;--seg:28px;--pad:3px;height:26px;font-size:10px}  /* whole pixels only */
   /* scroll-linked: the menu, its bar and EN/HE move with the scroll itself (the browser runs it with the scroll) */
   @supports (animation-timeline:scroll()){
     html.sdt header nav{animation:nav-drop linear both;animation-timeline:scroll(root);animation-range:0px 100px}
@@ -644,13 +645,17 @@ new ResizeObserver(setHdr).observe(hdr);setHdr();
   const splash=document.getElementById('splash'),fly=document.getElementById('spFly'),logo=document.getElementById('spLogo');
   let gone=false,started=false;
   scrollTo(0,0);document.body.style.overflow='hidden';
+  const block=e=>e.preventDefault();  /* iPhone Safari scrolls through overflow:hidden, so touches are held too */
+  addEventListener('touchmove',block,{passive:false});addEventListener('wheel',block,{passive:false});
   addEventListener('load',()=>scrollTo(0,0));addEventListener('pageshow',e=>{if(e.persisted)location.reload()});
   function done(){
     if(root.classList.contains('navin'))return;
+    removeEventListener('touchmove',block);removeEventListener('wheel',block);
+    if(scrollY)scrollTo({top:0,behavior:'instant'});
     root.classList.remove('splashing');splash.hidden=true;
     root.classList.add('navin');document.body.style.overflow='';
-    const settle=()=>{root.classList.add('navdone');removeEventListener('scroll',early)},early=()=>{if(scrollY>2)settle()};
-    addEventListener('scroll',early,{passive:true});setTimeout(settle,1500);  /* scrolling ends the menu's entrance at once */
+    const settle=()=>{root.classList.add('navdone');removeEventListener('scroll',early)},early=()=>{if(scrollY>=45)settle()};
+    addEventListener('scroll',early,{passive:true});setTimeout(settle,1500);  /* the entrance ends by itself, or once the menu has faded out while scrolling, so no snap is ever seen */
   }
   function hide(){
     if(gone)return;gone=true;
