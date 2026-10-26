@@ -115,7 +115,7 @@ header .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
 html[lang=en] .lang::before{transform:translateX(var(--seg))}
 .lang span{position:relative;z-index:1;display:block;width:var(--seg);text-align:center;padding-left:.06em;transition:color 250ms ease}
 html[lang=he] .lang [data-l=he],html[lang=en] .lang [data-l=en]{color:var(--on-accent)}
-.lang:active{scale:.96}
+.lang:active::before{filter:brightness(.96)}  /* a tap only tints the thumb; the letters never move */
 html:not(.navin) .lang{opacity:0}
 header .logo{justify-self:start;opacity:0;pointer-events:none;transition:opacity 300ms var(--ease-out)}
 html.scrolled header .logo{opacity:1;pointer-events:auto}
@@ -138,13 +138,14 @@ header .logo img{height:26px;width:auto}
 /* menu: one row of caps, the current section gets a hand-drawn marker in the cup color */
 header nav{grid-column:2;direction:ltr;display:flex;flex-wrap:wrap;justify-content:center;gap:4px clamp(14px,2.4vw,30px)}
 header nav a{position:relative;z-index:0;display:inline-block;padding:5px 2px;font-weight:700;font-size:14.5px;line-height:1.2;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;transform-origin:50% 50%;scale:1;-webkit-tap-highlight-color:transparent;
-  transition:transform 750ms cubic-bezier(.3,1.6,.55,1) calc(var(--n,0)*90ms),opacity 350ms ease calc(var(--n,0)*90ms),scale 350ms cubic-bezier(.34,1.56,.64,1),color 250ms ease}
+  transition:scale 350ms cubic-bezier(.34,1.56,.64,1),color 250ms ease}  /* no opacity/transform transitions: iPhone Safari fired them off the scroll animation */
 header nav a::before{content:"";position:absolute;z-index:-1;left:-7px;right:-5px;top:50%;height:1.5em;translate:0 -50%;background:var(--accent);border-radius:3px 9px 4px 10px / 8px 4px 9px 3px;rotate:-1.5deg;transform-origin:50% 50%;scale:0 1;transition:scale 350ms cubic-bezier(.65,0,.35,1)}
 header nav a[aria-current=true]{color:var(--on-accent);scale:1.12}
 header nav a[aria-current=true]::before{scale:1 1}
-html:not(.navin) header nav a{opacity:0;visibility:hidden;transform:translateY(-60px) rotate(-4deg)}
-/* once the entrance is over (or cut short by scrolling), only the marker scale and color still animate */
-html.navdone header nav a{transition:scale 350ms cubic-bezier(.34,1.56,.64,1),color 250ms ease}
+html:not(.navin) header nav a{visibility:hidden}
+/* the words drop in once when the opening ends (an animation, so nothing is left behind to fire later) */
+@keyframes nav-enter{0%{opacity:0;transform:translateY(-60px) rotate(-4deg)}45%{opacity:1}100%{opacity:1;transform:none}}
+html.navin header nav a{animation:nav-enter 750ms cubic-bezier(.3,1.6,.55,1) calc(var(--n,0)*90ms) backwards}
 
 /* English mode: the page turns left-to-right; doubled caps lines under translated text are hidden */
 html[lang=en] .doc{direction:ltr}
@@ -169,7 +170,7 @@ html.splashing,html.splashing body{overflow:hidden;overscroll-behavior:none}
   /* scroll-linked: the menu, its bar and EN/HE move with the scroll itself (the browser runs it with the scroll) */
   @supports (animation-timeline:scroll()){
     html.sdt header nav{animation:nav-drop linear both;animation-timeline:scroll(root);animation-range:0px 100px}
-    html.sdt header nav a{animation:word-in linear forwards;animation-timeline:scroll(root);animation-range:44px 150px}  /* hidden from 44px (the menu is back on at 45px), in from 92px; before 44px left alone */
+    html.sdt header nav a{animation:nav-enter 750ms cubic-bezier(.3,1.6,.55,1) calc(var(--n,0)*90ms) backwards,word-in linear forwards;animation-timeline:auto,scroll(root);animation-range:normal,44px 150px}  /* hidden from 44px (the menu is back on at 45px), in from 92px; before 44px left alone */
     html.sdt header::after{animation:bar-in linear both;animation-timeline:scroll(root);animation-range:0px 140px}
     html.sdt .lang{animation:lang-drop linear both;animation-timeline:scroll(root);animation-range:0px 140px}
   }
@@ -408,7 +409,7 @@ footer .soc a{display:grid;place-items:center;width:44px;height:44px;border-radi
   .js figure[data-reveal] img{transform:none;transition:none}
   .js figure[data-reveal].in{opacity:1}
   .btn:active,.tlink:hover svg,.tlink:active svg{transform:none}
-  header nav a,html:not(.navin) header nav a{transform:none;transition:opacity 300ms ease}
+  header nav a,html:not(.navin) header nav a{transform:none;animation:none!important;transition:color 250ms ease}
   .sp-logo.go{animation:spIn 300ms ease-out both}
   html{scroll-behavior:auto}
 }
@@ -654,8 +655,6 @@ new ResizeObserver(setHdr).observe(hdr);setHdr();
     if(scrollY)scrollTo({top:0,behavior:'instant'});
     root.classList.remove('splashing');splash.hidden=true;
     root.classList.add('navin');document.body.style.overflow='';
-    const settle=()=>{root.classList.add('navdone');removeEventListener('scroll',early)},early=()=>{if(scrollY>=45)settle()};
-    addEventListener('scroll',early,{passive:true});setTimeout(settle,1500);  /* the entrance ends by itself, or once the menu has faded out while scrolling, so no snap is ever seen */
   }
   function hide(){
     if(gone)return;gone=true;
